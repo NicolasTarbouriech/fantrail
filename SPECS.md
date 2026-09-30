@@ -37,7 +37,7 @@ Ce qu'on ne fait pas dans le POC : séries multi-courses, pronostics communautai
 | Index                 | Valeur de niveau du coureur, issue de l'UTMB Index (ou ITRA / Betrail à défaut). Sert au multiplicateur outsider. |
 | Rang de favori        | Position du coureur dans son champ, trié par index décroissant. 1 = favori.                                       |
 | Pronostic (`Picks`)   | Pour un joueur et un champ : un top 5 ordonné + une estimation du temps du vainqueur.                             |
-| Résultat (`Result`)   | Classement officiel d'un champ : positions 1 à 10 + temps du vainqueur + liste des abandons.                      |
+| Résultat (`Result`)   | Classement officiel d'un champ : positions 1 à 10 + temps du vainqueur.                                           |
 | Ligue (`League`)      | Groupe de joueurs avec son classement. Publique ou privée.                                                        |
 | Verrouillage (`Lock`) | Instant à partir duquel les picks d'un champ ne sont plus modifiables.                                            |
 
@@ -76,7 +76,7 @@ Heures de départ 2026 à confirmer sur les sites organisateurs :
 Pour chaque pick `i` (1 à 5) dont le coureur finit à la position réelle `p` :
 
 ```
-si p > 10 ou abandon      : 0
+si hors du top 10         : 0   (abandon ou arrivée après la 10ᵉ place)
 sinon                     : (10 − |i − p|) × poids(i)
 poids = [50, 48, 46, 44, 42] pour i = 1..5
 ```
@@ -147,7 +147,7 @@ Les bonus se cumulent (un top 3 exact donne aussi le top 3 désordre et le vainq
 ### 4.8 Résultats et corrections
 
 - Le résultat officiel est celui publié par l'organisateur (LiveTrail pour les deux courses).
-- L'admin saisit les positions 1 à 10 de chaque champ, le temps du vainqueur, et marque les abandons parmi les élites listés.
+- L'admin saisit les positions 1 à 10 de chaque champ et le temps du vainqueur. Les abandons ne sont pas saisis : un coureur absent du top 10 rapporte 0, qu'il ait abandonné ou fini plus loin.
 - La publication déclenche le calcul des scores. Une correction (disqualification, erreur de saisie) republie et recalcule tout, avec un historique des versions.
 
 ## 5. Comptes
@@ -189,7 +189,7 @@ Ce que fait l'admin, par ordre d'importance pour le POC :
 1. **Courses** : créer, éditer (nom, lieu, distance, D+, date, site, URL LiveTrail), fixer le nombre de picks, passer le statut : `Draft` → `Open` → `Locked` → `Scored`, ou `Cancelled`.
 2. **Champs et coureurs** : pour chaque champ, saisir la liste des élites : prénom, nom, nationalité, index, source de l'index, liens ITRA / UTMB. Import CSV pour aller vite. Ajout et retrait possibles jusqu'au verrouillage. Un coureur retiré reste dans les picks qui le contiennent, marqué « retiré », et y rapporte 0 point, comme un abandon. Le pronostic reste complet. Le joueur voit l'alerte sur l'accueil et sur son pronostic et peut le remplacer jusqu'au verrouillage.
 3. **Verrouillage** : heure de verrouillage par champ, et bouton de verrouillage manuel immédiat en cas de départ avancé ou retardé.
-4. **Résultats** : saisir positions 1 à 10, temps du vainqueur, abandons ; publier ; corriger et republier.
+4. **Résultats** : saisir positions 1 à 10 et temps du vainqueur ; publier ; corriger et republier.
 5. **Modération** : renommer ou supprimer une ligue au nom problématique, retirer un membre d'une ligue, désactiver un compte.
 
 Ce que l'admin **ne fait pas** :
@@ -256,6 +256,7 @@ Questions tranchées le 30 septembre 2026.
 | 6   | Résultats                       | Top 10 saisi par l'admin. Un pick hors top 10 s'affiche « hors top 10 ».                                                                              |
 | 7   | Fuseau                          | Heure locale du joueur, heure locale de la course en rappel.                                                                                          |
 | 8   | Coureur retiré de la start list | Le pick est conservé et rapporte 0 point, comme un abandon. Le joueur est averti dans l'interface et peut remplacer le coureur jusqu'au verrouillage. |
+| 9   | Saisie des abandons             | Supprimée : un coureur hors du top 10 marque 0 dans tous les cas, la saisie n'apporterait qu'un libellé.                                              |
 
 Sur le point 8 : vider le pick aurait rendu le pronostic incomplet, et un pronostic incomplet ne marque aucun point (§ 4.1). Un joueur qui ne se reconnecte pas avant le départ aurait perdu tout son pronostic pour un seul forfait. Conserver le pick limite la perte à ce pick.
 
