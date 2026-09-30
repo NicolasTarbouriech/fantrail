@@ -1,0 +1,19 @@
+{
+  "name": "shared-monitoring-feature-health-nestjs",
+  "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/shared/monitoring/feature-health-nestjs/src",
+  "projectType": "library",
+  "tags": [],
+  "targets": {
+    "build": {
+      "executor": "@nx/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/libs/shared/monitoring/feature-health-nestjs",
+        "main": "libs/shared/monitoring/feature-health-nestjs/src/index.ts",
+        "tsConfig": "libs/shared/monitoring/feature-health-nestjs/tsconfig.lib.json",
+        "assets": []
+      }
+    }
+  }
+}

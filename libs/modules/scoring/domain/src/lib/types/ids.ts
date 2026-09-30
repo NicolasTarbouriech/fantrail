@@ -1,0 +1,7 @@
+import { z } from 'zod';
+
+export const UserId = z.string().uuid();
+export type UserId = z.infer<typeof UserId>;
+
+export const FieldId = z.string().uuid();
+export type FieldId = z.infer<typeof FieldId>;

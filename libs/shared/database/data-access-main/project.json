@@ -1,0 +1,27 @@
+{
+  "name": "shared-database-data-access-main",
+  "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/shared/database/data-access-main/src",
+  "projectType": "library",
+  "tags": [],
+  "targets": {
+    "build": {
+      "executor": "@nx/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/libs/shared/database/data-access-main",
+        "main": "libs/shared/database/data-access-main/src/index.ts",
+        "tsConfig": "libs/shared/database/data-access-main/tsconfig.lib.json",
+        "assets": []
+      }
+    },
+    "typeorm-cli": {
+      "executor": "nx:run-commands",
+      "outputs": [],
+      "options": {
+        "cwd": "libs/shared/database/data-access-main",
+        "command": "npx ts-node -r tsconfig-paths/register --project tsconfig.lib.json ../../../../node_modules/typeorm/cli.js -d ./src/lib/dataSource.ts"
+      }
+    }
+  }
+}

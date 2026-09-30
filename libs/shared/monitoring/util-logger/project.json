@@ -1,0 +1,19 @@
+{
+  "name": "shared-monitoring-util-logger",
+  "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/shared/monitoring/util-logger/src",
+  "projectType": "library",
+  "tags": [],
+  "targets": {
+    "build": {
+      "executor": "@nx/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/libs/shared/monitoring/util-logger",
+        "main": "libs/shared/monitoring/util-logger/src/index.ts",
+        "tsConfig": "libs/shared/monitoring/util-logger/tsconfig.lib.json",
+        "assets": []
+      }
+    }
+  }
+}

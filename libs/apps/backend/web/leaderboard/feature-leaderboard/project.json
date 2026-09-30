@@ -1,0 +1,19 @@
+{
+  "name": "apps-backend-web-leaderboard-feature-leaderboard",
+  "$schema": "../../../../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/apps/backend/web/leaderboard/feature-leaderboard/src",
+  "projectType": "library",
+  "tags": [],
+  "targets": {
+    "build": {
+      "executor": "@nx/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/libs/apps/backend/web/leaderboard/feature-leaderboard",
+        "main": "libs/apps/backend/web/leaderboard/feature-leaderboard/src/index.ts",
+        "tsConfig": "libs/apps/backend/web/leaderboard/feature-leaderboard/tsconfig.lib.json",
+        "assets": []
+      }
+    }
+  }
+}

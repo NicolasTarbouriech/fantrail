@@ -1,0 +1,123 @@
+{
+  "compileOnSave": false,
+  "compilerOptions": {
+    "rootDir": ".",
+    "sourceMap": true,
+    "declaration": false,
+    "moduleResolution": "node",
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "importHelpers": true,
+    "target": "es2015",
+    "module": "esnext",
+    "lib": ["es2020", "dom"],
+    "skipLibCheck": true,
+    "skipDefaultLibCheck": true,
+    "baseUrl": ".",
+    "paths": {
+      "@trail/apps/backend/web/leaderboard/feature-leaderboard": [
+        "libs/apps/backend/web/leaderboard/feature-leaderboard/src/index.ts"
+      ],
+      "@trail/modules/league/application": [
+        "libs/modules/league/application/src/index.ts"
+      ],
+      "@trail/modules/league/domain": [
+        "libs/modules/league/domain/src/index.ts"
+      ],
+      "@trail/modules/league/domain-testing": [
+        "libs/modules/league/domain/src/lib/testing/index.ts"
+      ],
+      "@trail/modules/league/infrastructure": [
+        "libs/modules/league/infrastructure/src/index.ts"
+      ],
+      "@trail/modules/prediction/application": [
+        "libs/modules/prediction/application/src/index.ts"
+      ],
+      "@trail/modules/prediction/domain": [
+        "libs/modules/prediction/domain/src/index.ts"
+      ],
+      "@trail/modules/prediction/domain-testing": [
+        "libs/modules/prediction/domain/src/lib/testing/index.ts"
+      ],
+      "@trail/modules/prediction/infrastructure": [
+        "libs/modules/prediction/infrastructure/src/index.ts"
+      ],
+      "@trail/modules/race/application": [
+        "libs/modules/race/application/src/index.ts"
+      ],
+      "@trail/modules/race/domain": ["libs/modules/race/domain/src/index.ts"],
+      "@trail/modules/race/domain-testing": [
+        "libs/modules/race/domain/src/lib/testing/index.ts"
+      ],
+      "@trail/modules/race/infrastructure": [
+        "libs/modules/race/infrastructure/src/index.ts"
+      ],
+      "@trail/modules/result/application": [
+        "libs/modules/result/application/src/index.ts"
+      ],
+      "@trail/modules/result/domain": [
+        "libs/modules/result/domain/src/index.ts"
+      ],
+      "@trail/modules/result/domain-testing": [
+        "libs/modules/result/domain/src/lib/testing/index.ts"
+      ],
+      "@trail/modules/result/infrastructure": [
+        "libs/modules/result/infrastructure/src/index.ts"
+      ],
+      "@trail/modules/scoring/application": [
+        "libs/modules/scoring/application/src/index.ts"
+      ],
+      "@trail/modules/scoring/domain": [
+        "libs/modules/scoring/domain/src/index.ts"
+      ],
+      "@trail/modules/scoring/domain-testing": [
+        "libs/modules/scoring/domain/src/lib/testing/index.ts"
+      ],
+      "@trail/modules/scoring/infrastructure": [
+        "libs/modules/scoring/infrastructure/src/index.ts"
+      ],
+      "@trail/modules/user/application": [
+        "libs/modules/user/application/src/index.ts"
+      ],
+      "@trail/modules/user/domain": ["libs/modules/user/domain/src/index.ts"],
+      "@trail/modules/user/domain-testing": [
+        "libs/modules/user/domain/src/lib/testing/index.ts"
+      ],
+      "@trail/modules/user/infrastructure": [
+        "libs/modules/user/infrastructure/src/index.ts"
+      ],
+      "@trail/shared/auth/feature-nestjs": [
+        "libs/shared/auth/feature-nestjs/src/index.ts"
+      ],
+      "@trail/shared/auth/feature-nestjs-testing": [
+        "libs/shared/auth/feature-nestjs/src/lib/testing.ts"
+      ],
+      "@trail/shared/cqrs/util-nestjs": [
+        "libs/shared/cqrs/util-nestjs/src/index.ts"
+      ],
+      "@trail/shared/database/data-access-main": [
+        "libs/shared/database/data-access-main/src/index.ts"
+      ],
+      "@trail/shared/graphql/util-generator": [
+        "libs/shared/graphql/util-generator/src/index.ts"
+      ],
+      "@trail/shared/monitoring/feature-health-nestjs": [
+        "libs/shared/monitoring/feature-health-nestjs/src/index.ts"
+      ],
+      "@trail/shared/monitoring/util-logger": [
+        "libs/shared/monitoring/util-logger/src/index.ts"
+      ],
+      "@trail/shared/tooling/util-environment": [
+        "libs/shared/tooling/util-environment/src/index.ts"
+      ],
+      "@trail/shared/tooling/util-error": [
+        "libs/shared/tooling/util-error/src/index.ts"
+      ],
+      "@trail/shared/tooling/util-text": [
+        "libs/shared/tooling/util-text/src/index.ts"
+      ]
+    },
+    "esModuleInterop": true
+  },
+  "exclude": ["node_modules", "tmp"]
+}

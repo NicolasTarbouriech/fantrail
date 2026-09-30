@@ -1,0 +1,271 @@
+# Fantrail — Spécifications du POC
+
+Version 0.2 — 30 septembre 2026 (questions de la section 11 tranchées)
+Cible : Festival des Templiers (Millau, 15–18 octobre 2026) et Grand Raid de La Réunion / Diagonale des Fous (15–18 octobre 2026).
+
+---
+
+## 1. Objectif
+
+Fantrail est un jeu de pronostics gratuit entre amis sur les courses de trail. Chaque joueur pronostique le classement des élites d'une course, rejoint une ou plusieurs ligues, et se compare à ses amis sur un classement.
+
+Pas d'argent en jeu, pas de cote bookmaker : c'est un jeu de points.
+
+Le POC doit être en ligne et utilisable avant le **jeudi 15 octobre 2026**, date du départ de la Diagonale des Fous, avec deux courses ouvertes aux pronostics.
+
+## 2. Principes du jeu
+
+- Par course, deux champs séparés : élites hommes et élites femmes. Pas de scratch.
+- Le joueur pronostique un **top 5 ordonné** par champ.
+- Il estime aussi le **temps du vainqueur** de chaque champ.
+- Les picks restent privés jusqu'au verrouillage, puis deviennent visibles par les membres de ses ligues.
+- Chaque pick rapporte des points selon l'écart entre position pronostiquée et position réelle. Un pick qui finit hors du top 10 rapporte 0.
+- Un **multiplicateur outsider** récompense les picks de coureurs moins bien classés à l'index.
+- Des bonus récompensent le vainqueur trouvé, le top 3 et le top 5, dans l'ordre ou non, et les positions exactes multiples.
+- Ligues : créées par n'importe quel joueur, rejointes par code d'invitation, avec un classement par course et un classement cumulé. Le créateur peut retirer un membre, un membre peut quitter.
+- L'admin crée les courses et les fiches coureurs (avec liens ITRA et UTMB) et saisit les résultats. Aucune interface d'administration n'est exposée aux joueurs.
+
+Ce qu'on ne fait pas dans le POC : séries multi-courses, pronostics communautaires, fiches coureurs enrichies, notifications.
+
+## 3. Glossaire
+
+| Terme                 | Définition                                                                                                        |
+| --------------------- | ----------------------------------------------------------------------------------------------------------------- |
+| Course (`Race`)       | Une épreuve datée : Grand Trail des Templiers 2026, Diagonale des Fous 2026.                                      |
+| Champ (`Field`)       | Une course × un sexe : « Templiers – Hommes », « Templiers – Femmes ». C'est l'unité de pronostic et de scoring.  |
+| Coureur (`Runner`)    | Un élite inscrit dans un champ, avec son index de référence.                                                      |
+| Index                 | Valeur de niveau du coureur, issue de l'UTMB Index (ou ITRA / Betrail à défaut). Sert au multiplicateur outsider. |
+| Rang de favori        | Position du coureur dans son champ, trié par index décroissant. 1 = favori.                                       |
+| Pronostic (`Picks`)   | Pour un joueur et un champ : un top 5 ordonné + une estimation du temps du vainqueur.                             |
+| Résultat (`Result`)   | Classement officiel d'un champ : positions 1 à 10 + temps du vainqueur + liste des abandons.                      |
+| Ligue (`League`)      | Groupe de joueurs avec son classement. Publique ou privée.                                                        |
+| Verrouillage (`Lock`) | Instant à partir duquel les picks d'un champ ne sont plus modifiables.                                            |
+
+## 4. Règles du jeu
+
+### 4.1 Pronostic
+
+Pour chaque champ ouvert, le joueur soumet :
+
+1. un **top 5 ordonné**, cinq coureurs distincts pris dans la liste des élites du champ ;
+2. une **estimation du temps du vainqueur** au format `hh:mm`.
+
+Un pronostic est complet quand les cinq positions et le temps sont renseignés. Un pronostic incomplet peut être sauvegardé mais ne marque aucun point.
+
+Le joueur peut modifier son pronostic autant de fois qu'il veut jusqu'au verrouillage. La date de **dernière finalisation** est conservée : elle sert au départage.
+
+Le nombre de picks est un paramètre de la course (3 ou 5), fixé par l'admin. Le POC utilise 5.
+
+Un seul temps estimé par champ, celui du vainqueur. Un temps par pick est une évolution possible après le POC.
+
+### 4.2 Verrouillage
+
+- Chaque champ a une heure de verrouillage, par défaut l'heure de départ officielle de la course, en heure locale de la course.
+- Après verrouillage : picks figés, et visibles par les autres membres des ligues du joueur.
+- Avant verrouillage : picks visibles uniquement par leur auteur.
+
+Heures de départ 2026 à confirmer sur les sites organisateurs :
+
+| Champ                         | Départ                     | Fuseau          |
+| ----------------------------- | -------------------------- | --------------- |
+| Diagonale des Fous H/F        | jeudi 15 octobre, soirée   | UTC+4 (Réunion) |
+| Grand Trail des Templiers H/F | dimanche 18 octobre, matin | UTC+2 (Paris)   |
+
+### 4.3 Points de position
+
+Pour chaque pick `i` (1 à 5) dont le coureur finit à la position réelle `p` :
+
+```
+si p > 10 ou abandon      : 0
+sinon                     : (10 − |i − p|) × poids(i)
+poids = [50, 48, 46, 44, 42] pour i = 1..5
+```
+
+Points max hors bonus par champ : 2300 (500 + 480 + 460 + 440 + 420).
+
+Exemples : pick 1 qui gagne = 500. Pick 1 qui finit 3e = 400. Pick 5 qui finit 2e = 294. Pick 3 qui finit 11e = 0.
+
+### 4.4 Multiplicateur outsider
+
+Principe voulu : plus le coureur pronostiqué est bas à l'index, plus les points gagnés sont élevés. Un favori qui gagne rapporte le barème de base, un outsider qui gagne rapporte davantage.
+
+Règle proposée, sur le **rang de favori** `r` du coureur dans son champ (1 = meilleur index) :
+
+```
+multiplicateur(r) = min(1 + 0.1 × (r − 1), 2.0)
+points_pick = points_position × multiplicateur(r)
+```
+
+Soit ×1.0 pour le favori, ×1.5 pour le 6e favori, ×2.0 plafonné à partir du 11e favori.
+
+Décisions incluses dans cette règle :
+
+- Le multiplicateur s'applique **uniquement aux points de position**, pas aux bonus ni aux points de temps.
+- Il ne peut jamais produire de points négatifs : un outsider qui abandonne rapporte 0, pas une pénalité.
+- Les points d'un pick sont arrondis à l'entier le plus proche après application du multiplicateur.
+- Le rang est calculé sur l'index **au moment du verrouillage** et figé avec le résultat.
+- Un coureur sans index connu a un multiplicateur de 1.0. L'admin peut lui saisir un index à la main.
+- On utilise le rang plutôt que la valeur brute de l'index parce que les échelles UTMB (≈ 400–950), ITRA (≈ 300–1000) et Betrail (20–100) ne sont pas comparables entre elles.
+
+Vocabulaire : on parle d'**index** et de **rang de favori**, pas de « cote ». Dans les paris sportifs, une cote basse désigne le favori, ce qui est l'inverse de l'intention ici.
+
+### 4.5 Points de temps
+
+Le joueur estime le temps du vainqueur du champ. Les points dépendent de l'écart relatif au temps réel, pour que la règle soit équitable entre un Templiers à ~7 h et une Diagonale à ~24 h :
+
+```
+tolérance = 3 % du temps réel du vainqueur
+écart     = |temps estimé − temps réel|
+points    = 200 × max(0, 1 − écart / tolérance)
+```
+
+Exemples : vainqueur en 24 h 00, tolérance 43 min 12 s. Estimation à 23 h 45 → écart 15 min → 131 points. Estimation à 23 h 30 → écart 30 min → 61 points. Estimation à 25 h 00 → 0 point. Sur un Templiers gagné en 7 h 00, la tolérance est de 12 min 36 s.
+
+La tolérance est un paramètre de la course (3 % par défaut).
+
+### 4.6 Bonus (non multipliés)
+
+| Réussite                    | Points                 |
+| --------------------------- | ---------------------- |
+| Vainqueur trouvé            | 75                     |
+| Top 3 dans le désordre      | 150                    |
+| Top 3 dans l'ordre exact    | 300                    |
+| Top 5 dans le désordre      | 250                    |
+| Top 5 dans l'ordre exact    | 500                    |
+| Positions exactes multiples | (nombre d'exacts × 5)² |
+
+Les bonus se cumulent (un top 3 exact donne aussi le top 3 désordre et le vainqueur).
+
+### 4.7 Score et classement
+
+- Score du joueur pour un champ = Σ points de position × multiplicateur + points de temps + bonus. Les points de temps sont arrondis à l'entier le plus proche.
+- Score pour une course = somme des deux champs.
+- Classement d'une ligue = somme des scores sur les courses sélectionnées par la ligue.
+- Égalité : écart de temps cumulé le plus faible, puis date de finalisation la plus ancienne.
+- Un joueur sans pronostic sur un champ marque 0 et reste classé.
+
+### 4.8 Résultats et corrections
+
+- Le résultat officiel est celui publié par l'organisateur (LiveTrail pour les deux courses).
+- L'admin saisit les positions 1 à 10 de chaque champ, le temps du vainqueur, et marque les abandons parmi les élites listés.
+- La publication déclenche le calcul des scores. Une correction (disqualification, erreur de saisie) republie et recalcule tout, avec un historique des versions.
+
+## 5. Comptes
+
+- Inscription par email + mot de passe (décidé le 30 septembre 2026, pas de lien magique pour le POC).
+- Pseudo obligatoire, unique, 3 à 20 caractères. C'est ce qui apparaît dans les classements.
+- Mot de passe : 8 caractères minimum, avec au moins une lettre, un chiffre et un caractère spécial.
+- Deux rôles : `Player` et `Admin`. Le rôle admin est attribué en base, pas d'auto-inscription.
+- Suppression de compte : hors POC.
+
+## 6. Ligues
+
+### 6.1 Types
+
+|                                  | Publique                 | Privée                        |
+| -------------------------------- | ------------------------ | ----------------------------- |
+| Visible dans la liste des ligues | oui                      | non                           |
+| Rejoindre                        | en un clic               | par code d'invitation ou lien |
+| Classement visible               | par tout joueur connecté | par les membres               |
+
+### 6.2 Règles
+
+- Le nom est **unique**, insensible à la casse et aux accents, 3 à 40 caractères.
+- **Pas de limite de membres** dans le POC. Une limite optionnelle pourra être ajoutée plus tard sans changer le modèle.
+- Le créateur est propriétaire. Il peut renommer la ligue, changer sa visibilité, régénérer le code d'invitation, retirer un membre, supprimer la ligue.
+- Un membre peut quitter. Le propriétaire ne peut pas quitter sans transférer la propriété (hors POC : il supprime la ligue).
+- Une ligue couvre par défaut **toutes les courses ouvertes**. Le choix des courses par ligue est hors POC.
+- Un joueur peut appartenir à plusieurs ligues. Ses picks sont les mêmes partout : on pronostique une fois par champ, pas une fois par ligue.
+- Une ligue « Communauté » implicite classe tous les joueurs du site.
+
+### 6.3 Code d'invitation
+
+Code court (8 caractères, alphanumérique sans ambiguïté O/0, I/1), régénérable. Lien de la forme `/join/<code>`.
+
+## 7. Administration
+
+Ce que fait l'admin, par ordre d'importance pour le POC :
+
+1. **Courses** : créer, éditer (nom, lieu, distance, D+, date, site, URL LiveTrail), fixer le nombre de picks, passer le statut : `Draft` → `Open` → `Locked` → `Scored`, ou `Cancelled`.
+2. **Champs et coureurs** : pour chaque champ, saisir la liste des élites : prénom, nom, nationalité, index, source de l'index, liens ITRA / UTMB. Import CSV pour aller vite. Ajout et retrait possibles jusqu'au verrouillage. Un coureur retiré reste dans les picks qui le contiennent, marqué « retiré », et y rapporte 0 point, comme un abandon. Le pronostic reste complet. Le joueur voit l'alerte sur l'accueil et sur son pronostic et peut le remplacer jusqu'au verrouillage.
+3. **Verrouillage** : heure de verrouillage par champ, et bouton de verrouillage manuel immédiat en cas de départ avancé ou retardé.
+4. **Résultats** : saisir positions 1 à 10, temps du vainqueur, abandons ; publier ; corriger et republier.
+5. **Modération** : renommer ou supprimer une ligue au nom problématique, retirer un membre d'une ligue, désactiver un compte.
+
+Ce que l'admin **ne fait pas** :
+
+- il ne saisit ni ne modifie les picks d'un joueur ;
+- il ne gère pas le quotidien des ligues, qui appartiennent à leurs créateurs.
+
+## 8. Données coureurs et index
+
+État des sources, vérifié le 30 septembre 2026 :
+
+| Source                 | Échelle                              | Accès                                                                                                           | Verdict POC                              |
+| ---------------------- | ------------------------------------ | --------------------------------------------------------------------------------------------------------------- | ---------------------------------------- |
+| UTMB Index             | ≈ 400–950, par catégorie de distance | pages `utmb.world/runner/<id>` consultables, pas d'API publique documentée, des scrapers tiers existent (Apify) | source de référence, saisie manuelle     |
+| ITRA Performance Index | jusqu'à 1000                         | site avec recherche, pas d'API publique                                                                         | secours si pas d'index UTMB              |
+| Betrail                | 20–100                               | gratuit, orienté courses francophones                                                                           | secours pour les élites locaux (Réunion) |
+
+Décision POC : **saisie manuelle par l'admin**, via un CSV par champ. Volume : environ 30 élites par champ, soit 120 lignes pour les deux courses. C'est une soirée de travail, et ça évite un scraper à maintenir la semaine de la course.
+
+Les listes d'élites sont publiées avant les courses sur les sites des organisateurs et dans la presse spécialisée. À défaut, prendre les 30 meilleurs index parmi les inscrits.
+
+Après le POC : import automatique depuis les pages UTMB, avec revalidation manuelle.
+
+## 9. Parcours et écrans
+
+### Joueur
+
+1. **Inscription / connexion**.
+2. **Accueil** : courses ouvertes avec compte à rebours avant verrouillage, état de mes picks (vide, incomplet, complet, verrouillé), mes ligues.
+3. **Pronostic d'un champ** : liste des élites avec index et rang de favori, sélection ordonnée de 5 coureurs, saisie du temps, sauvegarde, indicateur « pronostic complet ».
+4. **Mes picks** : récapitulatif par course, avec le score détaillé une fois la course notée.
+5. **Ligues** : créer (nom, visibilité), rejoindre (liste publique ou code), page de ligue avec classement par course et cumulé, membres, lien d'invitation.
+6. **Classement d'une course** : score de chaque membre, picks des membres visibles après verrouillage.
+7. **Scorecard** : pour chaque pick, position réelle, points de position, multiplicateur, bonus, points de temps.
+
+### Admin
+
+8. Liste des courses, formulaire de course, formulaire de champ avec import CSV des coureurs.
+9. Saisie des résultats d'un champ et bouton « Publier ».
+10. Liste des ligues et des comptes avec actions de modération.
+
+## 10. Hors périmètre du POC
+
+- Argent, cagnottes, cotes de bookmaker.
+- Scraping automatique des index ou des résultats live.
+- Notifications (email, push) hors emails de connexion.
+- Séries multi-courses, saison, historique des années précédentes.
+- Fiches coureurs, photos, réseaux sociaux.
+- Choix des courses par ligue, limite de membres, transfert de propriété.
+- Application mobile native, internationalisation. Le site est en français, responsive.
+- Statistiques, community picks, commentaires.
+
+## 11. Décisions
+
+Questions tranchées le 30 septembre 2026.
+
+| #   | Question                        | Décision                                                                                                                                              |
+| --- | ------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 1   | Top 3 ou top 5                  | Top 5 pour le POC, nombre de picks paramétrable par course.                                                                                           |
+| 2   | Multiplicateur outsider         | Palier de 0.1 par rang, plafond ×2.0. À rejouer sur les résultats 2025 des deux courses avant l'ouverture.                                            |
+| 3   | Tolérance de temps              | 3 % du temps du vainqueur.                                                                                                                            |
+| 4   | Temps estimé                    | Un seul par champ : le temps du vainqueur. Un temps par pick viendra peut-être après le POC.                                                          |
+| 5   | Ligue publique                  | Rejoignable en un clic, sans validation du propriétaire.                                                                                              |
+| 6   | Résultats                       | Top 10 saisi par l'admin. Un pick hors top 10 s'affiche « hors top 10 ».                                                                              |
+| 7   | Fuseau                          | Heure locale du joueur, heure locale de la course en rappel.                                                                                          |
+| 8   | Coureur retiré de la start list | Le pick est conservé et rapporte 0 point, comme un abandon. Le joueur est averti dans l'interface et peut remplacer le coureur jusqu'au verrouillage. |
+
+Sur le point 8 : vider le pick aurait rendu le pronostic incomplet, et un pronostic incomplet ne marque aucun point (§ 4.1). Un joueur qui ne se reconnecte pas avant le départ aurait perdu tout son pronostic pour un seul forfait. Conserver le pick limite la perte à ce pick.
+
+## 12. Annexe — barème en mode 10 picks
+
+Pour référence si une course passe en top 10 : un pick marque si le coureur finit dans le top 15, avec `(15 − |i − p|) × poids(i)` et `poids = [50, 48, 46, 44, 42, 40, 38, 36, 34, 32]`. Max hors bonus : 6150. Bonus supplémentaire « top 10 dans le désordre » : 500.
+
+Sources :
+
+- UTMB Index, https://utmb.world/utmb-index/info
+- ITRA Performance Index, https://itra.run/FAQ/PerformanceIndex
+- Festival des Templiers 2026, https://www.festivaldestempliers.com/
+- Grand Raid de La Réunion 2026, https://www.grandraid-reunion.com/fr/les-courses/la-diagonale-des-fous/

@@ -1,0 +1,19 @@
+{
+  "name": "modules-scoring-application",
+  "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/modules/scoring/application/src",
+  "projectType": "library",
+  "tags": [],
+  "targets": {
+    "build": {
+      "executor": "@nx/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/libs/modules/scoring/application",
+        "main": "libs/modules/scoring/application/src/index.ts",
+        "tsConfig": "libs/modules/scoring/application/tsconfig.lib.json",
+        "assets": []
+      }
+    }
+  }
+}

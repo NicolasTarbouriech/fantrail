@@ -1,0 +1,19 @@
+{
+  "name": "modules-race-infrastructure",
+  "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/modules/race/infrastructure/src",
+  "projectType": "library",
+  "tags": [],
+  "targets": {
+    "build": {
+      "executor": "@nx/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/libs/modules/race/infrastructure",
+        "main": "libs/modules/race/infrastructure/src/index.ts",
+        "tsConfig": "libs/modules/race/infrastructure/tsconfig.lib.json",
+        "assets": []
+      }
+    }
+  }
+}

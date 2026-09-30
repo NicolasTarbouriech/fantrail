@@ -1,0 +1,329 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type Prediction {
+  id: ID!
+  fieldId: ID!
+
+  """Runner id per pick position, null while not chosen"""
+  pickList: [ID]!
+  winnerTimeEstimateInSeconds: Int
+
+  """Only complete predictions score points"""
+  isComplete: Boolean!
+  finalizedAt: DateTime
+  updatedAt: DateTime!
+  player: Player!
+
+  """Picked runners who withdrew: they will score 0"""
+  withdrawnRunnerIds: [ID!]!
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+type LeaderboardEntry {
+  rank: Int!
+  userId: ID!
+  total: Int!
+
+  """Fields where the player scored"""
+  scoredFieldCount: Int!
+
+  """Cumulated gap on the winner time, first tie-break"""
+  timeGapInSeconds: Int
+  player: Player!
+}
+
+type Player {
+  id: ID!
+  pseudo: String!
+}
+
+type League {
+  id: ID!
+  name: String!
+  visibility: LeagueVisibility!
+  memberCount: Int!
+  ownerId: ID!
+  isOwner: Boolean!
+  isMember: Boolean!
+
+  """Shown to members only, link /join/<code>"""
+  inviteCode: String
+  createdAt: DateTime!
+  members: [Player!]!
+
+  """Members ranked on one race or on every public race"""
+  leaderboard(raceId: ID): [LeaderboardEntry!]!
+
+  """Members predictions on a field, revealed once it locks"""
+  fieldPredictions(fieldId: ID!): [Prediction!]!
+}
+
+enum LeagueVisibility {
+  Public
+  Private
+}
+
+type FieldResult {
+  fieldId: ID!
+
+  """Increases with each correction"""
+  version: Int!
+
+  """Runner ids from the winner to the 10th"""
+  rankingList: [ID!]!
+  winnerTimeInSeconds: Int!
+  dnfRunnerIdList: [ID!]!
+  publishedAt: DateTime
+}
+
+type RaceField {
+  id: ID!
+  gender: Gender!
+  startAt: DateTime!
+  lockAt: DateTime!
+  lockedAt: DateTime
+  isLocked: Boolean!
+  startList: StartList!
+
+  """Null until the result is published"""
+  result: FieldResult
+}
+
+enum Gender {
+  Men
+  Women
+}
+
+type Runner {
+  id: ID!
+  firstName: String!
+  lastName: String!
+  fullName: String!
+
+  """ISO 3166-1 alpha-3 code"""
+  nationality: String
+  index: Int
+  indexSource: IndexSource
+  utmbUrl: String
+  itraUrl: String
+  isWithdrawn: Boolean!
+  withdrawnAt: DateTime
+
+  """1 = best index among active runners"""
+  favoriteRank: Int
+}
+
+enum IndexSource {
+  Utmb
+  Itra
+  Betrail
+  Manual
+}
+
+type StartList {
+  fieldId: ID!
+  runners: [Runner!]!
+}
+
+type Race {
+  id: ID!
+  name: String!
+  location: String!
+  distanceInKm: Float!
+  elevationGainInMeters: Int!
+
+  """IANA timezone of the race, e.g. Indian/Reunion"""
+  timezone: String!
+  websiteUrl: String
+  liveTrailUrl: String
+  pickCount: Int!
+  timeTolerancePercent: Float!
+  status: RaceStatus!
+  fields: [RaceField!]!
+}
+
+enum RaceStatus {
+  Draft
+  Open
+  Locked
+  Scored
+  Cancelled
+}
+
+type PickScore {
+  pickPosition: Int!
+  runnerId: ID!
+
+  """Null outside the top 10 or when the runner did not finish"""
+  finishPosition: Int
+  favoriteRank: Int
+  positionPoints: Int!
+
+  """Outsider multiplier, from 1.0 to 2.0"""
+  multiplier: Float!
+  points: Int!
+}
+
+type TimeScore {
+  estimateInSeconds: Int!
+  actualInSeconds: Int!
+  gapInSeconds: Int!
+  points: Int!
+}
+
+type Bonus {
+  type: BonusType!
+  points: Int!
+}
+
+enum BonusType {
+  Winner
+  Top3Unordered
+  Top3Exact
+  Top5Unordered
+  Top5Exact
+  MultipleExactPositions
+}
+
+type Scorecard {
+  fieldId: ID!
+  resultVersion: Int!
+  total: Int!
+  picks: [PickScore!]!
+  time: TimeScore!
+  bonuses: [Bonus!]!
+}
+
+type Me {
+  id: ID!
+  email: String!
+  pseudo: String!
+  role: UserRole!
+}
+
+enum UserRole {
+  Player
+  Admin
+}
+
+type AdminUser {
+  id: ID!
+  email: String!
+  pseudo: String!
+  role: UserRole!
+  disabledAt: DateTime
+  createdAt: DateTime!
+}
+
+type Query {
+  """Races open to predictions, locked or scored"""
+  races: [Race!]!
+  race(raceId: ID!): Race!
+  adminRaces(statusList: [RaceStatus!]): [Race!]!
+  me: Me
+  adminUsers: [AdminUser!]!
+  myPrediction(fieldId: ID!): Prediction
+  myPredictions: [Prediction!]!
+
+  """Every player, on one race or on all public races"""
+  communityLeaderboard(raceId: ID): [LeaderboardEntry!]!
+
+  """Null until the field is scored or without complete prediction"""
+  myScorecard(fieldId: ID!): Scorecard
+  publicLeagues: [League!]!
+  myLeagues: [League!]!
+  adminLeagues: [League!]!
+  league(leagueId: ID!): League!
+
+  """Preview of the league behind an invite link, before joining"""
+  leagueByInviteCode(inviteCode: String!): League!
+}
+
+type Mutation {
+  createRace(data: RaceInput!): Race!
+  updateRace(raceId: ID!, data: RaceInput!): Race!
+  openRace(raceId: ID!): Race!
+  lockRace(raceId: ID!): Race!
+  cancelRace(raceId: ID!): Race!
+  addRaceField(raceId: ID!, data: RaceFieldInput!): Race!
+  updateRaceField(fieldId: ID!, data: RaceFieldInput!): Race!
+
+  """Locks a field now, for an early or delayed start"""
+  lockRaceField(fieldId: ID!): Race!
+  addRunners(fieldId: ID!, dataList: [RunnerInput!]!): StartList!
+  updateRunner(fieldId: ID!, runnerId: ID!, data: RunnerInput!): StartList!
+  withdrawRunner(fieldId: ID!, runnerId: ID!): StartList!
+  reinstateRunner(fieldId: ID!, runnerId: ID!): StartList!
+  register(data: RegisterInput!): Me!
+  login(email: String!, password: String!): Me!
+  logout: Boolean!
+  disableUser(userId: ID!): AdminUser!
+  enableUser(userId: ID!): AdminUser!
+
+  """Saves the prediction, complete or not, until the field locks"""
+  savePrediction(fieldId: ID!, pickList: [ID]!, winnerTimeEstimateInSeconds: Int): Prediction!
+
+  """Publishes or corrects the result, then rescores the field"""
+  publishFieldResult(fieldId: ID!, rankingList: [ID!]!, winnerTimeInSeconds: Int!, dnfRunnerIdList: [ID!]! = []): FieldResult!
+  createLeague(name: String!, visibility: LeagueVisibility!): League!
+
+  """Joins a public league"""
+  joinLeague(leagueId: ID!): League!
+  joinLeagueByInviteCode(inviteCode: String!): League!
+  leaveLeague(leagueId: ID!): Boolean!
+  removeLeagueMember(leagueId: ID!, userId: ID!): League!
+  renameLeague(leagueId: ID!, name: String!): League!
+  changeLeagueVisibility(leagueId: ID!, visibility: LeagueVisibility!): League!
+  regenerateLeagueInviteCode(leagueId: ID!): League!
+  deleteLeague(leagueId: ID!): Boolean!
+}
+
+input RaceInput {
+  name: String!
+  location: String!
+  distanceInKm: Float!
+  elevationGainInMeters: Int!
+
+  """IANA timezone of the race, e.g. Europe/Paris"""
+  timezone: String!
+  websiteUrl: String
+  liveTrailUrl: String
+
+  """3 or 5"""
+  pickCount: Int!
+  timeTolerancePercent: Float!
+}
+
+input RaceFieldInput {
+  gender: Gender!
+  startAt: DateTime!
+  lockAt: DateTime!
+}
+
+input RunnerInput {
+  firstName: String!
+  lastName: String!
+
+  """ISO 3166-1 alpha-3 code"""
+  nationality: String
+  index: Int
+  indexSource: IndexSource
+  utmbUrl: String
+  itraUrl: String
+}
+
+input RegisterInput {
+  email: String!
+
+  """3 to 20 characters, unique regardless of case and accents"""
+  pseudo: String!
+
+  """At least 8 characters with a letter, a digit and a special character"""
+  password: String!
+}

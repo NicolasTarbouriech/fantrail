@@ -1,0 +1,19 @@
+{
+  "name": "modules-league-domain",
+  "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/modules/league/domain/src",
+  "projectType": "library",
+  "tags": [],
+  "targets": {
+    "build": {
+      "executor": "@nx/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/libs/modules/league/domain",
+        "main": "libs/modules/league/domain/src/index.ts",
+        "tsConfig": "libs/modules/league/domain/tsconfig.lib.json",
+        "assets": []
+      }
+    }
+  }
+}

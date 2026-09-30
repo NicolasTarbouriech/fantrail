@@ -1,0 +1,19 @@
+{
+  "name": "modules-prediction-infrastructure",
+  "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/modules/prediction/infrastructure/src",
+  "projectType": "library",
+  "tags": [],
+  "targets": {
+    "build": {
+      "executor": "@nx/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/libs/modules/prediction/infrastructure",
+        "main": "libs/modules/prediction/infrastructure/src/index.ts",
+        "tsConfig": "libs/modules/prediction/infrastructure/tsconfig.lib.json",
+        "assets": []
+      }
+    }
+  }
+}

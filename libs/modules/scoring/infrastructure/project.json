@@ -1,0 +1,19 @@
+{
+  "name": "modules-scoring-infrastructure",
+  "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/modules/scoring/infrastructure/src",
+  "projectType": "library",
+  "tags": [],
+  "targets": {
+    "build": {
+      "executor": "@nx/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/libs/modules/scoring/infrastructure",
+        "main": "libs/modules/scoring/infrastructure/src/index.ts",
+        "tsConfig": "libs/modules/scoring/infrastructure/tsconfig.lib.json",
+        "assets": []
+      }
+    }
+  }
+}

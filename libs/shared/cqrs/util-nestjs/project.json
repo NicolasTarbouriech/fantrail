@@ -1,0 +1,19 @@
+{
+  "name": "shared-cqrs-util-nestjs",
+  "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/shared/cqrs/util-nestjs/src",
+  "projectType": "library",
+  "tags": [],
+  "targets": {
+    "build": {
+      "executor": "@nx/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/libs/shared/cqrs/util-nestjs",
+        "main": "libs/shared/cqrs/util-nestjs/src/index.ts",
+        "tsConfig": "libs/shared/cqrs/util-nestjs/tsconfig.lib.json",
+        "assets": []
+      }
+    }
+  }
+}

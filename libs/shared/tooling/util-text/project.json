@@ -1,0 +1,19 @@
+{
+  "name": "shared-tooling-util-text",
+  "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/shared/tooling/util-text/src",
+  "projectType": "library",
+  "tags": [],
+  "targets": {
+    "build": {
+      "executor": "@nx/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/libs/shared/tooling/util-text",
+        "main": "libs/shared/tooling/util-text/src/index.ts",
+        "tsConfig": "libs/shared/tooling/util-text/tsconfig.lib.json",
+        "assets": []
+      }
+    }
+  }
+}

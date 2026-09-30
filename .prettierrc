@@ -1,0 +1,16 @@
+{
+  "singleQuote": true,
+  "importOrder": [
+    "^@trail/(.*)$",
+    "^[./](?!.*\\.(css|scss|png|jpg|jpeg|gif|svg|webp)(\\?url)?(\\?react)?).*",
+    "^[./].*\\.(png|jpg|jpeg|gif|svg|webp)(\\?url)?(\\?react)?$",
+    "^[./].*\\.(css|scss)$"
+  ],
+  "importOrderSeparation": true,
+  "importOrderSortSpecifiers": true,
+  "importOrderParserPlugins": ["typescript", "decorators-legacy", "jsx"],
+  "plugins": [
+    "prettier-plugin-tailwindcss",
+    "@trivago/prettier-plugin-sort-imports"
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "name": "shared-tooling-util-error",
+  "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/shared/tooling/util-error/src",
+  "projectType": "library",
+  "tags": [],
+  "targets": {
+    "build": {
+      "executor": "@nx/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/libs/shared/tooling/util-error",
+        "main": "libs/shared/tooling/util-error/src/index.ts",
+        "tsConfig": "libs/shared/tooling/util-error/tsconfig.lib.json",
+        "assets": []
+      }
+    }
+  }
+}
