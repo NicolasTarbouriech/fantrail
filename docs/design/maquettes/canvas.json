@@ -1,0 +1,189 @@
+{
+  "v": 3,
+  "attachments": {},
+  "boards": {
+    "Main.dc.html": {
+      "h": 1160,
+      "is_interactive": true,
+      "title": "Accueil",
+      "w": 390,
+      "x": 0,
+      "y": 0
+    },
+    "Dossard.dc.html": {
+      "h": 880,
+      "is_interactive": true,
+      "title": "Pronostic d’un champ",
+      "w": 390,
+      "x": 470,
+      "y": 0
+    },
+    "ChoixCoureur.dc.html": {
+      "h": 880,
+      "is_interactive": true,
+      "title": "Choix d’un coureur",
+      "w": 390,
+      "x": 940,
+      "y": 0
+    },
+    "MesLigues.dc.html": {
+      "h": 1120,
+      "is_interactive": true,
+      "title": "Mes ligues",
+      "w": 390,
+      "x": 1410,
+      "y": 0
+    },
+    "Ligue.dc.html": {
+      "h": 900,
+      "is_interactive": true,
+      "title": "Ligue et classement",
+      "w": 390,
+      "x": 2350,
+      "y": 0
+    },
+    "MesScores.dc.html": {
+      "h": 900,
+      "is_interactive": true,
+      "title": "Mes scores",
+      "w": 390,
+      "x": 2820,
+      "y": 0
+    },
+    "Scorecard.dc.html": {
+      "h": 1100,
+      "is_interactive": true,
+      "title": "Scorecard",
+      "w": 390,
+      "x": 3290,
+      "y": 0
+    },
+    "Profil.dc.html": {
+      "h": 844,
+      "is_interactive": true,
+      "title": "Profil",
+      "w": 390,
+      "x": 3760,
+      "y": 0
+    },
+    "Invitation.dc.html": {
+      "h": 1080,
+      "is_interactive": true,
+      "title": "Invitation et inscription",
+      "w": 390,
+      "x": 4230,
+      "y": 0
+    },
+    "Connexion.dc.html": {
+      "h": 844,
+      "is_interactive": true,
+      "title": "Connexion",
+      "w": 390,
+      "x": 4700,
+      "y": 0
+    },
+    "AdminCourses.dc.html": {
+      "h": 900,
+      "is_interactive": true,
+      "title": "Admin — courses",
+      "w": 1280,
+      "x": 0,
+      "y": 1540
+    },
+    "AdminResultats.dc.html": {
+      "h": 900,
+      "is_interactive": true,
+      "title": "Admin — course, saisie des résultats",
+      "w": 1280,
+      "x": 1360,
+      "y": 1540
+    },
+    "AdminLigues.dc.html": {
+      "h": 900,
+      "is_interactive": true,
+      "title": "Admin — ligues",
+      "w": 1280,
+      "x": 0,
+      "y": 2560
+    },
+    "AdminLigue.dc.html": {
+      "h": 900,
+      "is_interactive": true,
+      "title": "Admin — détail d’une ligue",
+      "w": 1280,
+      "x": 1360,
+      "y": 2560
+    },
+    "AdminJoueurs.dc.html": {
+      "h": 900,
+      "is_interactive": true,
+      "title": "Admin — joueurs",
+      "w": 1280,
+      "x": 0,
+      "y": 3580
+    },
+    "AdminJoueur.dc.html": {
+      "h": 900,
+      "is_interactive": true,
+      "title": "Admin — détail d’un joueur",
+      "w": 1280,
+      "x": 1360,
+      "y": 3580
+    },
+    "CreerLigue.dc.html": {
+      "h": 900,
+      "is_interactive": true,
+      "title": "Créer une ligue",
+      "w": 390,
+      "x": 1880,
+      "y": 0
+    }
+  },
+  "createdOnFiles": {
+    "at": "2026-09-30T18:40:00Z",
+    "v": 1
+  },
+  "designSystems": [],
+  "launch": {
+    "view": "canvas"
+  },
+  "notes": {
+    "admin": {
+      "kind": "title1",
+      "maxW": 2640,
+      "text": "Back-office — shadcn/ui",
+      "w": 240,
+      "x": 0,
+      "y": 1280
+    },
+    "heading": {
+      "kind": "title1",
+      "maxW": 5090,
+      "text": "Fantrail — écrans joueur, DA Dossard",
+      "w": 240,
+      "x": 0,
+      "y": -260
+    }
+  },
+  "order": [
+    "Main.dc.html",
+    "Dossard.dc.html",
+    "ChoixCoureur.dc.html",
+    "MesLigues.dc.html",
+    "CreerLigue.dc.html",
+    "Ligue.dc.html",
+    "MesScores.dc.html",
+    "Scorecard.dc.html",
+    "Profil.dc.html",
+    "Invitation.dc.html",
+    "Connexion.dc.html",
+    "AdminCourses.dc.html",
+    "AdminResultats.dc.html",
+    "AdminLigues.dc.html",
+    "AdminLigue.dc.html",
+    "AdminJoueurs.dc.html",
+    "AdminJoueur.dc.html"
+  ],
+  "pages": [],
+  "title": "Fantrail — directions visuelles"
+}

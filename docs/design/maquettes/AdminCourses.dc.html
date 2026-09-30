@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>Admin — courses</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@800;900&amp;family=Outfit:wght@400;500;600;700&amp;display=swap">
+<style>
+body{margin:0}
+a{color:#09090B}a:hover{color:#2B3BFF}
+</style>
+</helmet>
+<div style="width: 1280px; height: 900px; box-sizing: border-box; display: grid; grid-template-columns: 240px minmax(0, 1fr); background: #FFFFFF; color: #09090B; font-family: 'Outfit', sans-serif; font-size: 14px">
+<aside style="display: flex; flex-direction: column; gap: 20px; padding: 16px 12px; border-right: 1px solid #E4E4E7; background: #FAFAFA">
+<div style="display: flex; align-items: center; gap: 8px; height: 40px; padding: 0 8px">
+<span style="font-family: 'Big Shoulders Display', sans-serif; font-size: 24px; font-weight: 900; letter-spacing: 0.04em; color: #2B3BFF">FANTRAIL</span>
+<span style="padding: 2px 8px; border: 1px solid #E4E4E7; border-radius: 999px; background: #FFFFFF; color: #52525B; font-size: 12px; font-weight: 600">Admin</span>
+</div>
+<nav aria-label="Administration" style="display: flex; flex-direction: column; gap: 2px">
+<a href="AdminCourses.dc.html" aria-current="page" style="display: flex; align-items: center; gap: 10px; height: 36px; padding: 0 10px; border-radius: 8px; background: #F4F4F5; color: #09090B; font-weight: 600; text-decoration: none">
+<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20l6-14 4 8 3-5 3 11z"></path></svg>
+Courses</a>
+<a href="AdminLigues.dc.html" style="display: flex; align-items: center; gap: 10px; height: 36px; padding: 0 10px; border-radius: 8px; color: #52525B; font-weight: 500; text-decoration: none">
+<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="8" r="4"></circle><path d="M2 21c0-4 3-6 7-6s7 2 7 6"></path><path d="M16 4a4 4 0 0 1 0 8"></path><path d="M22 21c0-3-2-5-5-5.5"></path></svg>
+Ligues</a>
+<a href="AdminJoueurs.dc.html" style="display: flex; align-items: center; gap: 10px; height: 36px; padding: 0 10px; border-radius: 8px; color: #52525B; font-weight: 500; text-decoration: none">
+<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4"></circle><path d="M4 21c0-4 4-6 8-6s8 2 8 6"></path></svg>
+Joueurs</a>
+</nav>
+<div style="margin-top: auto; display: flex; align-items: center; gap: 10px; padding: 8px">
+<span style="width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; border-radius: 999px; background: #FFD60A; font-weight: 700">K</span>
+<span style="display: flex; flex-direction: column">
+<span style="font-weight: 600">Kilian</span>
+<span style="font-size: 12px; color: #71717A">Administrateur</span>
+</span>
+</div>
+</aside>
+<main style="display: flex; flex-direction: column; min-width: 0">
+<header style="display: flex; align-items: center; justify-content: space-between; height: 56px; padding: 0 24px; border-bottom: 1px solid #E4E4E7">
+<nav aria-label="Fil d’Ariane" style="display: flex; align-items: center; gap: 8px; color: #71717A">
+<span style="color: #09090B; font-weight: 500">Courses</span>
+</nav>
+<a href="Main.dc.html" style="height: 36px; box-sizing: border-box; display: flex; align-items: center; padding: 0 14px; border: 1px solid #E4E4E7; border-radius: 8px; background: #FFFFFF; color: #09090B; font-weight: 500; text-decoration: none">Voir côté joueur</a>
+</header>
+<div style="display: flex; flex-direction: column; gap: 20px; padding: 24px">
+<div style="display: flex; align-items: flex-end; justify-content: space-between; gap: 16px">
+<div style="display: flex; flex-direction: column; gap: 4px">
+<div style="display: flex; align-items: center; gap: 12px">
+<h1 style="margin: 0; font-size: 24px; font-weight: 700; letter-spacing: -0.01em">Courses</h1>
+
+</div>
+<span style="color: #71717A">Brouillon → Ouverte → Verrouillée → Notée. Une course s’ouvre quand chaque champ a assez de coureurs.</span>
+</div>
+<div style="display: flex; align-items: center; gap: 8px">
+<button type="button" style="height: 36px; box-sizing: border-box; display: inline-flex; align-items: center; gap: 8px; padding: 0 14px; border-radius: 8px; border: 0; background: #2B3BFF; color: #FFFFFF; font-family: inherit; font-size: 14px; font-weight: 600; cursor: pointer"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg>
+Nouvelle course</button>
+</div>
+</div>
+<div style="position: relative; display: flex; flex-direction: column; gap: 16px">
+<section style="border: 1px solid #E4E4E7; border-radius: 12px; background: #FFFFFF; overflow: hidden">
+<div style="display: grid; grid-template-columns: minmax(0, 2.2fr) 130px 150px 90px 100px 64px; align-items: center; height: 40px; border-bottom: 1px solid #E4E4E7; background: #FAFAFA; color: #71717A; font-size: 13px; font-weight: 500">
+<span style="padding: 0 16px">Course</span>
+<span style="padding: 0 16px">Date</span>
+<span style="padding: 0 16px">Statut</span>
+<span style="padding: 0 16px; text-align: right">Champs</span>
+<span style="padding: 0 16px; text-align: right">Coureurs</span>
+<span style="padding: 0 16px; text-align: right"></span>
+</div>
+<ul style="margin: 0; padding: 0; list-style: none">
+<li><a href="AdminResultats.dc.html" style="display: grid; grid-template-columns: minmax(0, 2.2fr) 130px 150px 90px 100px 64px; align-items: center; min-height: 52px; border-bottom: 1px solid #F4F4F5; color: #09090B; text-decoration: none">
+<span style="padding: 0 16px; min-width: 0"><span style="display: flex; flex-direction: column"><span style="font-weight: 600">Diagonale des Fous 2026</span><span style="font-size: 12px; color: #71717A">Saint-Pierre, La Réunion · 175 km</span></span></span>
+<span style="padding: 0 16px; min-width: 0">jeu. 15 oct.</span>
+<span style="padding: 0 16px; min-width: 0"><span style="display: inline-flex; align-items: center; gap: 5px; padding: 2px 9px; border-radius: 999px; background: #F4F4F5; color: #27272A; font-size: 12px; font-weight: 600"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="11" width="16" height="10" rx="2"></rect><path d="M8 11V7a4 4 0 0 1 8 0v4"></path></svg>
+Verrouillée</span></span>
+<span style="padding: 0 16px; min-width: 0; text-align: right; font-variant-numeric: tabular-nums">2</span>
+<span style="padding: 0 16px; min-width: 0; text-align: right; font-variant-numeric: tabular-nums">64</span>
+<span style="padding: 0 16px; min-width: 0; text-align: right; font-variant-numeric: tabular-nums"><button type="button" aria-label="Actions pour Diagonale des Fous 2026" style="width: 32px; height: 32px; display: inline-flex; align-items: center; justify-content: center; border: 0; border-radius: 8px; background: transparent; color: #52525B; cursor: pointer"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="5" cy="12" r="1.2"></circle><circle cx="12" cy="12" r="1.2"></circle><circle cx="19" cy="12" r="1.2"></circle></svg></button></span>
+</a></li>
+<li><a href="AdminResultats.dc.html" style="display: grid; grid-template-columns: minmax(0, 2.2fr) 130px 150px 90px 100px 64px; align-items: center; min-height: 52px; border-bottom: 1px solid #F4F4F5; color: #09090B; text-decoration: none">
+<span style="padding: 0 16px; min-width: 0"><span style="display: flex; flex-direction: column"><span style="font-weight: 600">Grand Trail des Templiers 2026</span><span style="font-size: 12px; color: #71717A">Millau · 80 km</span></span></span>
+<span style="padding: 0 16px; min-width: 0">dim. 18 oct.</span>
+<span style="padding: 0 16px; min-width: 0"><span style="display: inline-flex; align-items: center; gap: 5px; padding: 2px 9px; border-radius: 999px; background: #EEF0FF; color: #1E2BD6; font-size: 12px; font-weight: 600">Ouverte</span></span>
+<span style="padding: 0 16px; min-width: 0; text-align: right; font-variant-numeric: tabular-nums">2</span>
+<span style="padding: 0 16px; min-width: 0; text-align: right; font-variant-numeric: tabular-nums">58</span>
+<span style="padding: 0 16px; min-width: 0; text-align: right; font-variant-numeric: tabular-nums"><button type="button" aria-label="Actions pour Grand Trail des Templiers 2026" style="width: 32px; height: 32px; display: inline-flex; align-items: center; justify-content: center; border: 0; border-radius: 8px; background: transparent; color: #52525B; cursor: pointer"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="5" cy="12" r="1.2"></circle><circle cx="12" cy="12" r="1.2"></circle><circle cx="19" cy="12" r="1.2"></circle></svg></button></span>
+</a></li>
+<li><a href="AdminResultats.dc.html" style="display: grid; grid-template-columns: minmax(0, 2.2fr) 130px 150px 90px 100px 64px; align-items: center; min-height: 52px; border-bottom: 1px solid #F4F4F5; color: #09090B; text-decoration: none">
+<span style="padding: 0 16px; min-width: 0"><span style="display: flex; flex-direction: column"><span style="font-weight: 600">Course de test</span><span style="font-size: 12px; color: #71717A">brouillon interne</span></span></span>
+<span style="padding: 0 16px; min-width: 0">—</span>
+<span style="padding: 0 16px; min-width: 0"><span style="display: inline-flex; align-items: center; gap: 5px; padding: 2px 9px; border-radius: 999px; border: 1px solid #E4E4E7; background: #FFFFFF; color: #52525B; font-size: 12px; font-weight: 600">Brouillon</span></span>
+<span style="padding: 0 16px; min-width: 0; text-align: right; font-variant-numeric: tabular-nums">0</span>
+<span style="padding: 0 16px; min-width: 0; text-align: right; font-variant-numeric: tabular-nums">0</span>
+<span style="padding: 0 16px; min-width: 0; text-align: right; font-variant-numeric: tabular-nums"><button type="button" aria-label="Actions pour Course de test" style="width: 32px; height: 32px; display: inline-flex; align-items: center; justify-content: center; border: 0; border-radius: 8px; background: transparent; color: #52525B; cursor: pointer"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="5" cy="12" r="1.2"></circle><circle cx="12" cy="12" r="1.2"></circle><circle cx="19" cy="12" r="1.2"></circle></svg></button></span>
+</a></li>
+</ul>
+</section>
+<div role="menu" aria-label="Actions pour Grand Trail des Templiers 2026" style="position: absolute; right: 24px; top: 300px; width: 240px; padding: 4px; border: 1px solid #E4E4E7; border-radius: 10px; background: #FFFFFF; box-shadow: 0 8px 24px rgba(9, 9, 11, 0.12)">
+<button type="button" role="menuitem" style="width: 100%; height: 34px; display: flex; align-items: center; padding: 0 10px; border: 0; border-radius: 6px; background: #F4F4F5; color: #09090B; font-family: inherit; font-size: 14px; text-align: left; cursor: pointer">Modifier la course</button>
+<button type="button" role="menuitem" style="width: 100%; height: 34px; display: flex; align-items: center; padding: 0 10px; border: 0; border-radius: 6px; background: transparent; color: #09090B; font-family: inherit; font-size: 14px; text-align: left; cursor: pointer">Gérer les champs et start lists</button>
+<button type="button" role="menuitem" style="width: 100%; height: 34px; display: flex; align-items: center; padding: 0 10px; border: 0; border-radius: 6px; background: transparent; color: #09090B; font-family: inherit; font-size: 14px; text-align: left; cursor: pointer">Verrouiller maintenant</button>
+<div role="separator" style="height: 1px; margin: 4px 0; background: #E4E4E7"></div>
+<button type="button" role="menuitem" style="width: 100%; height: 34px; display: flex; align-items: center; padding: 0 10px; border: 0; border-radius: 6px; background: transparent; color: #B91C1C; font-family: inherit; font-size: 14px; text-align: left; cursor: pointer">Annuler la course</button>
+</div>
+</div>
+</div>
+</main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1280,"height":900}}'>
+class Component extends DCLogic {
+renderVals() {
+return {};
+}
+}
+</script>
+</body>
+</html>

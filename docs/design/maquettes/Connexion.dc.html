@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>Connexion</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;800;900&amp;family=Outfit:wght@400;500;600;700&amp;display=swap">
+<style>
+body{margin:0}
+a{color:#2B3BFF}a:hover{color:#1A26B8}
+</style>
+</helmet>
+<div style="width: 390px; height: 844px; box-sizing: border-box; display: flex; flex-direction: column; background: #2B3BFF; color: #0E1330; font-family: 'Outfit', sans-serif">
+<div style="padding: 20px 20px 32px; display: flex; flex-direction: column; gap: 28px; color: #FFFFFF">
+<span style="height: 44px; display: flex; align-items: center; font-family: 'Big Shoulders Display', sans-serif; font-size: 30px; font-weight: 900; letter-spacing: 0.04em">FANTRAIL</span>
+<div style="display: flex; flex-direction: column; gap: 10px">
+<h1 style="margin: 0; font-family: 'Big Shoulders Display', sans-serif; font-size: 60px; line-height: 0.88; font-weight: 900">CONTENT<br>DE TE REVOIR</h1>
+<span style="transform: rotate(-3deg); align-self: flex-start; padding: 4px 10px; border: 2px solid #0E1330; border-radius: 8px; background: #FFD60A; color: #0E1330; box-shadow: 2px 2px 0 #0E1330; font-family: 'Big Shoulders Display', sans-serif; font-size: 17px; font-weight: 900">LA DIAGONALE PART DANS 3 J</span>
+</div>
+</div>
+<form style="flex-grow: 1; box-sizing: border-box; display: flex; flex-direction: column; gap: 16px; padding: 24px 20px 28px; border-top: 2px solid #0E1330; border-radius: 28px 28px 0 0; background: #F4F5FF">
+<div style="display: flex; flex-direction: column; gap: 6px">
+<label for="login-email" style="font-size: 14px; font-weight: 700">Email</label>
+<input id="login-email" type="email" value="kilian@exemple.fr" style="height: 52px; box-sizing: border-box; padding: 0 14px; border: 2px solid #0E1330; border-radius: 12px; background: #FFFFFF; color: #0E1330; font-family: inherit; font-size: 16px">
+</div>
+<div style="display: flex; flex-direction: column; gap: 6px">
+<label for="login-password" style="font-size: 14px; font-weight: 700">Mot de passe</label>
+<input id="login-password" type="password" value="Trail-2026" style="height: 52px; box-sizing: border-box; padding: 0 14px; border: 2px solid #B8330A; border-radius: 12px; background: #FFFFFF; color: #0E1330; font-family: inherit; font-size: 16px">
+<span role="alert" style="display: flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 600; color: #B8330A">
+<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3 2 21h20z"></path><path d="M12 10v5"></path><path d="M12 18h.01"></path></svg>
+Email ou mot de passe incorrect</span>
+</div>
+<a href="Main.dc.html" style="margin-top: 8px; height: 56px; display: flex; align-items: center; justify-content: center; border: 2px solid #0E1330; border-radius: 16px; background: #FFD60A; color: #0E1330; box-shadow: 0 4px 0 #0E1330; font-family: 'Big Shoulders Display', sans-serif; font-size: 22px; font-weight: 900; letter-spacing: 0.03em; text-decoration: none">SE CONNECTER</a>
+<p style="margin: 0; font-size: 14px; text-align: center">Pas encore de compte ? <a href="Invitation.dc.html" style="font-weight: 700">Crée-le en 30 secondes</a></p>
+</form>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+renderVals() {
+return {};
+}
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>Invitation dans une ligue</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;800;900&amp;family=Outfit:wght@400;500;600;700&amp;display=swap">
+<style>
+body{margin:0}
+a{color:#2B3BFF}a:hover{color:#1A26B8}
+</style>
+</helmet>
+<div style="width: 390px; height: 1080px; box-sizing: border-box; display: flex; flex-direction: column; background: #F4F5FF; color: #0E1330; font-family: 'Outfit', sans-serif">
+<div style="padding: 20px 20px 28px; display: flex; flex-direction: column; gap: 18px; background: #2B3BFF; color: #FFFFFF">
+<div style="display: flex; align-items: center; justify-content: space-between; height: 44px">
+<span style="font-family: 'Big Shoulders Display', sans-serif; font-size: 30px; font-weight: 900; letter-spacing: 0.04em">FANTRAIL</span>
+<span style="transform: rotate(4deg); padding: 4px 10px; border: 2px solid #0E1330; border-radius: 8px; background: #FFD60A; color: #0E1330; box-shadow: 2px 2px 0 #0E1330; font-family: 'Big Shoulders Display', sans-serif; font-size: 16px; font-weight: 900">INVITATION</span>
+</div>
+<div style="display: flex; flex-direction: column; gap: 8px">
+<span style="font-size: 16px; color: #DDE1FF">Kilian t’invite dans sa ligue</span>
+<h1 style="margin: 0; font-family: 'Big Shoulders Display', sans-serif; font-size: 58px; line-height: 0.9; font-weight: 900">LES CHAMOIS</h1>
+<span style="font-size: 14px; color: #DDE1FF">6 joueurs · Diagonale des Fous · Grand Trail des Templiers</span>
+</div>
+</div>
+<div style="flex-grow: 1; box-sizing: border-box; padding: 20px 20px 28px; display: flex; flex-direction: column; gap: 20px">
+<ol style="margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 10px">
+<li style="display: flex; align-items: center; gap: 12px">
+<span style="width: 36px; height: 36px; flex-shrink: 0; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border-radius: 8px; border-top: 5px solid #2B3BFF; background: #FFFFFF; font-family: 'Big Shoulders Display', sans-serif; font-size: 22px; font-weight: 900">1</span>
+<span style="font-size: 15px"><strong>Pronostique le top 5</strong> hommes et femmes de chaque course</span>
+</li>
+<li style="display: flex; align-items: center; gap: 12px">
+<span style="width: 36px; height: 36px; flex-shrink: 0; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border-radius: 8px; border-top: 5px solid #2B3BFF; background: #FFFFFF; font-family: 'Big Shoulders Display', sans-serif; font-size: 22px; font-weight: 900">2</span>
+<span style="font-size: 15px"><strong>Estime le chrono</strong> du vainqueur</span>
+</li>
+<li style="display: flex; align-items: center; gap: 12px">
+<span style="width: 36px; height: 36px; flex-shrink: 0; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border-radius: 8px; border-top: 5px solid #2B3BFF; background: #FFFFFF; font-family: 'Big Shoulders Display', sans-serif; font-size: 22px; font-weight: 900">3</span>
+<span style="font-size: 15px"><strong>Mise sur les outsiders</strong> : jusqu’à ×2 sur tes points</span>
+</li>
+</ol>
+<form style="display: flex; flex-direction: column; gap: 14px; padding: 18px 16px; border: 2px solid #0E1330; border-radius: 18px; background: #FFFFFF; box-shadow: 0 4px 0 #0E1330">
+<h2 style="margin: 0; font-family: 'Big Shoulders Display', sans-serif; font-size: 26px; font-weight: 900">CRÉE TON COMPTE</h2>
+<div style="display: flex; flex-direction: column; gap: 6px">
+<label for="signup-pseudo" style="font-size: 14px; font-weight: 700">Pseudo</label>
+<input id="signup-pseudo" type="text" value="Marmotte" style="height: 48px; box-sizing: border-box; padding: 0 14px; border: 2px solid #0E1330; border-radius: 12px; background: #FFFFFF; color: #0E1330; font-family: inherit; font-size: 16px">
+<span style="font-size: 12px; color: #4A5070">C’est lui qui apparaît dans les classements</span>
+</div>
+<div style="display: flex; flex-direction: column; gap: 6px">
+<label for="signup-email" style="font-size: 14px; font-weight: 700">Email</label>
+<input id="signup-email" type="email" placeholder="toi@exemple.fr" style="height: 48px; box-sizing: border-box; padding: 0 14px; border: 2px solid #0E1330; border-radius: 12px; background: #FFFFFF; color: #0E1330; font-family: inherit; font-size: 16px">
+</div>
+<div style="display: flex; flex-direction: column; gap: 6px">
+<label for="signup-password" style="font-size: 14px; font-weight: 700">Mot de passe</label>
+<input id="signup-password" type="password" value="Trail-2026" style="height: 48px; box-sizing: border-box; padding: 0 14px; border: 2px solid #0E1330; border-radius: 12px; background: #FFFFFF; color: #0E1330; font-family: inherit; font-size: 16px">
+<ul style="margin: 0; padding: 0; list-style: none; display: flex; flex-wrap: wrap; gap: 6px">
+<li style="padding: 3px 8px; border-radius: 999px; background: #2B3BFF; color: #FFFFFF; font-size: 12px; font-weight: 600">8 caractères</li>
+<li style="padding: 3px 8px; border-radius: 999px; background: #2B3BFF; color: #FFFFFF; font-size: 12px; font-weight: 600">une lettre</li>
+<li style="padding: 3px 8px; border-radius: 999px; background: #2B3BFF; color: #FFFFFF; font-size: 12px; font-weight: 600">un chiffre</li>
+<li style="padding: 3px 8px; border-radius: 999px; background: #2B3BFF; color: #FFFFFF; font-size: 12px; font-weight: 600">un caractère spécial</li>
+</ul>
+</div>
+<a href="Main.dc.html" style="height: 56px; display: flex; align-items: center; justify-content: center; border: 2px solid #0E1330; border-radius: 16px; background: #FFD60A; color: #0E1330; box-shadow: 0 4px 0 #0E1330; font-family: 'Big Shoulders Display', sans-serif; font-size: 22px; font-weight: 900; letter-spacing: 0.03em; text-decoration: none">REJOINDRE LES CHAMOIS</a>
+</form>
+<p style="margin: 0; font-size: 14px; text-align: center">Déjà un compte ? <a href="Connexion.dc.html" style="font-weight: 700">Connecte-toi</a></p>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":1080}}'>
+class Component extends DCLogic {
+renderVals() {
+return {};
+}
+}
+</script>
+</body>
+</html>
