@@ -211,13 +211,31 @@ export function planFieldSync(
   return plan;
 }
 
-/** A LiveTrail hiccup must not flood a start list: big moves wait for a human. */
+/** Below this index, registrations and withdrawals come and go every day: they are applied without a second look. */
+export const SIGNIFICANT_INDEX = 600;
+const MAX_SIGNIFICANT_MOVE_RATIO = 0.15;
+const MIN_SIGNIFICANT_MOVE_LIMIT = 5;
+
+export function isSignificant({ index }: { index: number | null }): boolean {
+  return index !== null && index >= SIGNIFICANT_INDEX;
+}
+
+/** A LiveTrail hiccup must not flood a start list: big moves among the strong runners wait for a human. */
 export function isSuspicious(
   plan: FieldSyncPlan,
-  activeCount: number,
+  ours: StartListRunner[],
 ): boolean {
-  const limit = Math.max(20, Math.ceil(activeCount * 0.1));
-  return plan.additions.length > limit || plan.missing.length > limit;
+  const significantCount = ours.filter(
+    (runner) => !runner.isWithdrawn && isSignificant(runner),
+  ).length;
+  const limit = Math.max(
+    MIN_SIGNIFICANT_MOVE_LIMIT,
+    Math.ceil(significantCount * MAX_SIGNIFICANT_MOVE_RATIO),
+  );
+  return (
+    plan.additions.filter(isSignificant).length > limit ||
+    plan.missing.filter(isSignificant).length > limit
+  );
 }
 
 const ADD_BATCH_SIZE = 200;
@@ -312,10 +330,7 @@ export async function syncStartLists(
       }
       const runners = field.startList.runners;
       const plan = planFieldSync(runners, liveTrailRunners);
-      const suspicious = isSuspicious(
-        plan,
-        runners.filter(({ isWithdrawn }) => !isWithdrawn).length,
-      );
+      const suspicious = isSuspicious(plan, runners);
       log(
         `${label} : ${plan.updates.length} index, ${plan.additions.length} ajouts, ${plan.missing.length} absents${suspicious ? ' (suspect, rien écrit)' : ''}`,
       );
@@ -353,21 +368,36 @@ const STATUS_LABELS: Record<FieldSyncReport['status'], string> = {
 export function formatSyncReport(report: SyncReport): string {
   const lines = ['## Synchro des start lists avec LiveTrail', ''];
   lines.push(
-    '| Champ | LiveTrail | Index | Ajouts | Absents | À vérifier | État |',
+    `| Champ | LiveTrail | Index | Ajouts | Absents ${SIGNIFICANT_INDEX}+ | À vérifier | État |`,
   );
   lines.push('| --- | --- | --- | --- | --- | --- | --- |');
   for (const field of report.fields) {
     const { plan } = field;
     lines.push(
-      `| ${field.raceName} · ${field.gender === 'Men' ? 'hommes' : 'femmes'} | ${plan.liveTrailCount} | ${plan.updates.length} | ${plan.additions.length} | ${plan.missing.length} | ${plan.ambiguous.length + plan.reappeared.length} | ${STATUS_LABELS[field.status]}${field.errors.length ? `, ${field.errors.length} erreurs` : ''} |`,
+      `| ${field.raceName} · ${field.gender === 'Men' ? 'hommes' : 'femmes'} | ${plan.liveTrailCount} | ${plan.updates.length} | ${plan.additions.length} | ${plan.missing.filter(isSignificant).length} | ${plan.ambiguous.length + plan.reappeared.length} | ${STATUS_LABELS[field.status]}${field.errors.length ? `, ${field.errors.length} erreurs` : ''} |`,
     );
   }
   for (const field of report.fields) {
     const label = `${field.raceName} · ${field.gender === 'Men' ? 'hommes' : 'femmes'}`;
     const { plan } = field;
-    if (plan.missing.length) {
-      lines.push('', `**${label} : absents de LiveTrail, forfaits probables**`);
-      lines.push(...plan.missing.map((runner) => `- ${fullName(runner)}`));
+    const significantMissing = plan.missing.filter(isSignificant);
+    const otherMissingCount = plan.missing.length - significantMissing.length;
+    if (significantMissing.length) {
+      lines.push(
+        '',
+        `**${label} : absents de LiveTrail à ${SIGNIFICANT_INDEX}+, forfaits probables**`,
+      );
+      lines.push(
+        ...significantMissing.map(
+          (runner) => `- ${fullName(runner)} (${runner.index})`,
+        ),
+      );
+    }
+    if (otherMissingCount > 0) {
+      lines.push(
+        '',
+        `${label} : ${otherMissingCount} autres absents sous ${SIGNIFICANT_INDEX} ou sans index.`,
+      );
     }
     if (plan.ambiguous.length) {
       lines.push(

@@ -138,34 +138,62 @@ describe('planFieldSync', () => {
 });
 
 describe('isSuspicious', () => {
-  const plan = planFieldSync([], []);
+  const strong = Array.from({ length: 100 }, (_, index) =>
+    ours(`s${index}`, `Fort${index}`, 'Coureur', { index: 700 }),
+  );
+  const addition = (index: number | null) => ({
+    firstName: 'Nouveau',
+    lastName: 'Coureur',
+    nationality: null,
+    index,
+    indexSource: null,
+    utmbUrl: null,
+    itraUrl: null,
+  });
+  const empty = planFieldSync([], []);
 
-  it('accepts small moves and flags big ones', () => {
-    expect(isSuspicious(plan, 1000)).toBe(false);
+  it('allows up to 15 % of the runners at 600 and more to move', () => {
     expect(
       isSuspicious(
         {
-          ...plan,
-          additions: Array.from({ length: 101 }, () => ({
-            firstName: 'A',
-            lastName: 'B',
-            nationality: null,
-            index: null,
-            indexSource: null,
-            utmbUrl: null,
-            itraUrl: null,
-          })),
+          ...empty,
+          additions: Array.from({ length: 15 }, () => addition(650)),
         },
-        1000,
+        strong,
       ),
+    ).toBe(false);
+    expect(
+      isSuspicious({ ...empty, missing: strong.slice(0, 16) }, strong),
     ).toBe(true);
+  });
+
+  it('lets the runners under 600 come and go', () => {
     expect(
       isSuspicious(
         {
-          ...plan,
-          missing: Array.from({ length: 21 }, () => ours('x', 'A', 'B')),
+          ...empty,
+          additions: Array.from({ length: 500 }, () => addition(450)),
+          missing: Array.from({ length: 300 }, (_, index) =>
+            ours(`w${index}`, 'Faible', 'Coureur', { index: null }),
+          ),
         },
-        50,
+        strong,
+      ),
+    ).toBe(false);
+  });
+
+  it('keeps a floor of 5 moves for small fields', () => {
+    const few = strong.slice(0, 3);
+    expect(
+      isSuspicious(
+        { ...empty, additions: Array.from({ length: 5 }, () => addition(800)) },
+        few,
+      ),
+    ).toBe(false);
+    expect(
+      isSuspicious(
+        { ...empty, additions: Array.from({ length: 6 }, () => addition(800)) },
+        few,
       ),
     ).toBe(true);
   });
@@ -325,6 +353,7 @@ describe('formatSyncReport', () => {
       [
         ours('c', 'Léo', 'Absent'),
         ours('d', 'Jean', 'Dupont'),
+        ours('l', 'Petit', 'Index', { index: 420 }),
         ours('w', 'Marc', 'Retire', { isWithdrawn: true }),
       ],
       [theirs(1, 'Jean-Pierre', 'DUPONT'), theirs(2, 'Marc', 'RETIRE')],
@@ -344,9 +373,11 @@ describe('formatSyncReport', () => {
     expect(markdown).toContain(
       '| Grand Trail des Templiers · femmes | 2 | 0 | 0 | 2 | 2 | appliqué, 1 erreurs |',
     );
-    expect(markdown).toContain('- Léo Absent');
+    expect(markdown).toContain('- Léo Absent (800)');
     expect(markdown).toContain('- Jean-Pierre DUPONT');
     expect(markdown).toContain('- Marc Retire');
+    expect(markdown).toContain('1 autres absents sous 600 ou sans index.');
+    expect(markdown).not.toContain('- Petit Index');
     expect(markdown).toContain('- Léo Absent : boom');
     expect(markdown).toContain(
       '- Diagonale des Fous · hommes : liste LiveTrail vide',

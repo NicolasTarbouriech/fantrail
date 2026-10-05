@@ -60,6 +60,6 @@ Une migration risquée (index, `NOT NULL`, gros `UPDATE`) se joue à la main sur
 
 ## Synchro nocturne des start lists
 
-`.github/workflows/sync-start-lists.yml` lance chaque nuit à 3 h `cli-start-list sync` contre l'API de prod. Pour chaque course ouverte dont la page LiveTrail pointe sur une course (`…/fr/2026/races/<code>`), et chaque champ non verrouillé : index mis à jour, nouveaux inscrits ajoutés, absents seulement signalés. Un écart de plus de 10 % (ou 20 coureurs) n'écrit rien. Le rapport est dans le résumé du job GitHub.
+`.github/workflows/sync-start-lists.yml` lance chaque nuit à 3 h `cli-start-list sync` contre l'API de prod. Pour chaque course ouverte dont la page LiveTrail pointe sur une course (`…/fr/2026/races/<code>`), et chaque champ non verrouillé : index mis à jour, nouveaux inscrits ajoutés, absents seulement signalés. Si plus de 15 % des coureurs à 600 d'index ou plus bougent dans un champ (5 au minimum), rien n'est écrit ; sous 600, tout est appliqué et les absents sont seulement comptés. Le rapport est dans le résumé du job GitHub.
 
 Secret du dépôt à créer : `FANTRAIL_ADMIN_API_KEY`, la valeur de `ADMIN_API_KEY` dans Render. Lancé à la main (Actions → Run workflow), le job est une simulation par défaut.
