@@ -1,4 +1,4 @@
-import { mkdir, writeFile } from 'node:fs/promises';
+import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join, resolve } from 'node:path';
 
@@ -8,6 +8,7 @@ import {
   buildFromGrandRaid,
   buildFromLiveTrail,
 } from './lib/commands';
+import { parseAcceptedMatches } from './lib/csv';
 import { HttpClient } from './lib/http';
 
 const USAGE = `Construit les start lists à importer dans l'admin (CSV prenom;nom;nationalite;index;source;utmb;itra).
@@ -17,8 +18,11 @@ const USAGE = `Construit les start lists à importer dans l'admin (CSV prenom;no
       --top all lit tous les inscrits ; seuls les --enrich plus forts sont cherchés sur UTMB.
       ex. livetrail --tenant templiers_2026 --race Templi
 
-  grandraid [--type GRR] [--top 30] [--out <dossier>] [--name <préfixe>] [--max <n>]
+  grandraid [--type GRR] [--top 30|all] [--accept <fichier>] [--out <dossier>] [--name <préfixe>] [--max <n>]
       Liste officielle du Grand Raid, chaque inscrit cherché sur UTMB.
+      --top all garde toutes les correspondances certaines et envoie les autres inscrits dans <préfixe>-a-verifier.csv.
+      --accept lit les correspondances validées à la main (dossard;utmb;…), prises avant la recherche automatique.
+      ex. grandraid --type GRR --top all --name diagonale --accept apps/cli/start-list/review/diagonale-acceptes.csv
 
 Options communes : --cache <dossier> (réponses gardées sur disque), --delay <ms> (pause entre requêtes, 250 par défaut).`;
 
@@ -38,7 +42,7 @@ function printSummary(result: CommandResult, outDir: string): void {
     });
   }
   console.log(
-    `\n${result.scannedCount} coureurs examinés, ${result.unmatchedCount} sans correspondance UTMB certaine, ${result.reviewCount} à vérifier.`,
+    `\n${result.scannedCount} coureurs examinés, ${result.acceptedCount} validés à la main, ${result.unmatchedCount} sans correspondance UTMB certaine, ${result.reviewCount} à vérifier.`,
   );
   result.files.forEach((file) => console.log(`→ ${join(outDir, file.name)}`));
 }
@@ -77,11 +81,15 @@ async function main(): Promise<void> {
   } else if (command === 'grandraid') {
     const raceType = flags.get('type') ?? 'GRR';
     const maxRegistrants = intFlag(flags, 'max', 0);
+    const acceptFile = flags.get('accept');
     result = await buildFromGrandRaid(client, {
       raceType,
-      top: top === 'all' ? Number.POSITIVE_INFINITY : top,
+      top,
       filePrefix: flags.get('name') ?? raceType.toLowerCase(),
       log,
+      accepted: acceptFile
+        ? parseAcceptedMatches(await readFile(resolve(acceptFile), 'utf8'))
+        : undefined,
       maxRegistrants: maxRegistrants > 0 ? maxRegistrants : undefined,
     });
   } else {

@@ -17,6 +17,7 @@ import {
   type UtmbCandidate,
   matchRunner,
   strongestIndex,
+  suggestReviewedCandidate,
 } from './matching';
 import {
   GRANDRAID_LIST_URL,
@@ -27,7 +28,7 @@ import {
   searchUtmbRunners,
   utmbProfileUrl,
 } from './sources';
-import { formatNamePart, splitUtmbFullname } from './text';
+import { formatNamePart, restoreApostrophes, splitUtmbFullname } from './text';
 
 export type OutputFile = { name: string; content: string };
 
@@ -43,6 +44,8 @@ export type CommandResult = {
   scannedCount: number;
   unmatchedCount: number;
   reviewCount: number;
+  /** Runners matched through the reviewer's accept file. */
+  acceptedCount: number;
 };
 
 type Log = (message: string) => void;
@@ -69,7 +72,7 @@ function describeCandidates(candidates: UtmbCandidate[]): string {
   return candidates
     .map(
       (candidate) =>
-        `${candidate.fullname} (${candidate.index ?? '—'}, ${candidate.nationality ?? '?'}) ${utmbProfileUrl(candidate.uri)}`,
+        `${candidate.fullname} (${candidate.index ?? '—'}, ${candidate.nationality ?? '?'}, ${candidate.sex ?? '?'}) ${utmbProfileUrl(candidate.uri)}`,
     )
     .join(' | ');
 }
@@ -85,7 +88,10 @@ function describeDoubt(result: MatchResult): {
       return { reason: 'Nom partiel', candidates: result.candidates };
     case 'none':
       return {
-        reason: 'Nationalité différente',
+        reason:
+          result.nearCandidates.length > 0
+            ? 'Nationalité différente'
+            : 'Absent d’UTMB',
         candidates: result.nearCandidates,
       };
     case 'match':
@@ -192,16 +198,26 @@ export async function buildFromLiveTrail(
       content: toStartListCsv(rows),
     });
   }
-  return { files, fields, scannedCount, unmatchedCount, reviewCount: 0 };
+  return {
+    files,
+    fields,
+    scannedCount,
+    unmatchedCount,
+    reviewCount: 0,
+    acceptedCount: 0,
+  };
 }
 
 export type GrandRaidOptions = {
   raceType: string;
-  top: number;
+  /** `all` keeps every certain match and sends every other runner to the review file. */
+  top: number | 'all';
   filePrefix: string;
   log: Log;
   baseUrl?: string;
   reviewMinIndex?: number;
+  /** Reviewed matches: bib → UTMB profile URI, taken before the automatic matching. */
+  accepted?: Map<string, string>;
   /** Stops after this many registrants, to try the command quickly. */
   maxRegistrants?: number;
 };
@@ -247,6 +263,7 @@ export async function buildFromGrandRaid(
     log,
     baseUrl = GRANDRAID_LIST_URL,
     reviewMinIndex = 700,
+    accepted = new Map<string, string>(),
     maxRegistrants,
   }: GrandRaidOptions,
 ): Promise<CommandResult> {
@@ -259,10 +276,12 @@ export async function buildFromGrandRaid(
   const scanned = maxRegistrants
     ? registrants.slice(0, maxRegistrants)
     : registrants;
-  const rowsBySex = new Map<string, Map<string, StartListRow>>();
-  const review: ReviewRow[] = [];
-  let unmatchedCount = 0;
-
+  const lookups: Array<{
+    registrant: Registrant;
+    nationality: string | null;
+    candidates: UtmbCandidate[];
+    result: MatchResult;
+  }> = [];
   for (const [position, registrant] of scanned.entries()) {
     const nationality = countryCodes.get(registrant.country) ?? null;
     const candidates = await searchUtmbRunners(client, registrant.name);
@@ -270,12 +289,53 @@ export async function buildFromGrandRaid(
       { name: registrant.name, nationality },
       candidates,
     );
-    const candidate = result.kind === 'match' ? result.candidate : null;
+    lookups.push({ registrant, nationality, candidates, result });
+    if ((position + 1) % 100 === 0) {
+      log(`${position + 1}/${scanned.length} inscrits cherchés sur UTMB`);
+    }
+  }
+  const matchCountByUri = new Map<string, number>();
+  for (const { result } of lookups) {
+    if (result.kind === 'match') {
+      const uri = result.candidate.uri;
+      matchCountByUri.set(uri, (matchCountByUri.get(uri) ?? 0) + 1);
+    }
+  }
+
+  const rowsBySex = new Map<string, Map<string, StartListRow>>();
+  const review: ReviewRow[] = [];
+  let unmatchedCount = 0;
+  let acceptedCount = 0;
+  for (const { registrant, nationality, candidates, result } of lookups) {
+    // Namesakes of the list both match the strongest profile: at most one of them is that runner.
+    const isSharedMatch =
+      result.kind === 'match' &&
+      (matchCountByUri.get(result.candidate.uri) ?? 0) > 1;
+    const acceptedUri = accepted.get(registrant.bib);
+    const reviewed = acceptedUri
+      ? (candidates.find((candidate) => candidate.uri === acceptedUri) ?? null)
+      : null;
+    if (acceptedUri && !reviewed) {
+      log(
+        `  acceptation ignorée, profil introuvable : ${registrant.bib} ${registrant.name} → ${acceptedUri}`,
+      );
+    }
+    const automatic =
+      result.kind === 'match' && !isSharedMatch ? result.candidate : null;
+    const candidate = reviewed ?? automatic;
     const sex = candidate?.sex ?? null;
     if (candidate && sex) {
+      acceptedCount += reviewed ? 1 : 0;
       const rows = rowsBySex.get(sex) ?? new Map<string, StartListRow>();
+      if (rows.has(candidate.uri)) {
+        log(
+          `  profil UTMB déjà pris par un autre dossard : ${registrant.bib} ${registrant.name} → ${candidate.uri}`,
+        );
+      }
       rows.set(candidate.uri, {
-        ...splitUtmbFullname(candidate.fullname),
+        ...splitUtmbFullname(
+          restoreApostrophes(candidate.fullname, registrant.name),
+        ),
         nationality: toAlpha3(candidate.nationality) ?? toAlpha3(nationality),
         index: candidate.index,
         utmbUrl: utmbProfileUrl(candidate.uri),
@@ -283,22 +343,26 @@ export async function buildFromGrandRaid(
       rowsBySex.set(sex, rows);
     } else {
       unmatchedCount += 1;
-      const doubtful = describeDoubt(result);
-      if (
-        doubtful.candidates.length > 0 &&
-        strongestIndex(doubtful.candidates) >= reviewMinIndex
-      ) {
+      const doubtful = isSharedMatch
+        ? { reason: 'Profil commun à plusieurs dossards', candidates }
+        : describeDoubt(result);
+      const isWorthReviewing =
+        top === 'all' ||
+        (doubtful.candidates.length > 0 &&
+          strongestIndex(doubtful.candidates) >= reviewMinIndex);
+      if (isWorthReviewing) {
+        const suggestion = isSharedMatch
+          ? null
+          : suggestReviewedCandidate(registrant.name, doubtful.candidates);
         review.push({
           bib: registrant.bib,
           name: registrant.name,
           country: registrant.country,
           reason: doubtful.reason,
+          suggestion: suggestion ? utmbProfileUrl(suggestion.uri) : null,
           candidates: describeCandidates(doubtful.candidates),
         });
       }
-    }
-    if ((position + 1) % 100 === 0) {
-      log(`${position + 1}/${scanned.length} inscrits cherchés sur UTMB`);
     }
   }
 
@@ -308,7 +372,7 @@ export async function buildFromGrandRaid(
     const all = [...(rowsBySex.get(field.utmbSex)?.values() ?? [])].sort(
       byIndexDesc,
     );
-    const rows = all.slice(0, top);
+    const rows = top === 'all' ? all : all.slice(0, top);
     fields.push({ label: field.label, rows, matchedCount: all.length });
     files.push({
       name: `${filePrefix}-${field.slug}.csv`,
@@ -325,5 +389,6 @@ export async function buildFromGrandRaid(
     scannedCount: scanned.length,
     unmatchedCount,
     reviewCount: review.length,
+    acceptedCount,
   };
 }

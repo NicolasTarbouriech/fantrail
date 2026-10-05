@@ -1,6 +1,7 @@
 import {
   formatNamePart,
   nameTokens,
+  restoreApostrophes,
   sameTokens,
   splitUtmbFullname,
   stripAccents,
@@ -26,6 +27,7 @@ describe('text', () => {
     ['VAN DER BERG', 'Van der Berg'],
     ['de la FUENTE', 'De la Fuente'],
     ["D'ARTAGNAN", "D'Artagnan"],
+    ["KERANFLEC'H", "Keranflec'h"],
     ['  richauvet  ', 'Richauvet'],
   ])('formats %s', (value, expected) => {
     expect(formatNamePart(value)).toBe(expected);
@@ -56,5 +58,28 @@ describe('text', () => {
       firstName: '',
       lastName: 'Kilian',
     });
+  });
+
+  it('restores the apostrophes UTMB dropped', () => {
+    expect(
+      restoreApostrophes('Mélanie KERANFLEC H', 'Keranflec’h Mélanie'),
+    ).toBe("Mélanie KERANFLEC'H");
+    expect(restoreApostrophes('Moussa N DIAYE', "N'Diaye Moussa")).toBe(
+      "Moussa N'DIAYE",
+    );
+    expect(
+      restoreApostrophes("Mélanie KERANFLEC'H", 'Keranflec’h Mélanie'),
+    ).toBe("Mélanie KERANFLEC'H");
+    expect(restoreApostrophes('Moussa NDIAYE', "N'Diaye Moussa")).toBe(
+      'Moussa NDIAYE',
+    );
+    expect(restoreApostrophes('Ludovic POMMERET', 'Pommeret Ludovic')).toBe(
+      'Ludovic POMMERET',
+    );
+    expect(
+      splitUtmbFullname(
+        restoreApostrophes('Mélanie KERANFLEC H', 'Keranflec’h Mélanie'),
+      ),
+    ).toEqual({ firstName: 'Mélanie', lastName: "Keranflec'h" });
   });
 });

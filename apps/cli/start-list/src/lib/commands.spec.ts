@@ -83,6 +83,26 @@ const UTMB = {
       sex: 'F',
     },
   ],
+  'Keranflec’h Mélanie': [
+    {
+      id: 7,
+      fullname: 'Mélanie KERANFLEC H',
+      uri: '7.melanie.keranflec.h',
+      ip: 0,
+      nationality: 'FR',
+      sex: 'F',
+    },
+  ],
+  'Hogan Marianne': [
+    {
+      id: 8,
+      fullname: 'Marianne HOGAN',
+      uri: '8.marianne.hogan',
+      ip: 810,
+      nationality: 'CA',
+      sex: 'F',
+    },
+  ],
 };
 
 function utmbRoute(url: URL): unknown {
@@ -305,13 +325,112 @@ describe('buildFromGrandRaid', () => {
     );
     expect(result.files[1]?.content).toContain('Marjorie;Amiel;FRA;541');
     expect(result.files[2]?.content).toContain(
-      '2;Abas Frederic;France;Homonymes;Frédéric ABAS (721, FR)',
+      '2;Abas Frederic;France;Homonymes;;' +
+        'Frédéric ABAS (721, FR, H) https://utmb.world/runner/4.frederic.abas | ' +
+        'Frederic ABAS (715, FR, H) https://utmb.world/runner/5.frederic.abas\n',
     );
     expect(result).toMatchObject({
       scannedCount: 4,
       unmatchedCount: 2,
       reviewCount: 1,
+      acceptedCount: 0,
     });
+  });
+
+  it('keeps every runner with top all and takes the reviewed matches', async () => {
+    const logs: string[] = [];
+    const client = createClient((url) => {
+      if (url.hostname === 'api.utmb.world') {
+        return utmbRoute(url);
+      }
+      return (url.searchParams.get('debut_inscrits') ?? '0') === '0'
+        ? LIST_PAGE(
+            row('1', 'Airiau Gautier') +
+              row('2', 'Abas Frederic') +
+              row('3', 'Keranflec’h Mélanie'),
+          )
+        : LIST_PAGE(
+            row('4', 'Personne Inconnue') +
+              row('5', 'Hogan Marianne') +
+              row('6', 'Amiel Marjorie'),
+          );
+    });
+    const result = await buildFromGrandRaid(client, {
+      raceType: 'GRR',
+      top: 'all',
+      filePrefix: 'diagonale',
+      log: (message) => logs.push(message),
+      baseUrl: 'https://example.org/liste/',
+      accepted: new Map([
+        ['2', '4.frederic.abas'],
+        ['6', '404.marjorie.amiel'],
+      ]),
+    });
+    expect(result.files[0]?.content).toBe(
+      'prenom;nom;nationalite;index;source;utmb;itra\n' +
+        'Gautier;Airiau;FRA;901;utmb;https://utmb.world/runner/3.gautier.airiau;\n' +
+        'Frédéric;Abas;FRA;721;utmb;https://utmb.world/runner/4.frederic.abas;\n',
+    );
+    expect(result.files[1]?.content).toBe(
+      'prenom;nom;nationalite;index;source;utmb;itra\n' +
+        'Marjorie;Amiel;FRA;541;utmb;https://utmb.world/runner/6.marjorie.amiel;\n' +
+        "Mélanie;Keranflec'h;FRA;;;https://utmb.world/runner/7.melanie.keranflec.h;\n",
+    );
+    expect(result.files[2]?.content).toBe(
+      'dossard;nom_liste;pays_liste;raison;suggestion;candidats\n' +
+        '4;Personne Inconnue;France;Absent d’UTMB;;\n' +
+        '5;Hogan Marianne;France;Nationalité différente;https://utmb.world/runner/8.marianne.hogan;' +
+        'Marianne HOGAN (810, CA, F) https://utmb.world/runner/8.marianne.hogan\n',
+    );
+    expect(logs).toContain(
+      '  acceptation ignorée, profil introuvable : 6 Amiel Marjorie → 404.marjorie.amiel',
+    );
+    expect(result).toMatchObject({
+      scannedCount: 6,
+      unmatchedCount: 2,
+      reviewCount: 2,
+      acceptedCount: 1,
+    });
+  });
+
+  it('sends registrants sharing one profile to review unless accepted', async () => {
+    const client = createClient((url) =>
+      url.hostname === 'api.utmb.world'
+        ? utmbRoute(url)
+        : LIST_PAGE(row('1', 'Airiau Gautier') + row('9', 'Airiau Gautier')),
+    );
+    const build = (accepted: Map<string, string>, log: (m: string) => void) =>
+      buildFromGrandRaid(client, {
+        raceType: 'GRR',
+        top: 'all',
+        filePrefix: 'grr',
+        log,
+        baseUrl: 'https://example.org/liste/',
+        accepted,
+      });
+
+    const result = await build(
+      new Map([['9', '3.gautier.airiau']]),
+      () => undefined,
+    );
+    expect(result.fields[0]?.rows).toHaveLength(1);
+    expect(result.files[2]?.content).toBe(
+      'dossard;nom_liste;pays_liste;raison;suggestion;candidats\n' +
+        '1;Airiau Gautier;France;Profil commun à plusieurs dossards;;' +
+        'Gautier AIRIAU (901, FR, H) https://utmb.world/runner/3.gautier.airiau\n',
+    );
+
+    const logs: string[] = [];
+    await build(
+      new Map([
+        ['1', '3.gautier.airiau'],
+        ['9', '3.gautier.airiau'],
+      ]),
+      (message) => logs.push(message),
+    );
+    expect(logs).toContain(
+      '  profil UTMB déjà pris par un autre dossard : 9 Airiau Gautier → 3.gautier.airiau',
+    );
   });
 
   it('stops after the requested number of registrants', async () => {

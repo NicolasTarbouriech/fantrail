@@ -100,3 +100,32 @@ export function matchRunner(
 export function strongestIndex(candidates: UtmbCandidate[]): number {
   return Math.max(0, ...candidates.map((candidate) => candidate.index ?? 0));
 }
+
+/** Gap between two indexed homonyms above which a reviewer takes the strongest. */
+export const REVIEW_CLEAR_GAP = 100;
+
+/**
+ * Suggestion for a human review, nationality aside: the exact name with a single
+ * indexed runner, or one clearly stronger than the other indexed homonyms.
+ */
+export function suggestReviewedCandidate(
+  name: string,
+  candidates: UtmbCandidate[],
+  clearGap = REVIEW_CLEAR_GAP,
+): UtmbCandidate | null {
+  const tokens = nameTokens(name);
+  const [first, second] = candidates
+    .filter(
+      (candidate) =>
+        (candidate.index ?? 0) > 0 &&
+        candidate.sex !== null &&
+        sameTokens(nameTokens(candidate.fullname), tokens),
+    )
+    .sort(byIndexDesc);
+  if (!first) {
+    return null;
+  }
+  return !second || (first.index ?? 0) - (second.index ?? 0) >= clearGap
+    ? first
+    : null;
+}

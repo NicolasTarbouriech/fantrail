@@ -1,7 +1,7 @@
 export const START_LIST_CSV_HEADER =
   'prenom;nom;nationalite;index;source;utmb;itra';
 export const REVIEW_CSV_HEADER =
-  'dossard;nom_liste;pays_liste;raison;candidats';
+  'dossard;nom_liste;pays_liste;raison;suggestion;candidats';
 
 export type StartListRow = {
   firstName: string;
@@ -16,6 +16,8 @@ export type ReviewRow = {
   name: string;
   country: string;
   reason: string;
+  /** UTMB profile a reviewer would most likely accept, if any. */
+  suggestion: string | null;
   candidates: string;
 };
 
@@ -61,7 +63,26 @@ export function toReviewCsv(rows: ReviewRow[]): string {
       row.name,
       row.country,
       row.reason,
+      row.suggestion,
       row.candidates,
     ]),
   );
+}
+
+/** UTMB profile URI from a cell holding the URI or the whole profile URL. */
+function toUtmbUri(value: string): string {
+  return value.trim().replace(/^https?:\/\/utmb\.world\/runner\//, '');
+}
+
+/** Reviewed matches, `dossard;utmb;…` lines: bib → UTMB profile URI. */
+export function parseAcceptedMatches(text: string): Map<string, string> {
+  const accepted = new Map<string, string>();
+  for (const line of text.split(/\r?\n/)) {
+    const [bib = '', utmb = ''] = line.split(';').map((value) => value.trim());
+    if (!bib || bib.startsWith('#') || bib === 'dossard' || !utmb) {
+      continue;
+    }
+    accepted.set(bib, toUtmbUri(utmb));
+  }
+  return accepted;
 }

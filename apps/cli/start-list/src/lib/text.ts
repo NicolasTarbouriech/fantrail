@@ -52,7 +52,15 @@ function formatWord(word: string, isFirst: boolean): string {
   }
   return word
     .split(/([-'’])/)
-    .map((segment) => (/^[-'’]$/.test(segment) ? segment : capitalize(segment)))
+    .map((segment, index, segments) => {
+      if (/^[-'’]$/.test(segment)) {
+        return segment;
+      }
+      // A lone letter after an apostrophe is the Breton "c'h": "Keranflec'h", not "Keranflec'H".
+      const isBretonCh =
+        segment.length === 1 && /^['’]$/.test(segments[index - 1] ?? '');
+      return isBretonCh ? segment.toLocaleLowerCase('fr') : capitalize(segment);
+    })
     .join('');
 }
 
@@ -85,4 +93,34 @@ export function splitUtmbFullname(fullname: string): {
     firstName: formatNamePart(words.slice(0, splitAt).join(' ')),
     lastName: formatNamePart(words.slice(splitAt).join(' ')),
   };
+}
+
+const APOSTROPHE = /['’ʼ]/;
+
+/**
+ * UTMB drops some apostrophes ("Mélanie KERANFLEC H") that the official list keeps
+ * ("Keranflec’h Mélanie"): rejoin the words the source writes as one.
+ */
+export function restoreApostrophes(
+  fullname: string,
+  sourceName: string,
+): string {
+  const words = fullname.trim().split(/\s+/).filter(Boolean);
+  for (const sourceWord of sourceName.trim().split(/\s+/)) {
+    const pieces = nameTokens(sourceWord);
+    if (!APOSTROPHE.test(sourceWord) || pieces.length < 2) {
+      continue;
+    }
+    for (let start = 0; start + pieces.length <= words.length; start += 1) {
+      const slice = words.slice(start, start + pieces.length);
+      const isSplitWord = slice.every((word, index) =>
+        sameTokens(nameTokens(word), [pieces[index] ?? '']),
+      );
+      if (isSplitWord) {
+        words.splice(start, pieces.length, slice.join("'"));
+        break;
+      }
+    }
+  }
+  return words.join(' ');
 }

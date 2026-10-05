@@ -1,5 +1,5 @@
 import { intFlag, parseArgs, requireFlag } from './args';
-import { toReviewCsv, toStartListCsv } from './csv';
+import { parseAcceptedMatches, toReviewCsv, toStartListCsv } from './csv';
 import {
   decodeEntities,
   parseRegistrantsPage,
@@ -87,11 +87,42 @@ describe('csv', () => {
           name: 'Ammendola Antonio',
           country: 'Belgique',
           reason: 'Homonymes',
+          suggestion: null,
           candidates: 'a | b',
+        },
+        {
+          bib: '12',
+          name: 'Hogan Marianne',
+          country: 'Etats-Unis',
+          reason: 'Nationalité différente',
+          suggestion: 'https://utmb.world/runner/9.marianne.hogan',
+          candidates: 'c',
         },
       ]),
     ).toBe(
-      'dossard;nom_liste;pays_liste;raison;candidats\n47;Ammendola Antonio;Belgique;Homonymes;a | b\n',
+      'dossard;nom_liste;pays_liste;raison;suggestion;candidats\n' +
+        '47;Ammendola Antonio;Belgique;Homonymes;;a | b\n' +
+        '12;Hogan Marianne;Etats-Unis;Nationalité différente;https://utmb.world/runner/9.marianne.hogan;c\n',
+    );
+  });
+
+  it('reads the reviewed matches, by bib', () => {
+    expect(
+      parseAcceptedMatches(
+        [
+          'dossard;utmb;nom',
+          '# Nationalité différente, même nom et index unique',
+          '12;https://utmb.world/runner/9.marianne.hogan;Marianne Hogan',
+          ' 47 ; 4.antonio.ammendola ',
+          '',
+          '50;',
+        ].join('\r\n'),
+      ),
+    ).toEqual(
+      new Map([
+        ['12', '9.marianne.hogan'],
+        ['47', '4.antonio.ammendola'],
+      ]),
     );
   });
 });

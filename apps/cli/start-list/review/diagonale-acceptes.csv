@@ -1,0 +1,67 @@
+dossard;utmb;nom
+# Diagonale des Fous 2026 (GRR), relecture de diagonale-a-verifier.csv.
+# Accepté : même nom exact, un seul profil UTMB indexé portant ce nom (vérifié sur 100 résultats de recherche),
+# sexe cohérent. Le pays de la liste officielle est souvent le pays de résidence : une nationalité différente ne suffit pas à écarter.
+# Écartés :
+# 2305 Fernandez Jorge : 15 homonymes exacts sur UTMB, dont 2 français indexés, rien ne désigne le bon.
+# 2419 GONZALEZ Léa : le profil suggéré (640, ES) est un homme ; une Léa GONZALEZ (373, FR) existe hors des 5 premiers résultats.
+# 1617 Blondin Vincent : deux profils indexés (517 CA, 376 FR) et une liste en Espagne, rien ne les départage.
+# 2440 Lenclu Paulin : prénom et nom inversés sur UTMB, l'import écrirait « Lenclu Paulin » à l'envers.
+685;https://utmb.world/runner/950221.mohamed.aitelcadi;AIT EL CADI Mohamed
+1078;https://utmb.world/runner/8671686.massine.akhannouss;Akhannouss Massine
+2202;https://utmb.world/runner/1036065.martin.bachelet;bachelet martin
+2765;https://utmb.world/runner/2402985.eugene.bajyanasonga;BAJYANA SONGA Eugène
+913;https://utmb.world/runner/1373253.angelo.beaufay;beaufay angelo
+2640;https://utmb.world/runner/6432420.elliot.benoit;Benoit Elliot
+1602;https://utmb.world/runner/5397364.ramiz.benyahia;benyahia Ramiz
+1367;https://utmb.world/runner/5181250.andrea.bombino;Bombino Andrea
+2288;https://utmb.world/runner/4683995.hafida.boudraou;BOUDRAOU HAFIDA
+2543;https://utmb.world/runner/4286232.karim.boumeriame;Boumeriame Karim
+14;https://utmb.world/runner/3231639.guillaume.brouillon;BROUILLON Guillaume
+2841;https://utmb.world/runner/4993620.karis.brown;Brown Karis
+818;https://utmb.world/runner/5233872.yoann.cateigne;Cateigne Yoann
+2644;https://utmb.world/runner/77201.fabien.chambry;CHAMBRY Fabien
+2643;https://utmb.world/runner/1721531.henriette.chambry;CHAMBRY HENRIETTE
+784;https://utmb.world/runner/6593478.maximilien.costet;COSTET Maximilien
+630;https://utmb.world/runner/5627870.matthieu.dasnoy;Dasnoy Matthieu
+2208;https://utmb.world/runner/5885090.thomas.deluze;de Luze Thomas
+2017;https://utmb.world/runner/942.thomas.dequatrebarbes;DE QUATREBARBES THOMAS
+2251;https://utmb.world/runner/7889190.maxime.detry;DETRY Maxime
+368;https://utmb.world/runner/1369497.yannick.dournel;Dournel Yannick
+768;https://utmb.world/runner/1655819.albin.duchaussoy;DUCHAUSSOY Albin
+1957;https://utmb.world/runner/4510082.mickael.duquenne;Duquenne Mickael
+1811;https://utmb.world/runner/5649187.quentin.daoust;d’Aoust Quentin
+137;https://utmb.world/runner/6683.guillaume.felide;FELIDE GUILLAUME
+982;https://utmb.world/runner/470092.eric.geidel;Geidel Eric
+2555;https://utmb.world/runner/4951998.thomas.gruhl;Gruhl Thomas
+764;https://utmb.world/runner/5228452.anthony.hadid;HADID ANTHONY
+1825;https://utmb.world/runner/5273384.victor.hannoun;Hannoun Victor
+2247;https://utmb.world/runner/428254.marc.henrard;Henrard Marc
+2812;https://utmb.world/runner/643784.marianne.hogan;Hogan Marianne
+2679;https://utmb.world/runner/2201281.julian.homberger;Homberger Julian
+242;https://utmb.world/runner/1750505.nicolas.jutteau;JUTTEAU Nicolas
+1558;https://utmb.world/runner/244675.jaouad.karmoun;KARMOUN JAOUAD
+1751;https://utmb.world/runner/6584786.margaux.laguerre;Laguerre Margaux
+898;https://utmb.world/runner/445513.jonathan.lillywhite;Lillywhite Jonathan
+122;https://utmb.world/runner/440821.jeandavid.maire;Mairé Jean-David
+1489;https://utmb.world/runner/3537977.marie.malisse;Malisse Marie
+2114;https://utmb.world/runner/1323825.carolyn.morada;Morada Carolyn
+2271;https://utmb.world/runner/5513414.noa.ohms;Ohms Noa
+257;https://utmb.world/runner/921767.massimo.paladin;Paladin Massimo
+886;https://utmb.world/runner/940535.arnold.porton;Porton Arnold
+1618;https://utmb.world/runner/7369245.frantz.prianon;prianon frantz
+798;https://utmb.world/runner/1209413.sixto.quinore;Quin ore Sixto
+2230;https://utmb.world/runner/5647972.thomas.raas;Raas Thomas
+429;https://utmb.world/runner/1803753.ursula.rasoazanamelina;RASOAZANAMELINA Ursula
+2079;https://utmb.world/runner/978367.ludwig.rohart;ROHART LUDWIG
+2404;https://utmb.world/runner/6717998.david.rothe;Rothé David
+1118;https://utmb.world/runner/389107.denis.rozet;Rozet Denis
+983;https://utmb.world/runner/4269074.laurent.sauval;sauval laurent
+1411;https://utmb.world/runner/4472161.carmo.silva;Silva Carmo
+2740;https://utmb.world/runner/1532087.hugo.smets;Smets Hugo
+2030;https://utmb.world/runner/655355.jerome.vanderschaeghe;vanderschaeghe jérôme
+2266;https://utmb.world/runner/370755.jeremy.venzi;venzi jeremy
+1968;https://utmb.world/runner/7797136.blanca.veraescobar;Vera Escobar Blanca
+1113;https://utmb.world/runner/7890622.laura.verhelst;Verhelst Laura
+2452;https://utmb.world/runner/1620389.jeremy.wittorski;Wittorski Jérémy
+2090;https://utmb.world/runner/6855596.benn.woodman;Woodman Benn

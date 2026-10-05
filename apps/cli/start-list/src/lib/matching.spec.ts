@@ -4,6 +4,7 @@ import {
   isCompatibleName,
   matchRunner,
   strongestIndex,
+  suggestReviewedCandidate,
 } from './matching';
 
 function candidate(overrides: Partial<UtmbCandidate>): UtmbCandidate {
@@ -121,5 +122,53 @@ describe('matchRunner', () => {
       strongestIndex([candidate({ index: null }), candidate({ index: 700 })]),
     ).toBe(700);
     expect(strongestIndex([])).toBe(0);
+  });
+});
+
+describe('suggestReviewedCandidate', () => {
+  it('suggests the only indexed runner with the exact name, nationality aside', () => {
+    const hogan = candidate({
+      fullname: 'Marianne HOGAN',
+      uri: '9.marianne.hogan',
+      index: 810,
+      nationality: 'CA',
+      sex: 'F',
+    });
+    expect(
+      suggestReviewedCandidate('Hogan Marianne', [
+        hogan,
+        candidate({ fullname: 'Marianne HOGAN', index: 0, sex: 'F' }),
+        candidate({ fullname: 'Marianne HOGAN', index: 900, sex: null }),
+      ]),
+    ).toBe(hogan);
+  });
+
+  it('suggests a homonym only when clearly stronger', () => {
+    const strong = candidate({ index: 858 });
+    expect(
+      suggestReviewedCandidate('Pommeret Ludovic', [
+        candidate({ index: 700 }),
+        strong,
+      ]),
+    ).toBe(strong);
+    expect(
+      suggestReviewedCandidate('Pommeret Ludovic', [
+        candidate({ index: 780 }),
+        strong,
+      ]),
+    ).toBeNull();
+  });
+
+  it('suggests nothing for a partial name or without index', () => {
+    expect(
+      suggestReviewedCandidate('Chouchou Adrien', [
+        candidate({ fullname: 'Adrien CHOUCHOU MARTIN', index: 815 }),
+      ]),
+    ).toBeNull();
+    expect(
+      suggestReviewedCandidate('Pommeret Ludovic', [
+        candidate({ index: null }),
+      ]),
+    ).toBeNull();
   });
 });
