@@ -49,3 +49,6 @@ Thumbs.db
 .next
 storybook-static
 vite.config.*.timestamp*
+
+# Claude Code worktrees
+.claude/worktrees/
