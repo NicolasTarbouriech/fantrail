@@ -143,6 +143,26 @@ describe('RunnerOption', () => {
     expect(screen.getByText('Déjà 1ᵉʳ')).toBeInTheDocument();
     expect(screen.getByText('—')).toBeInTheDocument();
   });
+
+  it.each([
+    [7, 'text-[22px]'],
+    [343, 'text-lg'],
+    [1343, 'text-[15px]'],
+  ])(
+    'shrinks the rank #%i to stay in its column',
+    (favoriteRank, sizeClass) => {
+      render(
+        <RunnerOption
+          fullName="Victor Perin"
+          favoriteRank={favoriteRank}
+          details="FRA"
+          pickedLabel={null}
+          onSelect={jest.fn()}
+        />,
+      );
+      expect(screen.getByText(`#${favoriteRank}`)).toHaveClass(sizeClass);
+    },
+  );
 });
 
 describe('MemberPicks', () => {

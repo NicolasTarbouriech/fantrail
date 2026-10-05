@@ -2,6 +2,14 @@ import { cx } from '@trail/shared/design/ui-react';
 
 import { MultiplierBadge } from './MultiplierBadge';
 
+// Start lists run into thousands of runners: a long rank shrinks to stay in its column.
+function getRankSizeClass(rankLabel: string): string {
+  if (rankLabel.length >= 5) {
+    return 'text-[15px]';
+  }
+  return rankLabel.length === 4 ? 'text-lg' : 'text-[22px]';
+}
+
 export type RunnerOptionProps = {
   fullName: string;
   favoriteRank: number | null;
@@ -17,6 +25,7 @@ export function RunnerOption({
   pickedLabel,
   onSelect,
 }: RunnerOptionProps) {
+  const rankLabel = favoriteRank === null ? '—' : `#${favoriteRank}`;
   return (
     <button
       type="button"
@@ -30,11 +39,12 @@ export function RunnerOption({
     >
       <span
         className={cx(
-          'font-display w-10 shrink-0 text-center text-[22px] font-black',
+          'font-display w-12 shrink-0 text-center leading-none font-black',
+          getRankSizeClass(rankLabel),
           !pickedLabel && 'text-primary',
         )}
       >
-        {favoriteRank === null ? '—' : `#${favoriteRank}`}
+        {rankLabel}
       </span>
       <span className="flex min-w-0 grow flex-col">
         <span className="truncate text-[15px] font-bold uppercase">
