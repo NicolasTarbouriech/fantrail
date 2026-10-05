@@ -1,4 +1,5 @@
 import { type ReactNode, useState } from 'react';
+import { Link } from 'react-router-dom';
 
 import {
   clearPick,
@@ -8,6 +9,7 @@ import {
   formatWinnerTime,
   getFieldLabel,
   getMissingPickHint,
+  getPredictionScopeHint,
   isSamePickList,
   maskClockTime,
   movePick,
@@ -21,6 +23,7 @@ import {
   inputClasses,
 } from '@trail/shared/design/ui-react';
 
+import { paths } from '../../app/paths';
 import { DESKTOP_QUERY, useMediaQuery } from '../../hooks/useMediaQuery';
 import { getErrorMessage } from '../../services/errors';
 import { usePredictionPageMutateSaveMutation } from '../../services/graphql';
@@ -38,6 +41,7 @@ export type PredictionFormProps = {
   race: PredictionRace;
   field: PredictionField;
   saved: SavedPrediction | null;
+  leagueRaceIdsList: string[][];
   fieldTabs: ReactNode;
 };
 
@@ -45,6 +49,7 @@ export function PredictionForm({
   race,
   field,
   saved,
+  leagueRaceIdsList,
   fieldTabs,
 }: PredictionFormProps) {
   const isDesktop = useMediaQuery(DESKTOP_QUERY);
@@ -240,6 +245,18 @@ export function PredictionForm({
                 : (hint ?? '')}
           </span>
         )}
+        <p className="text-muted m-0 text-center text-xs">
+          {getPredictionScopeHint(leagueRaceIdsList, race.id)}
+          {leagueRaceIdsList.length === 0 ? (
+            <>
+              {' '}
+              <Link to={paths.leagues} className="text-primary font-bold">
+                Crée une ligue
+              </Link>{' '}
+              pour te mesurer à tes potes.
+            </>
+          ) : null}
+        </p>
       </div>
       {isDesktop ? null : (
         <RunnerPickerSheet

@@ -22,8 +22,9 @@ export function RegisterPage() {
       <div className="flex flex-col gap-2">
         <Heading level={1}>Crée ton compte</Heading>
         <p className="text-muted m-0 text-[15px]">
-          Pronostique le top 5 des élites et le chrono du vainqueur, puis défie
-          tes potes dans tes ligues.
+          Pronostique le top 5 et le chrono du vainqueur sur chaque course,
+          classe-toi parmi tous les joueurs, et défie tes potes dans des ligues
+          si tu veux.
         </p>
       </div>
       <RegisterForm

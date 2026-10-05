@@ -143,9 +143,13 @@ function HomeLeagues({ data }: { data: HomePageQuery }) {
         />
       ))}
       {data.myLeagues.length === 0 ? (
-        <Link to={paths.leagues} className="text-primary text-sm font-bold">
-          Créer ou rejoindre une ligue
-        </Link>
+        <p className="text-muted m-0 text-sm">
+          Pas besoin de ligue pour jouer.{' '}
+          <Link to={paths.leagues} className="text-primary font-bold">
+            Crée ou rejoins une ligue
+          </Link>{' '}
+          pour affronter tes potes.
+        </p>
       ) : null}
     </section>
   );

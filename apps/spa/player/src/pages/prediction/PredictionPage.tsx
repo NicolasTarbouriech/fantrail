@@ -167,6 +167,7 @@ export function PredictionPage() {
           race={race}
           field={field}
           saved={saved}
+          leagueRaceIdsList={data.myLeagues.map((league) => league.raceIds)}
           fieldTabs={fieldTabs}
         />
       )}

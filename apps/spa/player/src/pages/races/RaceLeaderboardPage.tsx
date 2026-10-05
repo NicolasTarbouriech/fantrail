@@ -38,7 +38,7 @@ export function RaceLeaderboardPage() {
           tone="ink"
           leading={back}
           title={data.race.name}
-          subtitle={`Classement · ${formatPlayerCount(entries.length)}`}
+          subtitle={`Classement ouvert à tous · ${formatPlayerCount(entries.length)}`}
         />
       }
     >

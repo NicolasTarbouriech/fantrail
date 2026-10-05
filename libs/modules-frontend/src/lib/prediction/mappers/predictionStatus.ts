@@ -51,6 +51,30 @@ export function getPredictionStatusTag({
   return { label: `${filled}/${pickCount}`, tone: 'outline', isComplete };
 }
 
+/** Where a prediction counts: players wonder whether they need a league to play. */
+export function getPredictionScopeHint(
+  leagueRaceIdsList: string[][],
+  raceId: string,
+): string {
+  const base =
+    'Ton prono compte au classement de tous les joueurs de la course';
+  const leagueCount = leagueRaceIdsList.length;
+  const followingCount = leagueRaceIdsList.filter((raceIds) =>
+    raceIds.includes(raceId),
+  ).length;
+  if (followingCount === 0) {
+    return `${base}.`;
+  }
+  if (followingCount === leagueCount) {
+    return leagueCount === 1
+      ? `${base} et dans ta ligue.`
+      : `${base} et dans tes ${leagueCount} ligues.`;
+  }
+  return followingCount === 1
+    ? `${base} et dans une de tes ligues.`
+    : `${base} et dans ${followingCount} de tes ligues.`;
+}
+
 export function getMissingPickHint(
   pickCount: number,
   pickList: PickList,

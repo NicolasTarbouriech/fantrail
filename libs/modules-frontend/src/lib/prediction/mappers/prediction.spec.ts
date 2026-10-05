@@ -8,6 +8,7 @@ import {
   formatWinnerTime,
   getMissingPickHint,
   getMultiplier,
+  getPredictionScopeHint,
   getPredictionStatusTag,
   isOutsider,
   isSamePickList,
@@ -60,6 +61,22 @@ describe('winnerTime', () => {
     expect(formatDuration(-7200)).toBe('2 h');
     expect(formatDuration(2592)).toBe('43 min');
     expect(formatDuration(4500)).toBe('1 h 15');
+  });
+});
+
+describe('getPredictionScopeHint', () => {
+  const base =
+    'Ton prono compte au classement de tous les joueurs de la course';
+
+  it.each([
+    [[], `${base}.`],
+    [[['other']], `${base}.`],
+    [[['race']], `${base} et dans ta ligue.`],
+    [[['race'], ['race', 'other']], `${base} et dans tes 2 ligues.`],
+    [[['race'], ['other']], `${base} et dans une de tes ligues.`],
+    [[['race'], ['race'], ['other']], `${base} et dans 2 de tes ligues.`],
+  ])('describes the leagues %j', (leagueRaceIdsList, expected) => {
+    expect(getPredictionScopeHint(leagueRaceIdsList, 'race')).toBe(expected);
   });
 });
 

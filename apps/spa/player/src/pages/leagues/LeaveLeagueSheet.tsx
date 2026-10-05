@@ -27,8 +27,8 @@ export function LeaveLeagueSheet({
       <ul className="m-0 flex flex-col gap-1.5 pl-[18px] text-sm leading-snug">
         <li>Tu disparais de son classement.</li>
         <li>
-          Tes pronos et tes points restent dans tes autres ligues et dans la
-          Communauté.
+          Tes pronos et tes points restent dans tes autres ligues et dans le
+          classement de tous les joueurs de chaque course.
         </li>
         <li>
           {isPrivate

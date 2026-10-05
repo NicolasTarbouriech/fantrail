@@ -47,6 +47,10 @@ query PredictionPage($raceId: ID!) {
     updatedAt
     withdrawnRunnerIds
   }
+  myLeagues {
+    id
+    raceIds
+  }
 }
 
 mutation PredictionPageMutateSave(

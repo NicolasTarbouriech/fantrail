@@ -1176,6 +1176,10 @@ export const PredictionPageDocument = gql`
     updatedAt
     withdrawnRunnerIds
   }
+  myLeagues {
+    id
+    raceIds
+  }
 }
     `;
 
