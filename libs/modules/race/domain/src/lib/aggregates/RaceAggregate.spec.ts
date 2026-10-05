@@ -20,6 +20,7 @@ import {
   buildRaceAggregate,
   buildRaceData,
 } from '../testing';
+import { RaceAggregate } from './RaceAggregate';
 
 describe('RaceAggregate', () => {
   const beforeLock = new Date('2026-10-14T10:00:00Z');
@@ -53,6 +54,32 @@ describe('RaceAggregate', () => {
       status: RaceStatus.Draft,
     });
     expect(race.data.distanceInKm).toBe(175);
+  });
+
+  it('starts with its first field and sorts by start', () => {
+    const later = buildRaceAggregate({
+      id: 'later',
+      fieldList: [
+        buildField({ data: { startAt: new Date('2026-10-18T03:10:00Z') } }),
+        buildField({
+          id: WOMEN_FIELD_ID,
+          data: {
+            gender: Gender.Women,
+            startAt: new Date('2026-10-17T03:10:00Z'),
+            lockAt: new Date('2026-10-17T03:10:00Z'),
+          },
+        }),
+      ],
+    });
+    const earlier = buildRaceAggregate({ id: 'earlier' });
+    const withoutField = buildRaceAggregate({ id: 'empty', fieldList: [] });
+    expect(later.startAt).toEqual(new Date('2026-10-17T03:10:00Z'));
+    expect(withoutField.startAt).toBeNull();
+    expect(
+      [withoutField, later, earlier]
+        .sort(RaceAggregate.compareByStart)
+        .map(({ id }) => id),
+    ).toEqual(['earlier', 'later', 'empty']);
   });
 
   describe('update', () => {

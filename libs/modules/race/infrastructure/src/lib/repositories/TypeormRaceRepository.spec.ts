@@ -5,6 +5,7 @@ import { RaceNotFoundError, RaceStatus } from '@trail/modules/race/domain';
 import {
   MEN_FIELD_ID,
   RACE_ID,
+  buildField,
   buildRaceAggregate,
   buildRaceData,
 } from '@trail/modules/race/domain-testing';
@@ -43,6 +44,20 @@ describe('TypeormRaceRepository', () => {
     expect(raceRepository.find).toHaveBeenLastCalledWith(
       expect.objectContaining({ where: {} }),
     );
+  });
+
+  it('lists races by first start', async () => {
+    const later = mapRaceEntity(
+      buildRaceAggregate({
+        id: 'later',
+        fieldList: [
+          buildField({ data: { startAt: new Date('2026-10-18T03:10:00Z') } }),
+        ],
+      }),
+    ) as RaceEntity;
+    jest.mocked(raceRepository.find).mockResolvedValueOnce([later, entity]);
+    const raceList = await repository.list();
+    expect(raceList.map(({ id }) => id)).toEqual([RACE_ID, 'later']);
   });
 
   it('gets a race by one of its fields, then loads all its fields', async () => {

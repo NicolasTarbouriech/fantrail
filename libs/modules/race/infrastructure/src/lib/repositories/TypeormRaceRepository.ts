@@ -36,7 +36,9 @@ export class TypeormRaceRepository extends RaceRepository {
       relations: RELATIONS,
       order: { created_at: 'ASC' },
     });
-    return entityList.map((entity) => this._mapEntity(entity));
+    return entityList
+      .map((entity) => this._mapEntity(entity))
+      .sort(RaceAggregate.compareByStart);
   }
 
   getById(id: RaceId): Promise<RaceAggregate> {
