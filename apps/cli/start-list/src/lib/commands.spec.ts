@@ -167,6 +167,102 @@ describe('buildFromLiveTrail', () => {
       reviewCount: 0,
     });
   });
+
+  it('reads every runner with top all and only looks up the strongest', async () => {
+    const searches: string[] = [];
+    const paths: string[] = [];
+    const client = createClient((url) => {
+      if (url.hostname === 'api.utmb.world') {
+        searches.push(url.searchParams.get('search') ?? '');
+        return utmbRoute(url);
+      }
+      paths.push(`${url.pathname}?page=${url.searchParams.get('page')}`);
+      if (url.searchParams.get('sex') === 'FEMALE') {
+        return { runners: [], totalRunners: 0 };
+      }
+      const page = Number(url.searchParams.get('page'));
+      const runners =
+        page === 0
+          ? [
+              {
+                bib: 7,
+                firstName: 'Zoe',
+                lastName: 'ZEDIC',
+                countryCode: 'FR',
+                sex: 'MALE',
+                index: 0,
+              },
+              {
+                bib: 3,
+                firstName: 'Paul',
+                lastName: 'BRUN',
+                countryCode: 'FR',
+                sex: 'MALE',
+                index: 700,
+              },
+              ...Array.from({ length: 198 }, (_, position) => ({
+                bib: 100 + position,
+                firstName: 'Runner',
+                lastName: `R${String(position).padStart(3, '0')}`,
+                countryCode: 'FR',
+                sex: 'MALE',
+                index: 600,
+              })),
+            ]
+          : [
+              {
+                bib: 3,
+                firstName: 'Paul',
+                lastName: 'BRUN',
+                countryCode: 'FR',
+                sex: 'MALE',
+                index: 700,
+              },
+              {
+                bib: 68,
+                firstName: 'Francesco',
+                lastName: 'PUPPI',
+                countryCode: 'IT',
+                sex: 'MALE',
+                index: 952,
+              },
+              {
+                bib: 8,
+                firstName: 'Anne',
+                lastName: 'ALPHA',
+                countryCode: 'FR',
+                sex: 'MALE',
+                index: null,
+              },
+            ];
+      return { runners, totalRunners: 203 };
+    });
+    const result = await buildFromLiveTrail(client, {
+      tenant: 'templiers_2026',
+      raceId: 'Templi',
+      top: 'all',
+      filePrefix: 'templiers',
+      log: () => undefined,
+      enrichCount: 2,
+    });
+    expect(paths).toEqual([
+      '/api/events/runners?page=0',
+      '/api/events/runners?page=1',
+      '/api/events/runners?page=0',
+    ]);
+    expect(searches).toEqual(['Francesco PUPPI', 'Paul BRUN']);
+    const lines = result.files[0]?.content.trim().split('\n') ?? [];
+    expect(lines).toHaveLength(1 + 202);
+    expect(lines[1]).toBe(
+      'Francesco;Puppi;ITA;952;utmb;https://utmb.world/runner/1.francesco.puppi;',
+    );
+    expect(lines[2]).toBe('Paul;Brun;FRA;700;utmb;;');
+    expect(lines.slice(-2)).toEqual([
+      'Anne;Alpha;FRA;;;;',
+      'Zoe;Zedic;FRA;;;;',
+    ]);
+    expect(result).toMatchObject({ scannedCount: 202, unmatchedCount: 1 });
+  });
 });
 
 const LIST_PAGE = (rows: string) => `

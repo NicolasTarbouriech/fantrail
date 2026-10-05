@@ -20,7 +20,9 @@ import {
 } from './matching';
 import {
   GRANDRAID_LIST_URL,
+  type LiveTrailRunner,
   type LiveTrailSex,
+  fetchAllLiveTrailRunners,
   fetchLiveTrailFavorites,
   searchUtmbRunners,
   utmbProfileUrl,
@@ -55,8 +57,12 @@ const FIELDS: Array<{
   { sex: 'FEMALE', utmbSex: 'F', slug: 'femmes', label: 'Femmes' },
 ];
 
+/** Strongest index first, then by last name; runners without index come last. */
 function byIndexDesc(a: StartListRow, b: StartListRow): number {
-  return (b.index ?? -1) - (a.index ?? -1);
+  return (
+    (b.index ?? -1) - (a.index ?? -1) ||
+    a.lastName.localeCompare(b.lastName, 'fr')
+  );
 }
 
 function describeCandidates(candidates: UtmbCandidate[]): string {
@@ -87,45 +93,86 @@ function describeDoubt(result: MatchResult): {
   }
 }
 
+export type LiveTrailTop = number | 'all';
+
 export type LiveTrailOptions = {
   tenant: string;
   raceId: string;
-  top: number;
+  /** `all` reads every registered runner instead of the favorites. */
+  top: LiveTrailTop;
   filePrefix: string;
   log: Log;
+  /** With `all`, only the strongest runners are looked up on UTMB. */
+  enrichCount?: number;
 };
 
-/** LiveTrail favorites, each linked to its UTMB profile when the match is certain. */
+export const ALL_RUNNERS_ENRICH_COUNT = 50;
+
+function uniqueByBib(runners: LiveTrailRunner[]): LiveTrailRunner[] {
+  const seen = new Set<number>();
+  return runners.filter((runner) => {
+    if (runner.bib === null) {
+      return true;
+    }
+    if (seen.has(runner.bib)) {
+      return false;
+    }
+    seen.add(runner.bib);
+    return true;
+  });
+}
+
+function runnerByIndexThenName(a: LiveTrailRunner, b: LiveTrailRunner): number {
+  return (
+    (b.index ?? -1) - (a.index ?? -1) ||
+    a.lastName.localeCompare(b.lastName, 'fr')
+  );
+}
+
+/** LiveTrail runners, the strongest linked to their UTMB profile when the match is certain. */
 export async function buildFromLiveTrail(
   client: HttpClient,
-  { tenant, raceId, top, filePrefix, log }: LiveTrailOptions,
+  {
+    tenant,
+    raceId,
+    top,
+    filePrefix,
+    log,
+    enrichCount = ALL_RUNNERS_ENRICH_COUNT,
+  }: LiveTrailOptions,
 ): Promise<CommandResult> {
   const files: OutputFile[] = [];
   const fields: FieldSummary[] = [];
   let scannedCount = 0;
   let unmatchedCount = 0;
   for (const field of FIELDS) {
-    const favorites = await fetchLiveTrailFavorites(client, {
-      tenant,
-      raceId,
-      sex: field.sex,
-      count: top,
-    });
-    log(`${field.label} : ${favorites.length} favoris LiveTrail`);
+    const query = { tenant, raceId, sex: field.sex };
+    const runners = uniqueByBib(
+      top === 'all'
+        ? await fetchAllLiveTrailRunners(client, query)
+        : await fetchLiveTrailFavorites(client, { ...query, count: top }),
+    ).sort(runnerByIndexThenName);
+    const enrichLimit = top === 'all' ? enrichCount : runners.length;
+    log(
+      `${field.label} : ${runners.length} coureurs LiveTrail, ${Math.min(enrichLimit, runners.length)} cherchés sur UTMB`,
+    );
     const rows: StartListRow[] = [];
     let matchedCount = 0;
-    for (const runner of favorites) {
+    for (const [position, runner] of runners.entries()) {
       const name = `${runner.firstName} ${runner.lastName}`;
-      const result = matchRunner(
-        { name, nationality: runner.countryCode, index: runner.index },
-        await searchUtmbRunners(client, name),
-      );
-      const candidate = result.kind === 'match' ? result.candidate : null;
-      if (candidate) {
-        matchedCount += 1;
-      } else {
-        unmatchedCount += 1;
-        log(`  sans profil UTMB certain : ${name} (${runner.index ?? '—'})`);
+      let candidate: UtmbCandidate | null = null;
+      if (position < enrichLimit) {
+        const result = matchRunner(
+          { name, nationality: runner.countryCode, index: runner.index },
+          await searchUtmbRunners(client, name),
+        );
+        candidate = result.kind === 'match' ? result.candidate : null;
+        if (candidate) {
+          matchedCount += 1;
+        } else {
+          unmatchedCount += 1;
+          log(`  sans profil UTMB certain : ${name} (${runner.index ?? '—'})`);
+        }
       }
       rows.push({
         firstName: formatNamePart(runner.firstName),
@@ -137,7 +184,7 @@ export async function buildFromLiveTrail(
         utmbUrl: candidate ? utmbProfileUrl(candidate.uri) : null,
       });
     }
-    scannedCount += favorites.length;
+    scannedCount += runners.length;
     rows.sort(byIndexDesc);
     fields.push({ label: field.label, rows, matchedCount });
     files.push({

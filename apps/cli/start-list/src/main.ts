@@ -12,8 +12,9 @@ import { HttpClient } from './lib/http';
 
 const USAGE = `Construit les start lists à importer dans l'admin (CSV prenom;nom;nationalite;index;source;utmb;itra).
 
-  livetrail --tenant <tenant> --race <raceId> [--top 30] [--out <dossier>] [--name <préfixe>]
+  livetrail --tenant <tenant> --race <raceId> [--top 30|all] [--enrich 50] [--out <dossier>] [--name <préfixe>]
       Favoris LiveTrail v3 (index ≥ 500) par sexe, reliés à leur profil UTMB.
+      --top all lit tous les inscrits ; seuls les --enrich plus forts sont cherchés sur UTMB.
       ex. livetrail --tenant templiers_2026 --race Templi
 
   grandraid [--type GRR] [--top 30] [--out <dossier>] [--name <préfixe>] [--max <n>]
@@ -59,7 +60,7 @@ async function main(): Promise<void> {
     log: (message) => console.log(message),
   });
   await client.prepare();
-  const top = intFlag(flags, 'top', 30);
+  const top = flags.get('top') === 'all' ? 'all' : intFlag(flags, 'top', 30);
   const log = (message: string) => console.log(message);
 
   let result: CommandResult;
@@ -71,13 +72,14 @@ async function main(): Promise<void> {
       top,
       filePrefix: flags.get('name') ?? raceId.toLowerCase(),
       log,
+      enrichCount: intFlag(flags, 'enrich', 50),
     });
   } else if (command === 'grandraid') {
     const raceType = flags.get('type') ?? 'GRR';
     const maxRegistrants = intFlag(flags, 'max', 0);
     result = await buildFromGrandRaid(client, {
       raceType,
-      top,
+      top: top === 'all' ? Number.POSITIVE_INFINITY : top,
       filePrefix: flags.get('name') ?? raceType.toLowerCase(),
       log,
       maxRegistrants: maxRegistrants > 0 ? maxRegistrants : undefined,

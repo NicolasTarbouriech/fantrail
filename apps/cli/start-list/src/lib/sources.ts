@@ -10,6 +10,11 @@ export const GRANDRAID_LIST_URL =
 
 export type LiveTrailSex = 'MALE' | 'FEMALE';
 
+// Both APIs send 0 for a runner without index: it must stay empty, not rank last.
+export function toIndex(value: number | null | undefined): number | null {
+  return value && value > 0 ? value : null;
+}
+
 const LiveTrailRunner = z.object({
   bib: z.number().nullish(),
   firstName: z.string(),
@@ -32,7 +37,14 @@ export type LiveTrailRunner = {
   index: number | null;
 };
 
-const PAGE_SIZE = 50;
+const FAVORITES_PAGE_SIZE = 50;
+const RUNNERS_PAGE_SIZE = 200;
+
+export type LiveTrailQuery = {
+  tenant: string;
+  raceId: string;
+  sex: LiveTrailSex;
+};
 
 // Runners who hid their identity come back as "Anonymous" without last name.
 function isNamed(runner: z.infer<typeof LiveTrailRunner>): boolean {
@@ -42,22 +54,19 @@ function isNamed(runner: z.infer<typeof LiveTrailRunner>): boolean {
   );
 }
 
-/** LiveTrail favorites: runners with an index, strongest first, anonymous ones left out. */
-export async function fetchLiveTrailFavorites(
+async function fetchLiveTrailPages(
   client: HttpClient,
-  {
-    tenant,
-    raceId,
-    sex,
-    count,
-  }: { tenant: string; raceId: string; sex: LiveTrailSex; count: number },
+  path: string,
+  { tenant, raceId, sex }: LiveTrailQuery,
+  pageSize: number,
+  count: number | null,
 ): Promise<LiveTrailRunner[]> {
   const runners: LiveTrailRunner[] = [];
-  for (let page = 0; runners.length < count; page += 1) {
-    const url = new URL(`${LIVETRAIL_API_URL}/events/runners/favorites`);
+  for (let page = 0; count === null || runners.length < count; page += 1) {
+    const url = new URL(`${LIVETRAIL_API_URL}${path}`);
     url.searchParams.set('raceId', raceId);
     url.searchParams.set('sex', sex);
-    url.searchParams.set('limit', String(PAGE_SIZE));
+    url.searchParams.set('limit', String(pageSize));
     url.searchParams.set('page', String(page));
     const response = LiveTrailFavoritesResponse.parse(
       await client.getJson(url.toString(), { 'X-Tenant': tenant }),
@@ -68,17 +77,45 @@ export async function fetchLiveTrailFavorites(
         firstName: runner.firstName,
         lastName: runner.lastName,
         countryCode: runner.countryCode ?? null,
-        index: runner.index ?? null,
+        index: toIndex(runner.index),
       })),
     );
     if (
-      response.runners.length < PAGE_SIZE ||
-      (page + 1) * PAGE_SIZE >= response.totalRunners
+      response.runners.length < pageSize ||
+      (page + 1) * pageSize >= response.totalRunners
     ) {
       break;
     }
   }
-  return runners.slice(0, count);
+  return count === null ? runners : runners.slice(0, count);
+}
+
+/** LiveTrail favorites: runners with an index ≥ 500, strongest first, anonymous ones left out. */
+export function fetchLiveTrailFavorites(
+  client: HttpClient,
+  { count, ...query }: LiveTrailQuery & { count: number },
+): Promise<LiveTrailRunner[]> {
+  return fetchLiveTrailPages(
+    client,
+    '/events/runners/favorites',
+    query,
+    FAVORITES_PAGE_SIZE,
+    count,
+  );
+}
+
+/** Every registered runner of the race, in LiveTrail order. */
+export function fetchAllLiveTrailRunners(
+  client: HttpClient,
+  query: LiveTrailQuery,
+): Promise<LiveTrailRunner[]> {
+  return fetchLiveTrailPages(
+    client,
+    '/events/runners',
+    query,
+    RUNNERS_PAGE_SIZE,
+    null,
+  );
 }
 
 const UtmbSearchResponse = z.object({
@@ -111,7 +148,7 @@ export async function searchUtmbRunners(
     id: runner.id,
     fullname: runner.fullname,
     uri: runner.uri,
-    index: runner.ip ?? null,
+    index: toIndex(runner.ip),
     nationality: runner.nationality ?? null,
     sex: runner.sex ?? null,
   }));
