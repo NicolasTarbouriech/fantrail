@@ -1263,6 +1263,41 @@ export function useTrailEventsPageMutateUpdateMutation(baseOptions?: Apollo.Muta
 export type TrailEventsPageMutateUpdateMutationHookResult = ReturnType<typeof useTrailEventsPageMutateUpdateMutation>;
 export type TrailEventsPageMutateUpdateMutationResult = Apollo.MutationResult<Types.TrailEventsPageMutateUpdateMutation>;
 export type TrailEventsPageMutateUpdateMutationOptions = Apollo.BaseMutationOptions<Types.TrailEventsPageMutateUpdateMutation, Types.TrailEventsPageMutateUpdateMutationVariables>;
+export const TrailEventsPageMutateChangeRaceDocument = gql`
+    mutation TrailEventsPageMutateChangeRace($raceId: ID!, $trailEventId: ID) {
+  changeRaceTrailEvent(raceId: $raceId, trailEventId: $trailEventId) {
+    id
+    trailEventId
+  }
+}
+    `;
+export type TrailEventsPageMutateChangeRaceMutationFn = Apollo.MutationFunction<Types.TrailEventsPageMutateChangeRaceMutation, Types.TrailEventsPageMutateChangeRaceMutationVariables>;
+
+/**
+ * __useTrailEventsPageMutateChangeRaceMutation__
+ *
+ * To run a mutation, you first call `useTrailEventsPageMutateChangeRaceMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useTrailEventsPageMutateChangeRaceMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [trailEventsPageMutateChangeRaceMutation, { data, loading, error }] = useTrailEventsPageMutateChangeRaceMutation({
+ *   variables: {
+ *      raceId: // value for 'raceId'
+ *      trailEventId: // value for 'trailEventId'
+ *   },
+ * });
+ */
+export function useTrailEventsPageMutateChangeRaceMutation(baseOptions?: Apollo.MutationHookOptions<Types.TrailEventsPageMutateChangeRaceMutation, Types.TrailEventsPageMutateChangeRaceMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<Types.TrailEventsPageMutateChangeRaceMutation, Types.TrailEventsPageMutateChangeRaceMutationVariables>(TrailEventsPageMutateChangeRaceDocument, options);
+      }
+export type TrailEventsPageMutateChangeRaceMutationHookResult = ReturnType<typeof useTrailEventsPageMutateChangeRaceMutation>;
+export type TrailEventsPageMutateChangeRaceMutationResult = Apollo.MutationResult<Types.TrailEventsPageMutateChangeRaceMutation>;
+export type TrailEventsPageMutateChangeRaceMutationOptions = Apollo.BaseMutationOptions<Types.TrailEventsPageMutateChangeRaceMutation, Types.TrailEventsPageMutateChangeRaceMutationVariables>;
 export const TrailEventsPageMutateDeleteDocument = gql`
     mutation TrailEventsPageMutateDelete($trailEventId: ID!) {
   deleteTrailEvent(trailEventId: $trailEventId)

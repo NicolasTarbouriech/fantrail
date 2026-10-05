@@ -12,6 +12,7 @@ import {
 import {
   AddFieldCommand,
   CancelRaceCommand,
+  ChangeRaceTrailEventCommand,
   CreateRaceCommand,
   DeleteRaceCommand,
   GetRaceQuery,
@@ -113,6 +114,22 @@ export class RaceResolver {
     return new RaceType(
       await this._commandBus.execute(
         new UpdateRaceCommand({ raceId, data: mapRaceData(data) }),
+      ),
+    );
+  }
+
+  @Mutation(() => RaceType, {
+    description: 'Puts the race in a trail event, or takes it out with null',
+  })
+  @UseGuards(AuthGuard, AdminGuard)
+  async changeRaceTrailEvent(
+    @Args('raceId', { type: () => ID }) raceId: string,
+    @Args('trailEventId', { type: () => ID, nullable: true })
+    trailEventId: string | null,
+  ): Promise<RaceType> {
+    return new RaceType(
+      await this._commandBus.execute(
+        new ChangeRaceTrailEventCommand({ raceId, trailEventId }),
       ),
     );
   }

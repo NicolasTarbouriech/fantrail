@@ -14,6 +14,7 @@ import {
 import { RaceDeletedNestEvent, RaceEventName } from '../events';
 import {
   MEN_FIELD_ID,
+  TRAIL_EVENT_ID,
   WOMEN_FIELD_ID,
   buildField,
   buildFieldData,
@@ -63,6 +64,14 @@ describe('RaceAggregate', () => {
       status: RaceStatus.Draft,
     });
     expect(race.data.distanceInKm).toBe(175);
+  });
+
+  it('joins and leaves a trail event whatever its status', () => {
+    const race = buildRaceAggregate({ status: RaceStatus.Scored });
+    race.changeTrailEvent(TRAIL_EVENT_ID);
+    expect(race.data.trailEventId).toBe(TRAIL_EVENT_ID);
+    race.changeTrailEvent(null);
+    expect(race.data.trailEventId).toBeNull();
   });
 
   describe('update', () => {

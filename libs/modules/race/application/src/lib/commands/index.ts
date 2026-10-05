@@ -4,6 +4,8 @@ export * from './AddRunnerListCommand';
 export * from './AddRunnerListCommandHandler';
 export * from './CancelRaceCommand';
 export * from './CancelRaceCommandHandler';
+export * from './ChangeRaceTrailEventCommand';
+export * from './ChangeRaceTrailEventCommandHandler';
 export * from './CreateRaceCommand';
 export * from './CreateRaceCommandHandler';
 export * from './CreateTrailEventCommand';

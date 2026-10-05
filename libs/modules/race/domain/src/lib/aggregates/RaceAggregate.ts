@@ -16,7 +16,14 @@ import {
   RaceDeletedNestEvent,
   RaceEventName,
 } from '../events';
-import { FieldData, FieldId, PickCount, RaceData, RaceId } from '../types';
+import {
+  FieldData,
+  FieldId,
+  PickCount,
+  RaceData,
+  RaceId,
+  TrailEventId,
+} from '../types';
 import { RaceField } from '../valueObjects';
 
 export class RaceAggregate extends AggregateRoot {
@@ -90,6 +97,11 @@ export class RaceAggregate extends AggregateRoot {
       throw new PickCountLockedError();
     }
     this._data = parsed;
+  }
+
+  /** A grouping for display only: any race can join or leave an event, whatever its status. */
+  changeTrailEvent(trailEventId: TrailEventId | null): void {
+    this._data = { ...this._data, trailEventId };
   }
 
   open(activeRunnerCountByFieldId: Record<FieldId, number>): void {

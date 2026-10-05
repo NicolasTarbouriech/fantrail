@@ -14,6 +14,7 @@ import {
 import { getErrorMessage } from '../../services/errors';
 import {
   type TrailEventsPageTrailEventFragment,
+  useTrailEventsPageMutateChangeRaceMutation,
   useTrailEventsPageMutateCreateMutation,
   useTrailEventsPageMutateDeleteMutation,
   useTrailEventsPageMutateUpdateMutation,
@@ -21,6 +22,7 @@ import {
 } from '../../services/graphql';
 import { ConfirmDialog } from '../races/ConfirmDialog';
 import { TrailEventDialog } from './TrailEventDialog';
+import { TrailEventRaces } from './TrailEventRaces';
 
 type Editing = { trailEvent: TrailEventsPageTrailEventFragment | null };
 
@@ -30,6 +32,8 @@ export function TrailEventsPage() {
     refetchQueries: ['TrailEventsPage'],
   });
   const [update, updateState] = useTrailEventsPageMutateUpdateMutation();
+  const [changeRace, changeRaceState] =
+    useTrailEventsPageMutateChangeRaceMutation();
   const [deleteTrailEvent, deleteState] =
     useTrailEventsPageMutateDeleteMutation({
       refetchQueries: ['TrailEventsPage', 'RacesPage'],
@@ -48,6 +52,25 @@ export function TrailEventsPage() {
       ]);
     }
   }
+
+  const eventNameById = new Map(
+    (data?.trailEvents ?? []).map((trailEvent) => [
+      trailEvent.id,
+      trailEvent.name,
+    ]),
+  );
+
+  const changeRaceTrailEvent = async (
+    raceId: string,
+    trailEventId: string | null,
+  ) => {
+    setActionError(null);
+    try {
+      await changeRace({ variables: { raceId, trailEventId } });
+    } catch (caught) {
+      setActionError(getErrorMessage(caught));
+    }
+  };
 
   const save = async (input: TrailEventInput) => {
     setActionError(null);
@@ -101,6 +124,9 @@ export function TrailEventsPage() {
         }
       />
       {loading && !data ? <Spinner /> : null}
+      {actionError && !editing && !deleting ? (
+        <AdminNotice tone="danger">{actionError}</AdminNotice>
+      ) : null}
       {error ? (
         <AdminNotice tone="danger">
           Impossible de charger les événements.
@@ -126,68 +152,59 @@ export function TrailEventsPage() {
                 </AdminTd>
               </tr>
             ) : null}
-            {data.trailEvents.map((trailEvent) => {
-              const raceNames = raceNamesByEventId.get(trailEvent.id) ?? [];
-              return (
-                <tr key={trailEvent.id}>
-                  <AdminTd>
-                    <span className="flex size-10 items-center justify-center overflow-hidden rounded-lg border border-zinc-200 bg-white">
-                      {trailEvent.logoUrl ? (
-                        <img
-                          src={trailEvent.logoUrl}
-                          alt=""
-                          className="size-full object-contain"
-                        />
-                      ) : (
-                        <span className="text-[11px] text-zinc-400">—</span>
-                      )}
-                    </span>
-                  </AdminTd>
-                  <AdminTd className="font-semibold whitespace-nowrap">
-                    {trailEvent.name}
-                  </AdminTd>
-                  <AdminTd className="min-w-56">
-                    <span className="flex flex-col">
-                      <span className="tabular-nums">
-                        {raceNames.length > 1
-                          ? `${raceNames.length} courses`
-                          : raceNames.length === 1
-                            ? '1 course'
-                            : 'Aucune course'}
-                      </span>
-                      {raceNames.length > 0 ? (
-                        <span className="text-xs text-zinc-500">
-                          {raceNames.join(' · ')}
-                        </span>
-                      ) : null}
-                    </span>
-                  </AdminTd>
-                  <AdminTd>
-                    <span className="flex justify-end gap-2">
-                      <AdminButton
-                        size="sm"
-                        onClick={() => {
-                          setActionError(null);
-                          setEditing({ trailEvent });
-                        }}
-                      >
-                        Modifier
-                      </AdminButton>
-                      <AdminButton
-                        size="sm"
-                        variant="destructive"
-                        onClick={() => {
-                          setActionError(null);
-                          setDeleting(trailEvent);
-                        }}
-                      >
-                        Supprimer
-                      </AdminButton>
-                    </span>
-                  </AdminTd>
-                </tr>
-              );
-            })}
+            {data.trailEvents.map((trailEvent) => (
+              <tr key={trailEvent.id}>
+                <AdminTd>
+                  <span className="flex size-10 items-center justify-center overflow-hidden rounded-lg border border-zinc-200 bg-white">
+                    {trailEvent.logoUrl ? (
+                      <img
+                        src={trailEvent.logoUrl}
+                        alt=""
+                        className="size-full object-contain"
+                      />
+                    ) : (
+                      <span className="text-[11px] text-zinc-400">—</span>
+                    )}
+                  </span>
+                </AdminTd>
+                <AdminTd className="font-semibold whitespace-nowrap">
+                  {trailEvent.name}
+                </AdminTd>
+                <AdminTd className="min-w-72">
+                  <TrailEventRaces
+                    trailEventId={trailEvent.id}
+                    trailEventName={trailEvent.name}
+                    races={data.adminRaces}
+                    eventNameById={eventNameById}
+                    isPending={changeRaceState.loading}
+                    onChange={changeRaceTrailEvent}
+                  />
+                </AdminTd>
+                <AdminTd>
+                  <span className="flex justify-end gap-2">
+                    <AdminButton
+                      size="sm"
+                      onClick={() => {
+                        setActionError(null);
+                        setEditing({ trailEvent });
+                      }}
+                    >
+                      Modifier
+                    </AdminButton>
+                    <AdminButton
+                      size="sm"
+                      variant="destructive"
+                      onClick={() => {
+                        setActionError(null);
+                        setDeleting(trailEvent);
+                      }}
+                    >
+                      Supprimer
+                    </AdminButton>
+                  </span>
+                </AdminTd>
+              </tr>
+            ))}
           </tbody>
         </AdminTable>
       ) : null}

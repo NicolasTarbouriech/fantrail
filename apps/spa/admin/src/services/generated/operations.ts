@@ -230,6 +230,14 @@ export type TrailEventsPageMutateUpdateMutationVariables = Types.Exact<{
 
 export type TrailEventsPageMutateUpdateMutation = { __typename?: 'Mutation', updateTrailEvent: { __typename?: 'TrailEvent', id: string, name: string, logoUrl: string | null } };
 
+export type TrailEventsPageMutateChangeRaceMutationVariables = Types.Exact<{
+  raceId: Types.Scalars['ID']['input'];
+  trailEventId?: Types.InputMaybe<Types.Scalars['ID']['input']>;
+}>;
+
+
+export type TrailEventsPageMutateChangeRaceMutation = { __typename?: 'Mutation', changeRaceTrailEvent: { __typename?: 'Race', id: string, trailEventId: string | null } };
+
 export type TrailEventsPageMutateDeleteMutationVariables = Types.Exact<{
   trailEventId: Types.Scalars['ID']['input'];
 }>;

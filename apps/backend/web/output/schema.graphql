@@ -278,6 +278,9 @@ type Query {
 type Mutation {
   createRace(data: RaceInput!): Race!
   updateRace(raceId: ID!, data: RaceInput!): Race!
+
+  """Puts the race in a trail event, or takes it out with null"""
+  changeRaceTrailEvent(raceId: ID!, trailEventId: ID): Race!
   openRace(raceId: ID!): Race!
   lockRace(raceId: ID!): Race!
 

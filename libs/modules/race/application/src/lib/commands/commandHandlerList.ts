@@ -1,6 +1,7 @@
 import { AddFieldCommandHandler } from './AddFieldCommandHandler';
 import { AddRunnerListCommandHandler } from './AddRunnerListCommandHandler';
 import { CancelRaceCommandHandler } from './CancelRaceCommandHandler';
+import { ChangeRaceTrailEventCommandHandler } from './ChangeRaceTrailEventCommandHandler';
 import { CreateRaceCommandHandler } from './CreateRaceCommandHandler';
 import { CreateTrailEventCommandHandler } from './CreateTrailEventCommandHandler';
 import { DeleteRaceCommandHandler } from './DeleteRaceCommandHandler';
@@ -20,6 +21,7 @@ export const commandHandlerList = [
   AddFieldCommandHandler,
   AddRunnerListCommandHandler,
   CancelRaceCommandHandler,
+  ChangeRaceTrailEventCommandHandler,
   CreateRaceCommandHandler,
   CreateTrailEventCommandHandler,
   DeleteRaceCommandHandler,

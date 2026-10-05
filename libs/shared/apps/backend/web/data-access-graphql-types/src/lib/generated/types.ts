@@ -129,6 +129,8 @@ export type Mutation = {
   cancelRace: Race;
   changeLeagueRaces: League;
   changeLeagueVisibility: League;
+  /** Puts the race in a trail event, or takes it out with null */
+  changeRaceTrailEvent: Race;
   createLeague: League;
   createRace: Race;
   createTrailEvent: TrailEvent;
@@ -195,6 +197,12 @@ export type MutationChangeLeagueRacesArgs = {
 export type MutationChangeLeagueVisibilityArgs = {
   leagueId: Scalars['ID']['input'];
   visibility: LeagueVisibility;
+};
+
+
+export type MutationChangeRaceTrailEventArgs = {
+  raceId: Scalars['ID']['input'];
+  trailEventId?: InputMaybe<Scalars['ID']['input']>;
 };
 
 

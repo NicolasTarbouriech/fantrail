@@ -30,6 +30,13 @@ mutation TrailEventsPageMutateUpdate(
   }
 }
 
+mutation TrailEventsPageMutateChangeRace($raceId: ID!, $trailEventId: ID) {
+  changeRaceTrailEvent(raceId: $raceId, trailEventId: $trailEventId) {
+    id
+    trailEventId
+  }
+}
+
 mutation TrailEventsPageMutateDelete($trailEventId: ID!) {
   deleteTrailEvent(trailEventId: $trailEventId)
 }
