@@ -7,6 +7,7 @@ import { LeaguesPage } from '../pages/leagues/LeaguesPage';
 import { PlayersPage } from '../pages/players/PlayersPage';
 import { RacePage } from '../pages/races/RacePage';
 import { RacesPage } from '../pages/races/RacesPage';
+import { TrailEventsPage } from '../pages/trailEvents/TrailEventsPage';
 import { AdminLayout } from './AdminLayout';
 import { paths } from './paths';
 
@@ -19,6 +20,7 @@ export function App() {
           <Route path={paths.races} element={<RacesPage />} />
           <Route path={paths.newRace} element={<RacePage />} />
           <Route path="/courses/:raceId/:tab?" element={<RacePage />} />
+          <Route path={paths.trailEvents} element={<TrailEventsPage />} />
           <Route path={paths.leagues} element={<LeaguesPage />} />
           <Route path="/ligues/:leagueId" element={<LeaguePage />} />
           <Route path={paths.players} element={<PlayersPage />} />

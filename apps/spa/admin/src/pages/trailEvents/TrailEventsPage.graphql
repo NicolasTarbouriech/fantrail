@@ -1,0 +1,35 @@
+fragment TrailEventsPageTrailEvent on TrailEvent {
+  id
+  name
+  logoUrl
+}
+
+query TrailEventsPage {
+  trailEvents {
+    ...TrailEventsPageTrailEvent
+  }
+  adminRaces {
+    id
+    name
+    trailEventId
+  }
+}
+
+mutation TrailEventsPageMutateCreate($data: TrailEventInput!) {
+  createTrailEvent(data: $data) {
+    ...TrailEventsPageTrailEvent
+  }
+}
+
+mutation TrailEventsPageMutateUpdate(
+  $trailEventId: ID!
+  $data: TrailEventInput!
+) {
+  updateTrailEvent(trailEventId: $trailEventId, data: $data) {
+    ...TrailEventsPageTrailEvent
+  }
+}
+
+mutation TrailEventsPageMutateDelete($trailEventId: ID!) {
+  deleteTrailEvent(trailEventId: $trailEventId)
+}

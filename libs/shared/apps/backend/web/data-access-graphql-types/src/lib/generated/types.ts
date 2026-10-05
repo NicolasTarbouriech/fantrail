@@ -131,9 +131,12 @@ export type Mutation = {
   changeLeagueVisibility: League;
   createLeague: League;
   createRace: Race;
+  createTrailEvent: TrailEvent;
   deleteLeague: Scalars['Boolean']['output'];
   /** Deletes the race with its fields, start lists, predictions, results and scores */
   deleteRace: Scalars['Boolean']['output'];
+  /** Deletes the event, its races stay without event */
+  deleteTrailEvent: Scalars['Boolean']['output'];
   disableUser: AdminUser;
   enableUser: AdminUser;
   /** Joins a public league */
@@ -160,6 +163,8 @@ export type Mutation = {
   updateRace: Race;
   updateRaceField: Race;
   updateRunner: StartList;
+  /** Renames the event and replaces its logo, null removes it */
+  updateTrailEvent: TrailEvent;
   withdrawRunner: StartList;
 };
 
@@ -205,6 +210,11 @@ export type MutationCreateRaceArgs = {
 };
 
 
+export type MutationCreateTrailEventArgs = {
+  data: TrailEventInput;
+};
+
+
 export type MutationDeleteLeagueArgs = {
   leagueId: Scalars['ID']['input'];
 };
@@ -212,6 +222,11 @@ export type MutationDeleteLeagueArgs = {
 
 export type MutationDeleteRaceArgs = {
   raceId: Scalars['ID']['input'];
+};
+
+
+export type MutationDeleteTrailEventArgs = {
+  trailEventId: Scalars['ID']['input'];
 };
 
 
@@ -328,6 +343,12 @@ export type MutationUpdateRunnerArgs = {
 };
 
 
+export type MutationUpdateTrailEventArgs = {
+  data: TrailEventInput;
+  trailEventId: Scalars['ID']['input'];
+};
+
+
 export type MutationWithdrawRunnerArgs = {
   fieldId: Scalars['ID']['input'];
   runnerId: Scalars['ID']['input'];
@@ -390,6 +411,8 @@ export type Query = {
   race: Race;
   /** Races open to predictions, locked, scored or cancelled */
   races: Array<Race>;
+  /** Every event, by name */
+  trailEvents: Array<TrailEvent>;
 };
 
 
@@ -443,6 +466,9 @@ export type Race = {
   timeTolerancePercent: Scalars['Float']['output'];
   /** IANA timezone of the race, e.g. Indian/Reunion */
   timezone: Scalars['String']['output'];
+  trailEvent?: Maybe<TrailEvent>;
+  /** Festival or raid the race belongs to */
+  trailEventId?: Maybe<Scalars['ID']['output']>;
   websiteUrl?: Maybe<Scalars['String']['output']>;
 };
 
@@ -478,6 +504,8 @@ export type RaceInput = {
   timeTolerancePercent: Scalars['Float']['input'];
   /** IANA timezone of the race, e.g. Europe/Paris */
   timezone: Scalars['String']['input'];
+  /** Festival or raid the race belongs to */
+  trailEventId?: InputMaybe<Scalars['ID']['input']>;
   websiteUrl?: InputMaybe<Scalars['String']['input']>;
 };
 
@@ -551,6 +579,22 @@ export type TimeScore = {
   estimateInSeconds: Scalars['Int']['output'];
   gapInSeconds: Scalars['Int']['output'];
   points: Scalars['Int']['output'];
+};
+
+/** Festival or raid gathering several races, shown as a tag */
+export type TrailEvent = {
+  __typename?: 'TrailEvent';
+  id: Scalars['ID']['output'];
+  /** Base64 data URL of the logo, small enough to inline */
+  logoUrl?: Maybe<Scalars['String']['output']>;
+  name: Scalars['String']['output'];
+};
+
+export type TrailEventInput = {
+  /** Base64 data URL of a PNG, JPEG, WebP or SVG logo of 100 KB at most, null without logo */
+  logoDataUrl?: InputMaybe<Scalars['String']['input']>;
+  /** Unique regardless of case and accents */
+  name: Scalars['String']['input'];
 };
 
 export enum UserRole {

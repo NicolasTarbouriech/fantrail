@@ -1,6 +1,7 @@
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
 
 import {
+  TrailEventTag,
   countPicks,
   findGenderBySlug,
   formatCountdown,
@@ -143,7 +144,14 @@ export function PredictionPage() {
                   formatStartTime(field.startAt, race.timezone),
                 ].join(' · ')
           }
-        />
+        >
+          {race.trailEvent ? (
+            <TrailEventTag
+              name={race.trailEvent.name}
+              logoUrl={race.trailEvent.logoUrl}
+            />
+          ) : null}
+        </Hero>
       }
     >
       {isLocked ? (

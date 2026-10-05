@@ -27,6 +27,10 @@ const MESSAGES: Record<string, string> = {
     'Le champ doit être verrouillé avant de publier son résultat.',
   FIELD_RESULT_NOT_PUBLISHED:
     'Publie le résultat de chaque champ avant de marquer la course notée.',
+  TRAIL_EVENT_NAME_ALREADY_USED: 'Un événement porte déjà ce nom.',
+  TRAIL_EVENT_LOGO_INVALID:
+    'Le logo doit être une image PNG, JPEG, WebP ou SVG de 100 Ko au plus.',
+  TRAIL_EVENT_NOT_FOUND: 'Cet événement n’existe plus.',
   LEAGUE_NAME_ALREADY_USED: 'Une ligue porte déjà ce nom.',
   LEAGUE_OWNER_CANNOT_LEAVE:
     'Le propriétaire ne peut pas être retiré de sa ligue.',

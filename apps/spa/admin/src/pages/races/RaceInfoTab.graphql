@@ -1,3 +1,10 @@
+query RaceInfoTabGetTrailEvents {
+  trailEvents {
+    id
+    name
+  }
+}
+
 mutation RaceInfoTabMutateCreate($data: RaceInput!) {
   createRace(data: $data) {
     ...RacePageRace

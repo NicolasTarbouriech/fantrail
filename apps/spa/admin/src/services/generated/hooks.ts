@@ -33,6 +33,7 @@ export const RacePageRaceFragmentDoc = gql`
   pickCount
   timeTolerancePercent
   status
+  trailEventId
   fields {
     id
     gender
@@ -56,6 +57,13 @@ export const RacePageRaceFragmentDoc = gql`
   }
 }
     ${RacePageRunnerFragmentDoc}`;
+export const TrailEventsPageTrailEventFragmentDoc = gql`
+    fragment TrailEventsPageTrailEvent on TrailEvent {
+  id
+  name
+  logoUrl
+}
+    `;
 export const RequireAdminDocument = gql`
     query RequireAdmin {
   me {
@@ -739,6 +747,46 @@ export function useFieldsTabMutateReinstateRunnerMutation(baseOptions?: Apollo.M
 export type FieldsTabMutateReinstateRunnerMutationHookResult = ReturnType<typeof useFieldsTabMutateReinstateRunnerMutation>;
 export type FieldsTabMutateReinstateRunnerMutationResult = Apollo.MutationResult<Types.FieldsTabMutateReinstateRunnerMutation>;
 export type FieldsTabMutateReinstateRunnerMutationOptions = Apollo.BaseMutationOptions<Types.FieldsTabMutateReinstateRunnerMutation, Types.FieldsTabMutateReinstateRunnerMutationVariables>;
+export const RaceInfoTabGetTrailEventsDocument = gql`
+    query RaceInfoTabGetTrailEvents {
+  trailEvents {
+    id
+    name
+  }
+}
+    `;
+
+/**
+ * __useRaceInfoTabGetTrailEventsQuery__
+ *
+ * To run a query within a React component, call `useRaceInfoTabGetTrailEventsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useRaceInfoTabGetTrailEventsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useRaceInfoTabGetTrailEventsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useRaceInfoTabGetTrailEventsQuery(baseOptions?: Apollo.QueryHookOptions<Types.RaceInfoTabGetTrailEventsQuery, Types.RaceInfoTabGetTrailEventsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<Types.RaceInfoTabGetTrailEventsQuery, Types.RaceInfoTabGetTrailEventsQueryVariables>(RaceInfoTabGetTrailEventsDocument, options);
+      }
+export function useRaceInfoTabGetTrailEventsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<Types.RaceInfoTabGetTrailEventsQuery, Types.RaceInfoTabGetTrailEventsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<Types.RaceInfoTabGetTrailEventsQuery, Types.RaceInfoTabGetTrailEventsQueryVariables>(RaceInfoTabGetTrailEventsDocument, options);
+        }
+export function useRaceInfoTabGetTrailEventsSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<Types.RaceInfoTabGetTrailEventsQuery, Types.RaceInfoTabGetTrailEventsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<Types.RaceInfoTabGetTrailEventsQuery, Types.RaceInfoTabGetTrailEventsQueryVariables>(RaceInfoTabGetTrailEventsDocument, options);
+        }
+export type RaceInfoTabGetTrailEventsQueryHookResult = ReturnType<typeof useRaceInfoTabGetTrailEventsQuery>;
+export type RaceInfoTabGetTrailEventsLazyQueryHookResult = ReturnType<typeof useRaceInfoTabGetTrailEventsLazyQuery>;
+export type RaceInfoTabGetTrailEventsSuspenseQueryHookResult = ReturnType<typeof useRaceInfoTabGetTrailEventsSuspenseQuery>;
+export type RaceInfoTabGetTrailEventsQueryResult = Apollo.QueryResult<Types.RaceInfoTabGetTrailEventsQuery, Types.RaceInfoTabGetTrailEventsQueryVariables>;
 export const RaceInfoTabMutateCreateDocument = gql`
     mutation RaceInfoTabMutateCreate($data: RaceInput!) {
   createRace(data: $data) {
@@ -1104,3 +1152,145 @@ export function useResultsTabMutatePublishMutation(baseOptions?: Apollo.Mutation
 export type ResultsTabMutatePublishMutationHookResult = ReturnType<typeof useResultsTabMutatePublishMutation>;
 export type ResultsTabMutatePublishMutationResult = Apollo.MutationResult<Types.ResultsTabMutatePublishMutation>;
 export type ResultsTabMutatePublishMutationOptions = Apollo.BaseMutationOptions<Types.ResultsTabMutatePublishMutation, Types.ResultsTabMutatePublishMutationVariables>;
+export const TrailEventsPageDocument = gql`
+    query TrailEventsPage {
+  trailEvents {
+    ...TrailEventsPageTrailEvent
+  }
+  adminRaces {
+    id
+    name
+    trailEventId
+  }
+}
+    ${TrailEventsPageTrailEventFragmentDoc}`;
+
+/**
+ * __useTrailEventsPageQuery__
+ *
+ * To run a query within a React component, call `useTrailEventsPageQuery` and pass it any options that fit your needs.
+ * When your component renders, `useTrailEventsPageQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useTrailEventsPageQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useTrailEventsPageQuery(baseOptions?: Apollo.QueryHookOptions<Types.TrailEventsPageQuery, Types.TrailEventsPageQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<Types.TrailEventsPageQuery, Types.TrailEventsPageQueryVariables>(TrailEventsPageDocument, options);
+      }
+export function useTrailEventsPageLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<Types.TrailEventsPageQuery, Types.TrailEventsPageQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<Types.TrailEventsPageQuery, Types.TrailEventsPageQueryVariables>(TrailEventsPageDocument, options);
+        }
+export function useTrailEventsPageSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<Types.TrailEventsPageQuery, Types.TrailEventsPageQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<Types.TrailEventsPageQuery, Types.TrailEventsPageQueryVariables>(TrailEventsPageDocument, options);
+        }
+export type TrailEventsPageQueryHookResult = ReturnType<typeof useTrailEventsPageQuery>;
+export type TrailEventsPageLazyQueryHookResult = ReturnType<typeof useTrailEventsPageLazyQuery>;
+export type TrailEventsPageSuspenseQueryHookResult = ReturnType<typeof useTrailEventsPageSuspenseQuery>;
+export type TrailEventsPageQueryResult = Apollo.QueryResult<Types.TrailEventsPageQuery, Types.TrailEventsPageQueryVariables>;
+export const TrailEventsPageMutateCreateDocument = gql`
+    mutation TrailEventsPageMutateCreate($data: TrailEventInput!) {
+  createTrailEvent(data: $data) {
+    ...TrailEventsPageTrailEvent
+  }
+}
+    ${TrailEventsPageTrailEventFragmentDoc}`;
+export type TrailEventsPageMutateCreateMutationFn = Apollo.MutationFunction<Types.TrailEventsPageMutateCreateMutation, Types.TrailEventsPageMutateCreateMutationVariables>;
+
+/**
+ * __useTrailEventsPageMutateCreateMutation__
+ *
+ * To run a mutation, you first call `useTrailEventsPageMutateCreateMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useTrailEventsPageMutateCreateMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [trailEventsPageMutateCreateMutation, { data, loading, error }] = useTrailEventsPageMutateCreateMutation({
+ *   variables: {
+ *      data: // value for 'data'
+ *   },
+ * });
+ */
+export function useTrailEventsPageMutateCreateMutation(baseOptions?: Apollo.MutationHookOptions<Types.TrailEventsPageMutateCreateMutation, Types.TrailEventsPageMutateCreateMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<Types.TrailEventsPageMutateCreateMutation, Types.TrailEventsPageMutateCreateMutationVariables>(TrailEventsPageMutateCreateDocument, options);
+      }
+export type TrailEventsPageMutateCreateMutationHookResult = ReturnType<typeof useTrailEventsPageMutateCreateMutation>;
+export type TrailEventsPageMutateCreateMutationResult = Apollo.MutationResult<Types.TrailEventsPageMutateCreateMutation>;
+export type TrailEventsPageMutateCreateMutationOptions = Apollo.BaseMutationOptions<Types.TrailEventsPageMutateCreateMutation, Types.TrailEventsPageMutateCreateMutationVariables>;
+export const TrailEventsPageMutateUpdateDocument = gql`
+    mutation TrailEventsPageMutateUpdate($trailEventId: ID!, $data: TrailEventInput!) {
+  updateTrailEvent(trailEventId: $trailEventId, data: $data) {
+    ...TrailEventsPageTrailEvent
+  }
+}
+    ${TrailEventsPageTrailEventFragmentDoc}`;
+export type TrailEventsPageMutateUpdateMutationFn = Apollo.MutationFunction<Types.TrailEventsPageMutateUpdateMutation, Types.TrailEventsPageMutateUpdateMutationVariables>;
+
+/**
+ * __useTrailEventsPageMutateUpdateMutation__
+ *
+ * To run a mutation, you first call `useTrailEventsPageMutateUpdateMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useTrailEventsPageMutateUpdateMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [trailEventsPageMutateUpdateMutation, { data, loading, error }] = useTrailEventsPageMutateUpdateMutation({
+ *   variables: {
+ *      trailEventId: // value for 'trailEventId'
+ *      data: // value for 'data'
+ *   },
+ * });
+ */
+export function useTrailEventsPageMutateUpdateMutation(baseOptions?: Apollo.MutationHookOptions<Types.TrailEventsPageMutateUpdateMutation, Types.TrailEventsPageMutateUpdateMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<Types.TrailEventsPageMutateUpdateMutation, Types.TrailEventsPageMutateUpdateMutationVariables>(TrailEventsPageMutateUpdateDocument, options);
+      }
+export type TrailEventsPageMutateUpdateMutationHookResult = ReturnType<typeof useTrailEventsPageMutateUpdateMutation>;
+export type TrailEventsPageMutateUpdateMutationResult = Apollo.MutationResult<Types.TrailEventsPageMutateUpdateMutation>;
+export type TrailEventsPageMutateUpdateMutationOptions = Apollo.BaseMutationOptions<Types.TrailEventsPageMutateUpdateMutation, Types.TrailEventsPageMutateUpdateMutationVariables>;
+export const TrailEventsPageMutateDeleteDocument = gql`
+    mutation TrailEventsPageMutateDelete($trailEventId: ID!) {
+  deleteTrailEvent(trailEventId: $trailEventId)
+}
+    `;
+export type TrailEventsPageMutateDeleteMutationFn = Apollo.MutationFunction<Types.TrailEventsPageMutateDeleteMutation, Types.TrailEventsPageMutateDeleteMutationVariables>;
+
+/**
+ * __useTrailEventsPageMutateDeleteMutation__
+ *
+ * To run a mutation, you first call `useTrailEventsPageMutateDeleteMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useTrailEventsPageMutateDeleteMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [trailEventsPageMutateDeleteMutation, { data, loading, error }] = useTrailEventsPageMutateDeleteMutation({
+ *   variables: {
+ *      trailEventId: // value for 'trailEventId'
+ *   },
+ * });
+ */
+export function useTrailEventsPageMutateDeleteMutation(baseOptions?: Apollo.MutationHookOptions<Types.TrailEventsPageMutateDeleteMutation, Types.TrailEventsPageMutateDeleteMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<Types.TrailEventsPageMutateDeleteMutation, Types.TrailEventsPageMutateDeleteMutationVariables>(TrailEventsPageMutateDeleteDocument, options);
+      }
+export type TrailEventsPageMutateDeleteMutationHookResult = ReturnType<typeof useTrailEventsPageMutateDeleteMutation>;
+export type TrailEventsPageMutateDeleteMutationResult = Apollo.MutationResult<Types.TrailEventsPageMutateDeleteMutation>;
+export type TrailEventsPageMutateDeleteMutationOptions = Apollo.BaseMutationOptions<Types.TrailEventsPageMutateDeleteMutation, Types.TrailEventsPageMutateDeleteMutationVariables>;

@@ -290,6 +290,11 @@ export const HomePageDocument = gql`
     timezone
     pickCount
     status
+    trailEvent {
+      id
+      name
+      logoUrl
+    }
     fields {
       id
       gender
@@ -1132,6 +1137,11 @@ export const PredictionPageDocument = gql`
     pickCount
     timeTolerancePercent
     status
+    trailEvent {
+      id
+      name
+      logoUrl
+    }
     fields {
       id
       gender

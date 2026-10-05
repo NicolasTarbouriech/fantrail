@@ -26,6 +26,7 @@ fragment RacePageRace on Race {
   pickCount
   timeTolerancePercent
   status
+  trailEventId
   fields {
     id
     gender

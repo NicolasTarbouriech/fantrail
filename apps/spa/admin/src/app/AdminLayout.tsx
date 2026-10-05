@@ -6,6 +6,7 @@ import { getInitial } from '@trail/modules-frontend';
 import {
   type IconProps,
   LogOutIcon,
+  MountainIcon,
   TrophyIcon,
   UserIcon,
   UsersIcon,
@@ -23,6 +24,7 @@ const NAV_ITEMS: Array<{
   icon: ComponentType<IconProps>;
 }> = [
   { label: 'Courses', to: paths.races, icon: TrophyIcon },
+  { label: 'Événements', to: paths.trailEvents, icon: MountainIcon },
   { label: 'Ligues', to: paths.leagues, icon: UsersIcon },
   { label: 'Joueurs', to: paths.players, icon: UserIcon },
 ];

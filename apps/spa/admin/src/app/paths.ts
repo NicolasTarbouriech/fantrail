@@ -6,6 +6,7 @@ export const paths = {
   newRace: '/courses/nouvelle',
   race: (raceId: string, tab: RaceTab = 'infos', fieldSlug?: string) =>
     `/courses/${raceId}/${tab}${fieldSlug ? `?champ=${fieldSlug}` : ''}`,
+  trailEvents: '/evenements',
   leagues: '/ligues',
   league: (leagueId: string) => `/ligues/${leagueId}`,
   players: '/joueurs',

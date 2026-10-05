@@ -15,6 +15,7 @@ import {
 import { paths } from '../../app/paths';
 import { getErrorMessage } from '../../services/errors';
 import {
+  useRaceInfoTabGetTrailEventsQuery,
   useRaceInfoTabMutateCancelMutation,
   useRaceInfoTabMutateCreateMutation,
   useRaceInfoTabMutateDeleteMutation,
@@ -33,6 +34,7 @@ type PendingAction = 'lock' | 'cancel' | 'delete' | null;
 
 export function RaceInfoTab({ race }: { race: AdminRace | null }) {
   const navigate = useNavigate();
+  const { data: trailEventsData } = useRaceInfoTabGetTrailEventsQuery();
   const [create, createState] = useRaceInfoTabMutateCreateMutation({
     refetchQueries: ['RacesPage'],
   });
@@ -85,6 +87,7 @@ export function RaceInfoTab({ race }: { race: AdminRace | null }) {
     <RaceForm
       key={race?.id ?? 'new'}
       race={race}
+      trailEventOptions={trailEventsData?.trailEvents ?? []}
       isEditable={isEditable}
       isPickCountEditable={!race || race.status === RaceStatus.Draft}
       isSaving={createState.loading || updateState.loading}

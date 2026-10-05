@@ -28,6 +28,7 @@ type RaceFormValues = {
   liveTrailUrl: string;
   pickCount: number;
   timeTolerancePercent: string;
+  trailEventId: string;
 };
 
 function toValues(race: AdminRace | null): RaceFormValues {
@@ -42,6 +43,7 @@ function toValues(race: AdminRace | null): RaceFormValues {
     liveTrailUrl: race?.liveTrailUrl ?? '',
     pickCount: race?.pickCount ?? 5,
     timeTolerancePercent: race ? String(race.timeTolerancePercent) : '3',
+    trailEventId: race?.trailEventId ?? '',
   };
 }
 
@@ -72,11 +74,13 @@ function toInput(values: RaceFormValues): RaceInput | string {
     liveTrailUrl: values.liveTrailUrl.trim() || null,
     pickCount: values.pickCount,
     timeTolerancePercent: tolerance,
+    trailEventId: values.trailEventId || null,
   };
 }
 
 export type RaceFormProps = {
   race: AdminRace | null;
+  trailEventOptions: Array<{ id: string; name: string }>;
   isEditable: boolean;
   isPickCountEditable: boolean;
   isSaving: boolean;
@@ -86,6 +90,7 @@ export type RaceFormProps = {
 
 export function RaceForm({
   race,
+  trailEventOptions,
   isEditable,
   isPickCountEditable,
   isSaving,
@@ -145,6 +150,25 @@ export function RaceForm({
               onChange={(event) => set('startDate', event.target.value)}
               className="tabular-nums"
             />
+          </AdminField>
+          <AdminField
+            id="race-trail-event"
+            label="Événement"
+            hint="Son tag et son logo s’affichent sur la carte de la course."
+            className="sm:col-span-2"
+          >
+            <AdminSelect
+              id="race-trail-event"
+              value={values.trailEventId}
+              onChange={(event) => set('trailEventId', event.target.value)}
+            >
+              <option value="">Aucun</option>
+              {trailEventOptions.map((trailEvent) => (
+                <option key={trailEvent.id} value={trailEvent.id}>
+                  {trailEvent.name}
+                </option>
+              ))}
+            </AdminSelect>
           </AdminField>
           <AdminField id="race-location" label="Lieu">
             <AdminInput

@@ -39,6 +39,33 @@ describe('RaceCard', () => {
     ).toBeInTheDocument();
     expect(screen.getByText('Course annulée')).toBeInTheDocument();
   });
+
+  it('tags the race with its event, logo or not', () => {
+    const { container } = render(
+      <MemoryRouter>
+        <RaceCard
+          tone="primary"
+          trailEvent={{
+            name: 'Grand Raid',
+            logoUrl: 'data:image/png;base64,iVBORw==',
+          }}
+          title="Diagonale des Fous"
+          subtitle="jeu. 15 oct."
+          rows={[]}
+        />
+        <RaceCard
+          tone="cancelled"
+          trailEvent={{ name: 'Festival des Templiers', logoUrl: null }}
+          title="Boffi Fifty"
+          subtitle="sam. 17 oct."
+          rows={[]}
+        />
+      </MemoryRouter>,
+    );
+    expect(screen.getByText('Grand Raid')).toBeInTheDocument();
+    expect(screen.getByText('Festival des Templiers')).toBeInTheDocument();
+    expect(container.querySelectorAll('img')).toHaveLength(1);
+  });
 });
 
 describe('PickSlot', () => {

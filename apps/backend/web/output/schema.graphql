@@ -59,8 +59,12 @@ type Race {
   liveTrailUrl: String
   pickCount: Int!
   timeTolerancePercent: Float!
+
+  """Festival or raid the race belongs to"""
+  trailEventId: ID
   status: RaceStatus!
   fields: [RaceField!]!
+  trailEvent: TrailEvent
 }
 
 enum RaceStatus {
@@ -167,6 +171,15 @@ type StartList {
   activeRunnerCount: Int!
 }
 
+"""Festival or raid gathering several races, shown as a tag"""
+type TrailEvent {
+  id: ID!
+  name: String!
+
+  """Base64 data URL of the logo, small enough to inline"""
+  logoUrl: String
+}
+
 type PickScore {
   pickPosition: Int!
   runnerId: ID!
@@ -237,6 +250,9 @@ type Query {
   races: [Race!]!
   race(raceId: ID!): Race!
   adminRaces(statusList: [RaceStatus!]): [Race!]!
+
+  """Every event, by name"""
+  trailEvents: [TrailEvent!]!
   me: Me
   adminUsers: [AdminUser!]!
   myPrediction(fieldId: ID!): Prediction
@@ -282,6 +298,13 @@ type Mutation {
   updateRunner(fieldId: ID!, runnerId: ID!, data: RunnerInput!): StartList!
   withdrawRunner(fieldId: ID!, runnerId: ID!): StartList!
   reinstateRunner(fieldId: ID!, runnerId: ID!): StartList!
+  createTrailEvent(data: TrailEventInput!): TrailEvent!
+
+  """Renames the event and replaces its logo, null removes it"""
+  updateTrailEvent(trailEventId: ID!, data: TrailEventInput!): TrailEvent!
+
+  """Deletes the event, its races stay without event"""
+  deleteTrailEvent(trailEventId: ID!): Boolean!
   register(data: RegisterInput!): Me!
   login(email: String!, password: String!): Me!
   logout: Boolean!
@@ -330,6 +353,9 @@ input RaceInput {
   """3 or 5"""
   pickCount: Int!
   timeTolerancePercent: Float!
+
+  """Festival or raid the race belongs to"""
+  trailEventId: ID
 }
 
 input RaceFieldInput {
@@ -348,6 +374,16 @@ input RunnerInput {
   indexSource: IndexSource
   utmbUrl: String
   itraUrl: String
+}
+
+input TrailEventInput {
+  """Unique regardless of case and accents"""
+  name: String!
+
+  """
+  Base64 data URL of a PNG, JPEG, WebP or SVG logo of 100 KB at most, null without logo
+  """
+  logoDataUrl: String
 }
 
 input RegisterInput {

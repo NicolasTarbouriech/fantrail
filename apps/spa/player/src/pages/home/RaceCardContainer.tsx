@@ -115,6 +115,7 @@ export function RaceCardContainer({
     return (
       <RaceCard
         tone="cancelled"
+        trailEvent={race.trailEvent}
         title={race.name}
         subtitle={[firstStart ? formatDay(firstStart) : null, race.location]
           .filter(Boolean)
@@ -133,6 +134,7 @@ export function RaceCardContainer({
     return (
       <RaceCard
         tone={tone}
+        trailEvent={race.trailEvent}
         title={race.name}
         subtitle="Résultats publiés"
         sticker={
@@ -149,6 +151,7 @@ export function RaceCardContainer({
     return (
       <RaceCard
         tone={tone}
+        trailEvent={race.trailEvent}
         title={race.name}
         subtitle={
           firstStart ? `Partie ${formatDayTime(firstStart)}` : 'En course'
@@ -172,6 +175,7 @@ export function RaceCardContainer({
   return (
     <RaceCard
       tone={tone}
+      trailEvent={race.trailEvent}
       title={race.name}
       subtitle={[
         firstStart ? formatDayTime(firstStart) : null,

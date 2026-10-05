@@ -9,6 +9,8 @@ import {
   cx,
 } from '@trail/shared/design/ui-react';
 
+import { TrailEventTag, type TrailEventTagProps } from './TrailEventTag';
+
 export type RaceCardTone = 'primary' | 'ink' | 'cancelled';
 
 export type RaceCardRow = {
@@ -20,6 +22,7 @@ export type RaceCardRow = {
 
 export type RaceCardProps = {
   tone: RaceCardTone;
+  trailEvent?: Pick<TrailEventTagProps, 'name' | 'logoUrl'> | null;
   title: string;
   subtitle: string;
   sticker?: { label: ReactNode; tone: StickerTone };
@@ -30,6 +33,7 @@ export type RaceCardProps = {
 
 export function RaceCard({
   tone,
+  trailEvent,
   title,
   subtitle,
   sticker,
@@ -55,7 +59,17 @@ export function RaceCard({
           isCancelled && 'border-muted text-muted border-b-2 border-dashed',
         )}
       >
-        <div className="flex flex-col gap-0.5">
+        <div className="flex min-w-0 flex-col gap-0.5">
+          {/* The slot is kept without event too, so that every card keeps the same height. */}
+          <div className="mb-1.5 flex h-7 min-w-0">
+            {trailEvent ? (
+              <TrailEventTag
+                name={trailEvent.name}
+                logoUrl={trailEvent.logoUrl}
+                className={cx(isCancelled && 'opacity-60')}
+              />
+            ) : null}
+          </div>
           <h2
             className={cx(
               // Two lines reserved so that cards side by side keep the same height.

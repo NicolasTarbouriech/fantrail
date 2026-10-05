@@ -8,6 +8,11 @@ query PredictionPage($raceId: ID!) {
     pickCount
     timeTolerancePercent
     status
+    trailEvent {
+      id
+      name
+      logoUrl
+    }
     fields {
       id
       gender
