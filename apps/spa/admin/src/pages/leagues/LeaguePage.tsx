@@ -129,6 +129,7 @@ export function LeaguePage() {
             ? `Créée par ${owner.pseudo} le ${formatDay(league.createdAt)}`
             : null,
           `${league.memberCount} membres`,
+          league.races.map((race) => race.name).join(', ') || 'aucune course',
           league.inviteCode ? `code d’invitation ${league.inviteCode}` : null,
         ]
           .filter(Boolean)

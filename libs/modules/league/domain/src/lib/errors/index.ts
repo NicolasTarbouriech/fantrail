@@ -6,4 +6,6 @@ export * from './LeagueNameAlreadyUsedError';
 export * from './LeagueNotFoundError';
 export * from './LeagueNotVisibleError';
 export * from './LeagueOwnerCannotLeaveError';
+export * from './LeagueRaceNotAvailableError';
+export * from './LeagueWithoutRaceError';
 export * from './index';

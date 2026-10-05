@@ -4,3 +4,4 @@ export * from './typeorm/1790790538343-CreatePredictions';
 export * from './typeorm/1790791076149-CreateFieldResults';
 export * from './typeorm/1790791289416-CreateFieldScores';
 export * from './typeorm/1790791670135-CreateLeagues';
+export * from './typeorm/1791230000000-AddLeagueRaces';

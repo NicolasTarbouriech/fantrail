@@ -93,6 +93,9 @@ export type League = {
   members: Array<Player>;
   name: Scalars['String']['output'];
   ownerId: Scalars['ID']['output'];
+  raceIds: Array<Scalars['ID']['output']>;
+  /** Races the league adds up */
+  races: Array<Race>;
   visibility: LeagueVisibility;
 };
 
@@ -124,6 +127,7 @@ export type Mutation = {
   addRaceField: Race;
   addRunners: StartList;
   cancelRace: Race;
+  changeLeagueRaces: League;
   changeLeagueVisibility: League;
   createLeague: League;
   createRace: Race;
@@ -175,6 +179,12 @@ export type MutationCancelRaceArgs = {
 };
 
 
+export type MutationChangeLeagueRacesArgs = {
+  leagueId: Scalars['ID']['input'];
+  raceIds: Array<Scalars['ID']['input']>;
+};
+
+
 export type MutationChangeLeagueVisibilityArgs = {
   leagueId: Scalars['ID']['input'];
   visibility: LeagueVisibility;
@@ -183,6 +193,7 @@ export type MutationChangeLeagueVisibilityArgs = {
 
 export type MutationCreateLeagueArgs = {
   name: Scalars['String']['input'];
+  raceIds: Array<Scalars['ID']['input']>;
   visibility: LeagueVisibility;
 };
 

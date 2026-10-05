@@ -21,5 +21,6 @@ export function mapLeagueAggregate(entity: LeagueEntity): LeagueAggregate {
       (member) => new LeagueMember(member.user_id, member.joined_at),
     ),
     entity.created_at,
+    entity.race_id_list,
   );
 }

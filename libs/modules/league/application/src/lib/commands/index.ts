@@ -1,3 +1,5 @@
+export * from './ChangeLeagueRacesCommand';
+export * from './ChangeLeagueRacesCommandHandler';
 export * from './ChangeLeagueVisibilityCommand';
 export * from './ChangeLeagueVisibilityCommandHandler';
 export * from './CreateLeagueCommand';

@@ -23,7 +23,7 @@ export type LeaguePageQueryVariables = Types.Exact<{
 }>;
 
 
-export type LeaguePageQuery = { __typename?: 'Query', league: { __typename?: 'League', id: string, name: string, visibility: Types.LeagueVisibility, memberCount: number, ownerId: string, inviteCode: string | null, createdAt: string, members: Array<{ __typename?: 'Player', id: string, pseudo: string }>, leaderboard: Array<{ __typename?: 'LeaderboardEntry', rank: number, userId: string, total: number }> } };
+export type LeaguePageQuery = { __typename?: 'Query', league: { __typename?: 'League', id: string, name: string, visibility: Types.LeagueVisibility, memberCount: number, ownerId: string, inviteCode: string | null, createdAt: string, members: Array<{ __typename?: 'Player', id: string, pseudo: string }>, races: Array<{ __typename?: 'Race', id: string, name: string }>, leaderboard: Array<{ __typename?: 'LeaderboardEntry', rank: number, userId: string, total: number }> } };
 
 export type LeaguePageMutateRenameMutationVariables = Types.Exact<{
   leagueId: Types.Scalars['ID']['input'];

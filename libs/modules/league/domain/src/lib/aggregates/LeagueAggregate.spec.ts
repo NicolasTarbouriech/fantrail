@@ -8,9 +8,13 @@ import {
   LeagueMemberNotFoundError,
   LeagueNotVisibleError,
   LeagueOwnerCannotLeaveError,
+  LeagueRaceNotAvailableError,
+  LeagueWithoutRaceError,
 } from '../errors';
 import {
   INVITE_CODE,
+  LEAGUE_RACE_ID,
+  OTHER_LEAGUE_RACE_ID,
   OWNER_ID,
   buildLeagueAggregate,
   buildLeagueUserId,
@@ -130,6 +134,42 @@ describe('LeagueAggregate', () => {
     expect(league.inviteCodeFor(member)).toBe(INVITE_CODE);
     expect(league.inviteCodeFor(admin)).toBe(INVITE_CODE);
     expect(league.inviteCodeFor({ userId: u(5), isAdmin: false })).toBeNull();
+  });
+
+  describe('races', () => {
+    const available = [LEAGUE_RACE_ID, OTHER_LEAGUE_RACE_ID];
+
+    it('lists the races it covers', () => {
+      const league = buildLeagueAggregate();
+      expect(league.raceIdList).toEqual([LEAGUE_RACE_ID]);
+      expect(league.includesRace(LEAGUE_RACE_ID)).toBe(true);
+      expect(league.includesRace(OTHER_LEAGUE_RACE_ID)).toBe(false);
+    });
+
+    it('lets the owner or an admin change them', () => {
+      const league = buildLeagueAggregate();
+      league.changeRaces(
+        owner,
+        [OTHER_LEAGUE_RACE_ID, LEAGUE_RACE_ID, OTHER_LEAGUE_RACE_ID],
+        available,
+      );
+      expect(league.raceIdList).toEqual([OTHER_LEAGUE_RACE_ID, LEAGUE_RACE_ID]);
+      league.changeRaces(admin, [LEAGUE_RACE_ID], available);
+      expect(league.raceIdList).toEqual([LEAGUE_RACE_ID]);
+      expect(() => league.changeRaces(member, available, available)).toThrow(
+        LeagueForbiddenError,
+      );
+    });
+
+    it('needs at least one available race', () => {
+      const league = buildLeagueAggregate();
+      expect(() => league.changeRaces(owner, [], available)).toThrow(
+        LeagueWithoutRaceError,
+      );
+      expect(() =>
+        league.changeRaces(owner, [OTHER_LEAGUE_RACE_ID], [LEAGUE_RACE_ID]),
+      ).toThrow(LeagueRaceNotAvailableError);
+    });
   });
 
   describe('assertViewableBy', () => {

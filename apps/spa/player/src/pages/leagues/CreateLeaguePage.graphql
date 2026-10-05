@@ -1,8 +1,21 @@
+query CreateLeaguePage {
+  races {
+    id
+    name
+    status
+    fields {
+      id
+      startAt
+    }
+  }
+}
+
 mutation CreateLeaguePageMutateCreate(
   $name: String!
   $visibility: LeagueVisibility!
+  $raceIds: [ID!]!
 ) {
-  createLeague(name: $name, visibility: $visibility) {
+  createLeague(name: $name, visibility: $visibility, raceIds: $raceIds) {
     id
   }
 }

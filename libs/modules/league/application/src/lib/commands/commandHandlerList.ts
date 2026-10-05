@@ -1,3 +1,4 @@
+import { ChangeLeagueRacesCommandHandler } from './ChangeLeagueRacesCommandHandler';
 import { ChangeLeagueVisibilityCommandHandler } from './ChangeLeagueVisibilityCommandHandler';
 import { CreateLeagueCommandHandler } from './CreateLeagueCommandHandler';
 import { DeleteLeagueCommandHandler } from './DeleteLeagueCommandHandler';
@@ -9,6 +10,7 @@ import { RemoveLeagueMemberCommandHandler } from './RemoveLeagueMemberCommandHan
 import { RenameLeagueCommandHandler } from './RenameLeagueCommandHandler';
 
 export const commandHandlerList = [
+  ChangeLeagueRacesCommandHandler,
   ChangeLeagueVisibilityCommandHandler,
   CreateLeagueCommandHandler,
   DeleteLeagueCommandHandler,

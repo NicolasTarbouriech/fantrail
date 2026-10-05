@@ -2,6 +2,7 @@ import { AggregateRoot } from '@nestjs/cqrs';
 
 import { toNameKey } from '@trail/shared/tooling/util-text';
 
+import { LeagueRaceAssertion } from '../assertions';
 import { LeagueVisibility } from '../enums';
 import {
   InvalidInviteCodeError,
@@ -17,6 +18,7 @@ import {
   LeagueActor,
   LeagueId,
   LeagueName,
+  RaceId,
   UserId,
 } from '../types';
 import { LeagueMember } from '../valueObjects';
@@ -30,6 +32,7 @@ export class LeagueAggregate extends AggregateRoot {
     private _inviteCode: InviteCode,
     private _memberList: LeagueMember[],
     public readonly createdAt: Date,
+    private _raceIdList: RaceId[],
   ) {
     super();
   }
@@ -56,6 +59,14 @@ export class LeagueAggregate extends AggregateRoot {
 
   get memberList(): LeagueMember[] {
     return this._memberList;
+  }
+
+  get raceIdList(): RaceId[] {
+    return this._raceIdList;
+  }
+
+  includesRace(raceId: RaceId): boolean {
+    return this._raceIdList.includes(raceId);
   }
 
   get memberIdList(): UserId[] {
@@ -123,6 +134,18 @@ export class LeagueAggregate extends AggregateRoot {
   changeVisibility(actor: LeagueActor, visibility: LeagueVisibility): void {
     this._assertOwner(actor);
     this._visibility = visibility;
+  }
+
+  changeRaces(
+    actor: LeagueActor,
+    raceIdList: RaceId[],
+    availableRaceIdList: RaceId[],
+  ): void {
+    this._assertModerator(actor);
+    this._raceIdList = LeagueRaceAssertion.assertSelection(
+      raceIdList,
+      availableRaceIdList,
+    );
   }
 
   regenerateInviteCode(actor: LeagueActor): InviteCode {

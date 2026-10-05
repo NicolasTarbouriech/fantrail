@@ -87,6 +87,7 @@ export class TypeormLeagueRepository extends LeagueRepository {
     visibility,
     ownerId,
     inviteCode,
+    raceIdList,
   }: CreateLeagueParams): Promise<LeagueAggregate> {
     const entity = await this._withUniqueName(() =>
       this._leagueRepository.save(
@@ -96,6 +97,7 @@ export class TypeormLeagueRepository extends LeagueRepository {
           visibility,
           owner_id: ownerId,
           invite_code: inviteCode,
+          race_id_list: raceIdList,
           member_list: [{ user_id: ownerId, joined_at: new Date() }],
         }),
       ),
@@ -113,6 +115,7 @@ export class TypeormLeagueRepository extends LeagueRepository {
           visibility: league.visibility,
           owner_id: league.ownerId,
           invite_code: league.inviteCode,
+          race_id_list: league.raceIdList,
           member_list: league.memberList.map((member) => ({
             league_id: league.id,
             user_id: member.userId,

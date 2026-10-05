@@ -80,7 +80,7 @@ export function LeaguePage() {
   const league = data.league;
   const isPrivate = league.visibility === LeagueVisibility.Private;
   const owner = league.members.find((member) => member.id === league.ownerId);
-  const races = data.races.filter(
+  const races = league.races.filter(
     (race) => race.status !== RaceStatus.Cancelled,
   );
   const selectedRace = races.find((race) => race.id === raceId) ?? null;

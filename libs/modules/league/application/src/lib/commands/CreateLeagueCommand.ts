@@ -4,6 +4,7 @@ import {
   LeagueAggregate,
   LeagueName,
   LeagueVisibility,
+  RaceId,
   UserId,
 } from '@trail/modules/league/domain';
 import { Command } from '@trail/shared/cqrs/util-nestjs';
@@ -12,6 +13,7 @@ export const CreateLeagueCommandInput = z.object({
   ownerId: UserId,
   name: LeagueName,
   visibility: z.nativeEnum(LeagueVisibility),
+  raceIdList: z.array(RaceId),
 });
 export type CreateLeagueCommandInput = z.infer<typeof CreateLeagueCommandInput>;
 

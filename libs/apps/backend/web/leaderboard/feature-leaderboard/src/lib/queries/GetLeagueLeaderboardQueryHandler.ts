@@ -18,14 +18,16 @@ export class GetLeagueLeaderboardQueryHandler implements IEnhancedQueryHandler<G
   async execute({
     input,
   }: GetLeagueLeaderboardQuery): Promise<LeaderboardEntry[]> {
-    const [league, fieldIdList] = await Promise.all([
-      this._queryBus.execute(
-        new GetLeagueQuery({ leagueId: input.leagueId, viewer: input.viewer }),
-      ),
-      this._queryBus.execute(
-        new ListLeaderboardFieldIdsQuery({ raceId: input.raceId }),
-      ),
-    ]);
+    const league = await this._queryBus.execute(
+      new GetLeagueQuery({ leagueId: input.leagueId, viewer: input.viewer }),
+    );
+    // A league only adds up the races its owner chose.
+    const raceIdList = input.raceId
+      ? league.raceIdList.filter((raceId) => raceId === input.raceId)
+      : league.raceIdList;
+    const fieldIdList = await this._queryBus.execute(
+      new ListLeaderboardFieldIdsQuery({ raceIdList }),
+    );
     return this._queryBus.execute(
       new GetLeaderboardQuery({ fieldIdList, userIdList: league.memberIdList }),
     );

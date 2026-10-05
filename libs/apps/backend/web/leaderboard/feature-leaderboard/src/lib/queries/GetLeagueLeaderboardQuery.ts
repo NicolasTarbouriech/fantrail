@@ -14,7 +14,7 @@ export type GetLeagueLeaderboardQueryInput = z.infer<
   typeof GetLeagueLeaderboardQueryInput
 >;
 
-// The members of a league, on one race or on every public race.
+// The members of a league, on one of its races or on all of them.
 export class GetLeagueLeaderboardQuery extends Query<LeaderboardEntry[]> {
   public readonly input: GetLeagueLeaderboardQueryInput;
 

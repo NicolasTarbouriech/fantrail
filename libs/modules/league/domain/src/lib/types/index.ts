@@ -8,6 +8,9 @@ export type LeagueId = z.infer<typeof LeagueId>;
 export const UserId = z.string().uuid();
 export type UserId = z.infer<typeof UserId>;
 
+export const RaceId = z.string().uuid();
+export type RaceId = z.infer<typeof RaceId>;
+
 export const LeagueName = z.string().trim().min(3).max(40);
 export type LeagueName = z.infer<typeof LeagueName>;
 

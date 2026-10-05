@@ -64,7 +64,7 @@ export function JoinPage() {
   }
 
   const owner = league.members.find((member) => member.id === league.ownerId);
-  const raceNames = (data?.races ?? []).map((race) => race.name).join(' · ');
+  const raceNames = league.races.map((race) => race.name).join(' · ');
 
   const joinLeague = async () => {
     setJoinError(null);

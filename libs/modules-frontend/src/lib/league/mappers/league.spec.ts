@@ -1,10 +1,14 @@
+import { RaceStatus } from '@trail/shared/apps/backend/web/data-access-graphql-types';
+
 import {
   buildInviteLink,
   findMyStanding,
   formatPlayerCount,
   formatPoints,
   formatRank,
+  getDefaultLeagueRaceIds,
   getLeagueNameError,
+  getSelectableLeagueRaces,
   isInviteCode,
   normalizeInviteCode,
 } from './index';
@@ -51,5 +55,22 @@ describe('getLeagueNameError', () => {
     expect(getLeagueNameError('x'.repeat(41))).toBe(
       'Entre 3 et 40 caractères.',
     );
+  });
+});
+
+describe('leagueRaces', () => {
+  const races = [
+    { id: 'open', status: RaceStatus.Open },
+    { id: 'locked', status: RaceStatus.Locked },
+    { id: 'cancelled', status: RaceStatus.Cancelled },
+  ];
+
+  it('offers every race but the cancelled ones, open ones first picked', () => {
+    expect(getSelectableLeagueRaces(races).map((race) => race.id)).toEqual([
+      'open',
+      'locked',
+    ]);
+    expect(getDefaultLeagueRaceIds(races)).toEqual(['open']);
+    expect(getDefaultLeagueRaceIds([races[1]])).toEqual(['locked']);
   });
 });

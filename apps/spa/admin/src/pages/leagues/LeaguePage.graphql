@@ -11,6 +11,10 @@ query LeaguePage($leagueId: ID!) {
       id
       pseudo
     }
+    races {
+      id
+      name
+    }
     leaderboard {
       rank
       userId

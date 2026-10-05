@@ -1,6 +1,7 @@
 import { GetLeagueQuery } from '@trail/modules/league/application';
 import {
   LEAGUE_ID,
+  LEAGUE_RACE_ID,
   OWNER_ID,
   buildLeagueAggregate,
   buildLeagueUserId,
@@ -68,6 +69,17 @@ describe('ListLeaderboardFieldIdsQueryHandler', () => {
     );
   });
 
+  it('keeps the public races among a list', async () => {
+    const queryBus = queryBusAnswering([
+      [ListRacesQuery, [buildRaceAggregate(), otherRace]],
+    ]);
+    await expect(
+      new ListLeaderboardFieldIdsQueryHandler(queryBus).execute(
+        new ListLeaderboardFieldIdsQuery({ raceIdList: [otherRace.id] }),
+      ),
+    ).resolves.toEqual([]);
+  });
+
   it('keeps the fields of one race when asked', async () => {
     const queryBus = queryBusAnswering([[GetRaceQuery, buildRaceAggregate()]]);
     await expect(
@@ -122,10 +134,42 @@ describe('GetLeagueLeaderboardQueryHandler', () => {
       new GetLeagueQuery({ leagueId: LEAGUE_ID, viewer }),
     );
     expect(queryBus.execute).toHaveBeenCalledWith(
+      new ListLeaderboardFieldIdsQuery({ raceIdList: [LEAGUE_RACE_ID] }),
+    );
+    expect(queryBus.execute).toHaveBeenCalledWith(
       new GetLeaderboardQuery({
         fieldIdList: [MEN_FIELD_ID],
         userIdList: [OWNER_ID, u(2)],
       }),
+    );
+  });
+
+  it('keeps one race only when it belongs to the league', async () => {
+    const queryBus = queryBusAnswering([
+      [GetLeagueQuery, buildLeagueAggregate()],
+      [ListLeaderboardFieldIdsQuery, []],
+      [GetLeaderboardQuery, []],
+    ]);
+    const handler = new GetLeagueLeaderboardQueryHandler(queryBus);
+    await handler.execute(
+      new GetLeagueLeaderboardQuery({
+        leagueId: LEAGUE_ID,
+        viewer,
+        raceId: LEAGUE_RACE_ID,
+      }),
+    );
+    await handler.execute(
+      new GetLeagueLeaderboardQuery({
+        leagueId: LEAGUE_ID,
+        viewer,
+        raceId: RACE_ID,
+      }),
+    );
+    expect(queryBus.execute).toHaveBeenCalledWith(
+      new ListLeaderboardFieldIdsQuery({ raceIdList: [LEAGUE_RACE_ID] }),
+    );
+    expect(queryBus.execute).toHaveBeenCalledWith(
+      new ListLeaderboardFieldIdsQuery({ raceIdList: [] }),
     );
   });
 });

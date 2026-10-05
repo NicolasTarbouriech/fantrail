@@ -9,6 +9,7 @@ import {
 import {
   INVITE_CODE,
   LEAGUE_ID,
+  LEAGUE_RACE_ID,
   OWNER_ID,
   buildLeagueAggregate,
   buildLeagueUserId,
@@ -40,6 +41,7 @@ const ENTITY = {
     },
   ],
   created_at: new Date('2026-10-01T10:00:00Z'),
+  race_id_list: [LEAGUE_RACE_ID],
 } as LeagueEntity;
 
 const nameViolation = (): QueryFailedError =>
@@ -118,10 +120,12 @@ describe('TypeormLeagueRepository', () => {
       visibility: LeagueVisibility.Private,
       ownerId: OWNER_ID,
       inviteCode: INVITE_CODE,
+      raceIdList: [LEAGUE_RACE_ID],
     });
     expect(leagueRepository.save).toHaveBeenCalledWith(
       expect.objectContaining({
         name_key: 'les chamois',
+        race_id_list: [LEAGUE_RACE_ID],
         member_list: [expect.objectContaining({ user_id: OWNER_ID })],
       }),
     );
@@ -135,6 +139,7 @@ describe('TypeormLeagueRepository', () => {
         visibility: LeagueVisibility.Public,
         ownerId: OWNER_ID,
         inviteCode: INVITE_CODE,
+        raceIdList: [LEAGUE_RACE_ID],
       }),
     ).rejects.toThrow(LeagueNameAlreadyUsedError);
     jest

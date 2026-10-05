@@ -1,12 +1,13 @@
 import { LeagueAggregate } from '../aggregates';
 import { LeagueVisibility } from '../enums';
-import { InviteCode, LeagueId, LeagueName, UserId } from '../types';
+import { InviteCode, LeagueId, LeagueName, RaceId, UserId } from '../types';
 
 export interface CreateLeagueParams {
   name: LeagueName;
   visibility: LeagueVisibility;
   ownerId: UserId;
   inviteCode: InviteCode;
+  raceIdList: RaceId[];
 }
 
 export abstract class LeagueRepository {

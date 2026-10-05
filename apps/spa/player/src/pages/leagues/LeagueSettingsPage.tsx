@@ -1,7 +1,12 @@
 import { type FormEvent, useState } from 'react';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
 
-import { VisibilityOptions, getLeagueNameError } from '@trail/modules-frontend';
+import {
+  RaceChoiceList,
+  VisibilityOptions,
+  getLeagueNameError,
+  toggleRace,
+} from '@trail/modules-frontend';
 import { LeagueVisibility } from '@trail/shared/apps/backend/web/data-access-graphql-types';
 import {
   Button,
@@ -21,6 +26,7 @@ import { useCurrentPlayer } from '../../auth/CurrentPlayer';
 import { getErrorMessage } from '../../services/errors';
 import {
   useLeagueSettingsPageMutateDeleteMutation,
+  useLeagueSettingsPageMutateRacesMutation,
   useLeagueSettingsPageMutateRegenerateCodeMutation,
   useLeagueSettingsPageMutateRemoveMemberMutation,
   useLeagueSettingsPageMutateRenameMutation,
@@ -28,6 +34,7 @@ import {
   useLeagueSettingsPageQuery,
 } from '../../services/graphql';
 import { ConfirmSheet } from './ConfirmSheet';
+import { toLeagueRaceChoices } from './leagueRaceChoices';
 
 type PendingConfirm =
   | { kind: 'remove'; userId: string; pseudo: string }
@@ -43,6 +50,10 @@ export function LeagueSettingsPage() {
   });
   const [rename, renameState] = useLeagueSettingsPageMutateRenameMutation();
   const [changeVisibility] = useLeagueSettingsPageMutateVisibilityMutation();
+  const [changeRaces, changeRacesState] =
+    useLeagueSettingsPageMutateRacesMutation();
+  const [raceIds, setRaceIds] = useState<string[] | null>(null);
+  const [raceError, setRaceError] = useState<string | null>(null);
   const [regenerate, regenerateState] =
     useLeagueSettingsPageMutateRegenerateCodeMutation();
   const [removeMember, removeState] =
@@ -69,6 +80,29 @@ export function LeagueSettingsPage() {
     return <Navigate to={paths.league(league.id)} replace />;
   }
   const currentName = name ?? league.name;
+  const selectedRaceIds = raceIds ?? league.raceIds;
+  const racesChanged =
+    [...selectedRaceIds].sort().join() !== [...league.raceIds].sort().join();
+
+  const saveRaces = async () => {
+    setNotice(null);
+    if (selectedRaceIds.length === 0) {
+      setRaceError('Garde au moins une course.');
+      return;
+    }
+    setRaceError(null);
+    try {
+      await changeRaces({
+        variables: { leagueId: league.id, raceIds: selectedRaceIds },
+      });
+      setRaceIds(null);
+      setNotice(
+        'Courses de la ligue enregistrées : le classement est recalculé.',
+      );
+    } catch (caught) {
+      setRaceError(getErrorMessage(caught));
+    }
+  };
 
   const submitName = async (event: FormEvent) => {
     event.preventDefault();
@@ -192,6 +226,30 @@ export function LeagueSettingsPage() {
                 {nameError ?? '3 à 40 caractères, unique.'}
               </span>
             </form>
+          </Card>
+          <Card variant="flat" className="flex flex-col gap-2.5 p-3.5">
+            <Heading className="text-xl">Courses de la ligue</Heading>
+            <RaceChoiceList
+              name="league-races"
+              races={toLeagueRaceChoices(data.races)}
+              selectedIds={selectedRaceIds}
+              onToggle={(raceId) =>
+                setRaceIds(toggleRace(selectedRaceIds, raceId))
+              }
+            />
+            {raceError ? (
+              <span className="text-alert text-xs font-semibold">
+                {raceError}
+              </span>
+            ) : null}
+            <Button
+              variant="primary"
+              block
+              onClick={saveRaces}
+              disabled={!racesChanged || changeRacesState.loading}
+            >
+              Enregistrer les courses
+            </Button>
           </Card>
           <Card variant="flat" className="flex flex-col gap-2.5 p-3.5">
             <Heading className="text-xl">Visibilité</Heading>

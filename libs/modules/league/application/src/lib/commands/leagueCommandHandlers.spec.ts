@@ -2,17 +2,23 @@ import {
   InvalidInviteCodeError,
   LeagueAggregate,
   LeagueForbiddenError,
+  LeagueRaceRepository,
   LeagueRepository,
   LeagueVisibility,
+  LeagueWithoutRaceError,
 } from '@trail/modules/league/domain';
 import {
   INVITE_CODE,
   LEAGUE_ID,
+  LEAGUE_RACE_ID,
+  OTHER_LEAGUE_RACE_ID,
   OWNER_ID,
   buildLeagueAggregate,
   buildLeagueUserId,
 } from '@trail/modules/league/domain-testing';
 
+import { ChangeLeagueRacesCommand } from './ChangeLeagueRacesCommand';
+import { ChangeLeagueRacesCommandHandler } from './ChangeLeagueRacesCommandHandler';
 import { ChangeLeagueVisibilityCommand } from './ChangeLeagueVisibilityCommand';
 import { ChangeLeagueVisibilityCommandHandler } from './ChangeLeagueVisibilityCommandHandler';
 import { CreateLeagueCommand } from './CreateLeagueCommand';
@@ -38,9 +44,15 @@ const owner = { userId: OWNER_ID, isAdmin: false };
 describe('league command handlers', () => {
   let league: LeagueAggregate;
   let leagueRepository: LeagueRepository;
+  let leagueRaceRepository: LeagueRaceRepository;
 
   beforeEach(() => {
     league = buildLeagueAggregate({ memberIdList: [OWNER_ID, u(2)] });
+    leagueRaceRepository = {
+      listAvailableRaceIds: jest.fn(() =>
+        Promise.resolve([LEAGUE_RACE_ID, OTHER_LEAGUE_RACE_ID]),
+      ),
+    } as unknown as LeagueRaceRepository;
     leagueRepository = {
       getById: jest.fn(() => Promise.resolve(league)),
       findByInviteCode: jest.fn(() => Promise.resolve(league)),
@@ -51,11 +63,15 @@ describe('league command handlers', () => {
   });
 
   it('CreateLeagueCommandHandler creates the league with a fresh invite code', async () => {
-    await new CreateLeagueCommandHandler(leagueRepository).execute(
+    await new CreateLeagueCommandHandler(
+      leagueRepository,
+      leagueRaceRepository,
+    ).execute(
       new CreateLeagueCommand({
         ownerId: OWNER_ID,
         name: 'Les Chamois',
         visibility: LeagueVisibility.Private,
+        raceIdList: [LEAGUE_RACE_ID, LEAGUE_RACE_ID],
       }),
     );
     expect(leagueRepository.create).toHaveBeenCalledWith({
@@ -63,7 +79,39 @@ describe('league command handlers', () => {
       visibility: LeagueVisibility.Private,
       ownerId: OWNER_ID,
       inviteCode: expect.stringMatching(/^[A-HJ-NP-Z2-9]{8}$/),
+      raceIdList: [LEAGUE_RACE_ID],
     });
+  });
+
+  it('CreateLeagueCommandHandler refuses a league without an available race', async () => {
+    const handler = new CreateLeagueCommandHandler(
+      leagueRepository,
+      leagueRaceRepository,
+    );
+    const input = {
+      ownerId: OWNER_ID,
+      name: 'Les Chamois',
+      visibility: LeagueVisibility.Public,
+    };
+    await expect(
+      handler.execute(new CreateLeagueCommand({ ...input, raceIdList: [] })),
+    ).rejects.toThrow(LeagueWithoutRaceError);
+    expect(leagueRepository.create).not.toHaveBeenCalled();
+  });
+
+  it('ChangeLeagueRacesCommandHandler changes the races and saves the league', async () => {
+    const saved = await new ChangeLeagueRacesCommandHandler(
+      leagueRepository,
+      leagueRaceRepository,
+    ).execute(
+      new ChangeLeagueRacesCommand({
+        actor: owner,
+        leagueId: LEAGUE_ID,
+        raceIdList: [OTHER_LEAGUE_RACE_ID],
+      }),
+    );
+    expect(saved.raceIdList).toEqual([OTHER_LEAGUE_RACE_ID]);
+    expect(leagueRepository.save).toHaveBeenCalledWith(league);
   });
 
   it('JoinLeagueCommandHandler joins a public league', async () => {

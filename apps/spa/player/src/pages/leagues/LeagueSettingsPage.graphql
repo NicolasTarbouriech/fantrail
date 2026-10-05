@@ -1,4 +1,13 @@
 query LeagueSettingsPage($leagueId: ID!) {
+  races {
+    id
+    name
+    status
+    fields {
+      id
+      startAt
+    }
+  }
   league(leagueId: $leagueId) {
     id
     name
@@ -6,6 +15,7 @@ query LeagueSettingsPage($leagueId: ID!) {
     isOwner
     ownerId
     inviteCode
+    raceIds
     members {
       id
       pseudo
@@ -50,4 +60,11 @@ mutation LeagueSettingsPageMutateRemoveMember($leagueId: ID!, $userId: ID!) {
 
 mutation LeagueSettingsPageMutateDelete($leagueId: ID!) {
   deleteLeague(leagueId: $leagueId)
+}
+
+mutation LeagueSettingsPageMutateRaces($leagueId: ID!, $raceIds: [ID!]!) {
+  changeLeagueRaces(leagueId: $leagueId, raceIds: $raceIds) {
+    id
+    raceIds
+  }
 }

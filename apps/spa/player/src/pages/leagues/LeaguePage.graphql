@@ -12,6 +12,26 @@ query LeaguePage($leagueId: ID!, $raceId: ID) {
       id
       pseudo
     }
+    races {
+      id
+      name
+      status
+      pickCount
+      fields {
+        id
+        gender
+        isLocked
+        startList {
+          fieldId
+          runners {
+            id
+            lastName
+            favoriteRank
+            isWithdrawn
+          }
+        }
+      }
+    }
     leaderboard(raceId: $raceId) {
       rank
       userId
@@ -20,26 +40,6 @@ query LeaguePage($leagueId: ID!, $raceId: ID) {
       player {
         id
         pseudo
-      }
-    }
-  }
-  races {
-    id
-    name
-    status
-    pickCount
-    fields {
-      id
-      gender
-      isLocked
-      startList {
-        fieldId
-        runners {
-          id
-          lastName
-          favoriteRank
-          isWithdrawn
-        }
       }
     }
   }

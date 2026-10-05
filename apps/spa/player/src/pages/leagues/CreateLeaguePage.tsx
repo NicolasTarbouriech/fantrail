@@ -2,9 +2,12 @@ import { type FormEvent, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import {
+  RaceChoiceList,
   VisibilityOptions,
+  getDefaultLeagueRaceIds,
   getInitial,
   getLeagueNameError,
+  toggleRace,
 } from '@trail/modules-frontend';
 import { LeagueVisibility } from '@trail/shared/apps/backend/web/data-access-graphql-types';
 import {
@@ -18,7 +21,11 @@ import { TabPage } from '@trail/shell/fantrail';
 import { paths, tabPaths } from '../../app/paths';
 import { useCurrentPlayer } from '../../auth/CurrentPlayer';
 import { getErrorMessage } from '../../services/errors';
-import { useCreateLeaguePageMutateCreateMutation } from '../../services/graphql';
+import {
+  useCreateLeaguePageMutateCreateMutation,
+  useCreateLeaguePageQuery,
+} from '../../services/graphql';
+import { toLeagueRaceChoices } from './leagueRaceChoices';
 
 export function CreateLeaguePage() {
   const player = useCurrentPlayer();
@@ -28,18 +35,26 @@ export function CreateLeaguePage() {
   });
   const [name, setName] = useState('');
   const [visibility, setVisibility] = useState(LeagueVisibility.Private);
+  const { data } = useCreateLeaguePageQuery();
+  const [raceIds, setRaceIds] = useState<string[] | null>(null);
+  const races = data?.races ?? [];
+  const selectedRaceIds = raceIds ?? getDefaultLeagueRaceIds(races);
   const [error, setError] = useState<string | null>(null);
+  const [raceError, setRaceError] = useState<string | null>(null);
 
   const submit = async (event: FormEvent) => {
     event.preventDefault();
     const nameError = getLeagueNameError(name);
+    const missingRace =
+      selectedRaceIds.length === 0 ? 'Choisis au moins une course.' : null;
     setError(nameError);
-    if (nameError) {
+    setRaceError(missingRace);
+    if (nameError || missingRace) {
       return;
     }
     try {
       const result = await create({
-        variables: { name: name.trim(), visibility },
+        variables: { name: name.trim(), visibility, raceIds: selectedRaceIds },
       });
       if (result.data) {
         navigate(paths.league(result.data.createLeague.id), { replace: true });
@@ -73,10 +88,28 @@ export function CreateLeaguePage() {
             onChange={setVisibility}
           />
         </fieldset>
+        <fieldset className="m-0 flex flex-col gap-2.5 border-0 p-0">
+          <legend className="mb-2.5 p-0 text-sm font-bold">
+            Quelles courses compte-t-elle ?
+          </legend>
+          <RaceChoiceList
+            name="races"
+            races={toLeagueRaceChoices(races)}
+            selectedIds={selectedRaceIds}
+            onToggle={(raceId) =>
+              setRaceIds(toggleRace(selectedRaceIds, raceId))
+            }
+          />
+          {raceError ? (
+            <span className="text-alert text-xs font-semibold">
+              {raceError}
+            </span>
+          ) : null}
+        </fieldset>
         <Callout>
-          Ta ligue couvre toutes les courses ouvertes. Tu en es le propriétaire
-          : tu pourras la renommer, changer sa visibilité et retirer des
-          membres.
+          Le classement de ta ligue additionne les courses choisies. Tu en es le
+          propriétaire : tu pourras changer ses courses, la renommer, changer sa
+          visibilité et retirer des membres.
         </Callout>
         <Button
           type="submit"

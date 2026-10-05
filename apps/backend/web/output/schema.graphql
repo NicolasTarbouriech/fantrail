@@ -25,6 +25,49 @@ A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date
 """
 scalar DateTime
 
+type RaceField {
+  id: ID!
+  gender: Gender!
+  startAt: DateTime!
+  lockAt: DateTime!
+  lockedAt: DateTime
+  isLocked: Boolean!
+  startList: StartList!
+
+  """Null until the result is published"""
+  result: FieldResult
+}
+
+enum Gender {
+  Men
+  Women
+}
+
+type Race {
+  id: ID!
+  name: String!
+  location: String!
+  distanceInKm: Float!
+  elevationGainInMeters: Int!
+
+  """IANA timezone of the race, e.g. Indian/Reunion"""
+  timezone: String!
+  websiteUrl: String
+  liveTrailUrl: String
+  pickCount: Int!
+  timeTolerancePercent: Float!
+  status: RaceStatus!
+  fields: [RaceField!]!
+}
+
+enum RaceStatus {
+  Draft
+  Open
+  Locked
+  Scored
+  Cancelled
+}
+
 type LeaderboardEntry {
   rank: Int!
   userId: ID!
@@ -48,6 +91,7 @@ type League {
   name: String!
   visibility: LeagueVisibility!
   memberCount: Int!
+  raceIds: [ID!]!
   ownerId: ID!
   isOwner: Boolean!
   isMember: Boolean!
@@ -55,6 +99,9 @@ type League {
   """Shown to members only, link /join/<code>"""
   inviteCode: String
   createdAt: DateTime!
+
+  """Races the league adds up"""
+  races: [Race!]!
   members: [Player!]!
 
   """Members ranked on one race or on every public race"""
@@ -80,24 +127,6 @@ type FieldResult {
   winnerTimeInSeconds: Int!
   dnfRunnerIdList: [ID!]!
   publishedAt: DateTime
-}
-
-type RaceField {
-  id: ID!
-  gender: Gender!
-  startAt: DateTime!
-  lockAt: DateTime!
-  lockedAt: DateTime
-  isLocked: Boolean!
-  startList: StartList!
-
-  """Null until the result is published"""
-  result: FieldResult
-}
-
-enum Gender {
-  Men
-  Women
 }
 
 type Runner {
@@ -129,31 +158,6 @@ enum IndexSource {
 type StartList {
   fieldId: ID!
   runners: [Runner!]!
-}
-
-type Race {
-  id: ID!
-  name: String!
-  location: String!
-  distanceInKm: Float!
-  elevationGainInMeters: Int!
-
-  """IANA timezone of the race, e.g. Indian/Reunion"""
-  timezone: String!
-  websiteUrl: String
-  liveTrailUrl: String
-  pickCount: Int!
-  timeTolerancePercent: Float!
-  status: RaceStatus!
-  fields: [RaceField!]!
-}
-
-enum RaceStatus {
-  Draft
-  Open
-  Locked
-  Scored
-  Cancelled
 }
 
 type PickScore {
@@ -274,7 +278,14 @@ type Mutation {
 
   """Publishes or corrects the result, then rescores the field"""
   publishFieldResult(fieldId: ID!, rankingList: [ID!]!, winnerTimeInSeconds: Int!, dnfRunnerIdList: [ID!]! = []): FieldResult!
-  createLeague(name: String!, visibility: LeagueVisibility!): League!
+  createLeague(
+    name: String!
+    visibility: LeagueVisibility!
+
+    """Races the league adds up, at least one"""
+    raceIds: [ID!]!
+  ): League!
+  changeLeagueRaces(leagueId: ID!, raceIds: [ID!]!): League!
 
   """Joins a public league"""
   joinLeague(leagueId: ID!): League!

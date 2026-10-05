@@ -9,10 +9,10 @@ query JoinPage($inviteCode: String!) {
       id
       pseudo
     }
-  }
-  races {
-    id
-    name
+    races {
+      id
+      name
+    }
   }
 }
 

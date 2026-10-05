@@ -23,6 +23,9 @@ export class ListLeaderboardFieldIdsQueryHandler implements IEnhancedQueryHandle
       : await this._queryBus.execute(
           new ListRacesQuery({ statusList: PUBLIC_RACE_STATUS_LIST }),
         );
-    return raceList.flatMap((race) => race.fieldList.map(({ id }) => id));
+    const { raceIdList } = input;
+    return raceList
+      .filter((race) => !raceIdList || raceIdList.includes(race.id))
+      .flatMap((race) => race.fieldList.map(({ id }) => id));
   }
 }

@@ -13,6 +13,7 @@ import { GraphQLError } from 'graphql';
 import { GetLeagueLeaderboardQuery } from '@trail/apps/backend/web/leaderboard/feature-leaderboard';
 import { ListLeagueFieldPredictionsQuery } from '@trail/apps/backend/web/leaderboard/feature-leaderboard';
 import {
+  ChangeLeagueRacesCommand,
   ChangeLeagueVisibilityCommand,
   CreateLeagueCommand,
   DeleteLeagueCommand,
@@ -31,6 +32,8 @@ import {
   LeagueAggregate,
   LeagueVisibility,
 } from '@trail/modules/league/domain';
+import { ListRacesQuery } from '@trail/modules/race/application';
+import { PLAYER_RACE_STATUS_LIST } from '@trail/modules/race/domain';
 import { UserAggregate } from '@trail/modules/user/domain';
 import {
   EnhancedCommandBus,
@@ -44,6 +47,7 @@ import { AuthNotMandatory } from '../../../../../services/auth/guards/AuthNotMan
 import { toLeagueActor } from '../../../../../services/auth/toLeagueActor';
 import { UserDataLoader } from '../../../../../services/dataloader/UserDataLoader';
 import { PredictionType } from '../../prediction/types/PredictionType';
+import { RaceType } from '../../race/types/RaceType';
 import { LeaderboardEntryType } from '../../scoring/types/LeaderboardEntryType';
 import { PlayerType } from '../../scoring/types/PlayerType';
 import { LeagueType } from '../types/LeagueType';
@@ -123,10 +127,39 @@ export class LeagueResolver {
     @Args('name', { type: () => String }) name: string,
     @Args('visibility', { type: () => LeagueVisibility })
     visibility: LeagueVisibility,
+    @Args('raceIds', {
+      type: () => [ID],
+      description: 'Races the league adds up, at least one',
+    })
+    raceIds: string[],
   ): Promise<LeagueType> {
     return this._toType(
       await this._commandBus.execute(
-        new CreateLeagueCommand({ ownerId: user.id, name, visibility }),
+        new CreateLeagueCommand({
+          ownerId: user.id,
+          name,
+          visibility,
+          raceIdList: raceIds,
+        }),
+      ),
+      user,
+    );
+  }
+
+  @Mutation(() => LeagueType)
+  @UseGuards(AuthGuard)
+  async changeLeagueRaces(
+    @User() user: UserAggregate,
+    @Args('leagueId', { type: () => ID }) leagueId: string,
+    @Args('raceIds', { type: () => [ID] }) raceIds: string[],
+  ): Promise<LeagueType> {
+    return this._toType(
+      await this._commandBus.execute(
+        new ChangeLeagueRacesCommand({
+          actor: toLeagueActor(user),
+          leagueId,
+          raceIdList: raceIds,
+        }),
       ),
       user,
     );
@@ -252,6 +285,18 @@ export class LeagueResolver {
     return this._commandBus.execute(
       new DeleteLeagueCommand({ actor: toLeagueActor(user), leagueId }),
     );
+  }
+
+  @ResolveField(() => [RaceType], {
+    description: 'Races the league adds up',
+  })
+  async races(@Parent() league: LeagueType): Promise<RaceType[]> {
+    const raceList = await this._queryBus.execute(
+      new ListRacesQuery({ statusList: PLAYER_RACE_STATUS_LIST }),
+    );
+    return raceList
+      .filter((race) => league.aggregate.includesRace(race.id))
+      .map((race) => new RaceType(race));
   }
 
   @ResolveField(() => [PlayerType])

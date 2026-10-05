@@ -49,4 +49,7 @@ export class LeagueEntity {
 
   @CreateDateColumn({ type: 'timestamp with time zone' })
   created_at!: Date;
+
+  @Column({ type: 'jsonb', default: () => "'[]'" })
+  race_id_list!: string[];
 }

@@ -1,5 +1,6 @@
 export * from './lib/LeagueModuleName';
 export * from './lib/aggregates';
+export * from './lib/assertions';
 export * from './lib/constants';
 export * from './lib/enums';
 export * from './lib/errors';

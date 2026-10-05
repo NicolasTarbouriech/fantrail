@@ -161,10 +161,10 @@ export const JoinPageDocument = gql`
       id
       pseudo
     }
-  }
-  races {
-    id
-    name
+    races {
+      id
+      name
+    }
   }
 }
     `;
@@ -506,9 +506,54 @@ export type CommunityPageQueryHookResult = ReturnType<typeof useCommunityPageQue
 export type CommunityPageLazyQueryHookResult = ReturnType<typeof useCommunityPageLazyQuery>;
 export type CommunityPageSuspenseQueryHookResult = ReturnType<typeof useCommunityPageSuspenseQuery>;
 export type CommunityPageQueryResult = Apollo.QueryResult<Types.CommunityPageQuery, Types.CommunityPageQueryVariables>;
+export const CreateLeaguePageDocument = gql`
+    query CreateLeaguePage {
+  races {
+    id
+    name
+    status
+    fields {
+      id
+      startAt
+    }
+  }
+}
+    `;
+
+/**
+ * __useCreateLeaguePageQuery__
+ *
+ * To run a query within a React component, call `useCreateLeaguePageQuery` and pass it any options that fit your needs.
+ * When your component renders, `useCreateLeaguePageQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useCreateLeaguePageQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useCreateLeaguePageQuery(baseOptions?: Apollo.QueryHookOptions<Types.CreateLeaguePageQuery, Types.CreateLeaguePageQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<Types.CreateLeaguePageQuery, Types.CreateLeaguePageQueryVariables>(CreateLeaguePageDocument, options);
+      }
+export function useCreateLeaguePageLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<Types.CreateLeaguePageQuery, Types.CreateLeaguePageQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<Types.CreateLeaguePageQuery, Types.CreateLeaguePageQueryVariables>(CreateLeaguePageDocument, options);
+        }
+export function useCreateLeaguePageSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<Types.CreateLeaguePageQuery, Types.CreateLeaguePageQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<Types.CreateLeaguePageQuery, Types.CreateLeaguePageQueryVariables>(CreateLeaguePageDocument, options);
+        }
+export type CreateLeaguePageQueryHookResult = ReturnType<typeof useCreateLeaguePageQuery>;
+export type CreateLeaguePageLazyQueryHookResult = ReturnType<typeof useCreateLeaguePageLazyQuery>;
+export type CreateLeaguePageSuspenseQueryHookResult = ReturnType<typeof useCreateLeaguePageSuspenseQuery>;
+export type CreateLeaguePageQueryResult = Apollo.QueryResult<Types.CreateLeaguePageQuery, Types.CreateLeaguePageQueryVariables>;
 export const CreateLeaguePageMutateCreateDocument = gql`
-    mutation CreateLeaguePageMutateCreate($name: String!, $visibility: LeagueVisibility!) {
-  createLeague(name: $name, visibility: $visibility) {
+    mutation CreateLeaguePageMutateCreate($name: String!, $visibility: LeagueVisibility!, $raceIds: [ID!]!) {
+  createLeague(name: $name, visibility: $visibility, raceIds: $raceIds) {
     id
   }
 }
@@ -530,6 +575,7 @@ export type CreateLeaguePageMutateCreateMutationFn = Apollo.MutationFunction<Typ
  *   variables: {
  *      name: // value for 'name'
  *      visibility: // value for 'visibility'
+ *      raceIds: // value for 'raceIds'
  *   },
  * });
  */
@@ -555,6 +601,26 @@ export const LeaguePageDocument = gql`
       id
       pseudo
     }
+    races {
+      id
+      name
+      status
+      pickCount
+      fields {
+        id
+        gender
+        isLocked
+        startList {
+          fieldId
+          runners {
+            id
+            lastName
+            favoriteRank
+            isWithdrawn
+          }
+        }
+      }
+    }
     leaderboard(raceId: $raceId) {
       rank
       userId
@@ -563,26 +629,6 @@ export const LeaguePageDocument = gql`
       player {
         id
         pseudo
-      }
-    }
-  }
-  races {
-    id
-    name
-    status
-    pickCount
-    fields {
-      id
-      gender
-      isLocked
-      startList {
-        fieldId
-        runners {
-          id
-          lastName
-          favoriteRank
-          isWithdrawn
-        }
       }
     }
   }
@@ -741,6 +787,15 @@ export type LeaguePageMutateLeaveMutationResult = Apollo.MutationResult<Types.Le
 export type LeaguePageMutateLeaveMutationOptions = Apollo.BaseMutationOptions<Types.LeaguePageMutateLeaveMutation, Types.LeaguePageMutateLeaveMutationVariables>;
 export const LeagueSettingsPageDocument = gql`
     query LeagueSettingsPage($leagueId: ID!) {
+  races {
+    id
+    name
+    status
+    fields {
+      id
+      startAt
+    }
+  }
   league(leagueId: $leagueId) {
     id
     name
@@ -748,6 +803,7 @@ export const LeagueSettingsPageDocument = gql`
     isOwner
     ownerId
     inviteCode
+    raceIds
     members {
       id
       pseudo
@@ -962,6 +1018,41 @@ export function useLeagueSettingsPageMutateDeleteMutation(baseOptions?: Apollo.M
 export type LeagueSettingsPageMutateDeleteMutationHookResult = ReturnType<typeof useLeagueSettingsPageMutateDeleteMutation>;
 export type LeagueSettingsPageMutateDeleteMutationResult = Apollo.MutationResult<Types.LeagueSettingsPageMutateDeleteMutation>;
 export type LeagueSettingsPageMutateDeleteMutationOptions = Apollo.BaseMutationOptions<Types.LeagueSettingsPageMutateDeleteMutation, Types.LeagueSettingsPageMutateDeleteMutationVariables>;
+export const LeagueSettingsPageMutateRacesDocument = gql`
+    mutation LeagueSettingsPageMutateRaces($leagueId: ID!, $raceIds: [ID!]!) {
+  changeLeagueRaces(leagueId: $leagueId, raceIds: $raceIds) {
+    id
+    raceIds
+  }
+}
+    `;
+export type LeagueSettingsPageMutateRacesMutationFn = Apollo.MutationFunction<Types.LeagueSettingsPageMutateRacesMutation, Types.LeagueSettingsPageMutateRacesMutationVariables>;
+
+/**
+ * __useLeagueSettingsPageMutateRacesMutation__
+ *
+ * To run a mutation, you first call `useLeagueSettingsPageMutateRacesMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useLeagueSettingsPageMutateRacesMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [leagueSettingsPageMutateRacesMutation, { data, loading, error }] = useLeagueSettingsPageMutateRacesMutation({
+ *   variables: {
+ *      leagueId: // value for 'leagueId'
+ *      raceIds: // value for 'raceIds'
+ *   },
+ * });
+ */
+export function useLeagueSettingsPageMutateRacesMutation(baseOptions?: Apollo.MutationHookOptions<Types.LeagueSettingsPageMutateRacesMutation, Types.LeagueSettingsPageMutateRacesMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<Types.LeagueSettingsPageMutateRacesMutation, Types.LeagueSettingsPageMutateRacesMutationVariables>(LeagueSettingsPageMutateRacesDocument, options);
+      }
+export type LeagueSettingsPageMutateRacesMutationHookResult = ReturnType<typeof useLeagueSettingsPageMutateRacesMutation>;
+export type LeagueSettingsPageMutateRacesMutationResult = Apollo.MutationResult<Types.LeagueSettingsPageMutateRacesMutation>;
+export type LeagueSettingsPageMutateRacesMutationOptions = Apollo.BaseMutationOptions<Types.LeagueSettingsPageMutateRacesMutation, Types.LeagueSettingsPageMutateRacesMutationVariables>;
 export const LeaguesPageDocument = gql`
     query LeaguesPage {
   myLeagues {

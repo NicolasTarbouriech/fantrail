@@ -35,6 +35,11 @@ export class LeagueType {
     return this.aggregate.memberList.length;
   }
 
+  @Field(() => [ID])
+  get raceIds(): string[] {
+    return this.aggregate.raceIdList;
+  }
+
   @Field(() => ID)
   get ownerId(): string {
     return this.aggregate.ownerId;

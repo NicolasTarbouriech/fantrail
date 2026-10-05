@@ -178,6 +178,10 @@ export const LeaguePageDocument = gql`
       id
       pseudo
     }
+    races {
+      id
+      name
+    }
     leaderboard {
       rank
       userId
