@@ -78,12 +78,16 @@ function isUppercaseWord(word: string): boolean {
   return /\p{L}/u.test(word) && word === word.toLocaleUpperCase('fr');
 }
 
-/** UTMB writes "Firstname LASTNAME": the trailing uppercase words are the last name. */
+/** UTMB writes "Firstname LASTNAME", sometimes followed by another spelling in brackets. */
 export function splitUtmbFullname(fullname: string): {
   firstName: string;
   lastName: string;
 } {
-  const words = fullname.trim().split(/\s+/).filter(Boolean);
+  const words = fullname
+    .replace(/\s*\([^)]*\)\s*$/, '')
+    .trim()
+    .split(/\s+/)
+    .filter(Boolean);
   const lastNameStart = words.findIndex((_, index) =>
     words.slice(index).every(isUppercaseWord),
   );
@@ -123,4 +127,66 @@ export function restoreApostrophes(
     }
   }
   return words.join(' ');
+}
+
+export type SplitName = { firstName: string; lastName: string };
+
+/**
+ * The official list writes "Lastname Firstname" in any case. A UTMB profile sharing the words
+ * tells where its last name ends and its first name starts. Otherwise leading uppercase words
+ * are the last name, else the first name is the longest ending made of known first names.
+ */
+export function splitListName(
+  name: string,
+  {
+    utmbName,
+    isKnownFirstName,
+  }: {
+    utmbName: SplitName | null;
+    isKnownFirstName: (word: string) => boolean;
+  },
+): SplitName | null {
+  const words = name.trim().split(/\s+/).filter(Boolean);
+  if (words.length < 2) {
+    return null;
+  }
+  const splitAt = (cut: number, isLastNameFirst = true) => {
+    const [lastWords, firstWords] = isLastNameFirst
+      ? [words.slice(0, cut), words.slice(cut)]
+      : [words.slice(cut), words.slice(0, cut)];
+    return {
+      firstName: formatNamePart(firstWords.join(' ')),
+      lastName: formatNamePart(lastWords.join(' ')),
+    };
+  };
+
+  if (utmbName) {
+    const lastTokens = new Set(nameTokens(utmbName.lastName));
+    const firstTokens = new Set(nameTokens(utmbName.firstName));
+    const indexOfWordOnlyIn = (tokens: Set<string>, others: Set<string>) =>
+      words.findIndex((word) =>
+        nameTokens(word).every(
+          (token) => tokens.has(token) && !others.has(token),
+        ),
+      );
+    const firstAt = indexOfWordOnlyIn(firstTokens, lastTokens);
+    const lastAt = indexOfWordOnlyIn(lastTokens, firstTokens);
+    if (lastAt === 0 && firstAt > 0) {
+      return splitAt(firstAt);
+    }
+    if (firstAt === 0 && lastAt > 0) {
+      return splitAt(lastAt, false);
+    }
+  }
+
+  const upperCount = words.findIndex((word) => !isUppercaseWord(word));
+  if (upperCount > 0) {
+    return splitAt(upperCount);
+  }
+
+  let cut = words.length - 1;
+  while (cut > 1 && isKnownFirstName(words[cut - 1] ?? '')) {
+    cut -= 1;
+  }
+  return splitAt(cut);
 }

@@ -1,7 +1,7 @@
 export const START_LIST_CSV_HEADER =
   'prenom;nom;nationalite;index;source;utmb;itra';
 export const REVIEW_CSV_HEADER =
-  'dossard;nom_liste;pays_liste;raison;suggestion;candidats';
+  'dossard;nom_liste;pays_liste;raison;export_sans_index;suggestion;candidats';
 
 export type StartListRow = {
   firstName: string;
@@ -16,6 +16,8 @@ export type ReviewRow = {
   name: string;
   country: string;
   reason: string;
+  /** Field slug the runner went to without index, or why it was left out. */
+  exportedTo: string;
   /** UTMB profile a reviewer would most likely accept, if any. */
   suggestion: string | null;
   candidates: string;
@@ -63,6 +65,7 @@ export function toReviewCsv(rows: ReviewRow[]): string {
       row.name,
       row.country,
       row.reason,
+      row.exportedTo,
       row.suggestion,
       row.candidates,
     ]),

@@ -87,6 +87,7 @@ describe('csv', () => {
           name: 'Ammendola Antonio',
           country: 'Belgique',
           reason: 'Homonymes',
+          exportedTo: 'hommes',
           suggestion: null,
           candidates: 'a | b',
         },
@@ -95,14 +96,15 @@ describe('csv', () => {
           name: 'Hogan Marianne',
           country: 'Etats-Unis',
           reason: 'Nationalité différente',
+          exportedTo: 'Sexe inconnu',
           suggestion: 'https://utmb.world/runner/9.marianne.hogan',
           candidates: 'c',
         },
       ]),
     ).toBe(
-      'dossard;nom_liste;pays_liste;raison;suggestion;candidats\n' +
-        '47;Ammendola Antonio;Belgique;Homonymes;;a | b\n' +
-        '12;Hogan Marianne;Etats-Unis;Nationalité différente;https://utmb.world/runner/9.marianne.hogan;c\n',
+      'dossard;nom_liste;pays_liste;raison;export_sans_index;suggestion;candidats\n' +
+        '47;Ammendola Antonio;Belgique;Homonymes;hommes;;a | b\n' +
+        '12;Hogan Marianne;Etats-Unis;Nationalité différente;Sexe inconnu;https://utmb.world/runner/9.marianne.hogan;c\n',
     );
   });
 

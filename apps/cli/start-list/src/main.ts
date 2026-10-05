@@ -42,7 +42,7 @@ function printSummary(result: CommandResult, outDir: string): void {
     });
   }
   console.log(
-    `\n${result.scannedCount} coureurs examinés, ${result.acceptedCount} validés à la main, ${result.unmatchedCount} sans correspondance UTMB certaine, ${result.reviewCount} à vérifier.`,
+    `\n${result.scannedCount} coureurs examinés, ${result.acceptedCount} validés à la main, ${result.unmatchedCount} sans correspondance UTMB certaine dont ${result.leftOutCount} hors CSV, ${result.reviewCount} à vérifier.`,
   );
   result.files.forEach((file) => console.log(`→ ${join(outDir, file.name)}`));
 }

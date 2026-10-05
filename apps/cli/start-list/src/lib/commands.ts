@@ -28,7 +28,13 @@ import {
   searchUtmbRunners,
   utmbProfileUrl,
 } from './sources';
-import { formatNamePart, restoreApostrophes, splitUtmbFullname } from './text';
+import {
+  formatNamePart,
+  nameTokens,
+  restoreApostrophes,
+  splitListName,
+  splitUtmbFullname,
+} from './text';
 
 export type OutputFile = { name: string; content: string };
 
@@ -46,6 +52,8 @@ export type CommandResult = {
   reviewCount: number;
   /** Runners matched through the reviewer's accept file. */
   acceptedCount: number;
+  /** Doubtful runners left out of every field, with no sex or no full name to tell. */
+  leftOutCount: number;
 };
 
 type Log = (message: string) => void;
@@ -205,6 +213,7 @@ export async function buildFromLiveTrail(
     unmatchedCount,
     reviewCount: 0,
     acceptedCount: 0,
+    leftOutCount: 0,
   };
 }
 
@@ -253,7 +262,54 @@ async function fetchRegistrants(
   return { registrants: unique, countryCodes: first.countryCodes };
 }
 
-/** Official registrants, each looked up on UTMB: certain matches only, strongest index first. */
+type Doubt = {
+  registrant: Registrant;
+  nationality: string | null;
+  reason: string;
+  candidates: UtmbCandidate[];
+  /** Profiles sharing the name: their sex, and their last name to cut the list name. */
+  namesakes: UtmbCandidate[];
+  suggestion: UtmbCandidate | null;
+};
+
+/** "Jean-Marc" → "jean marc" and "jean": a compound first name also tells the sex of its first word. */
+function firstNameKeys(firstName: string): string[] {
+  const tokens = nameTokens(firstName);
+  return [...new Set([tokens.join(' '), tokens[0] ?? ''])].filter(Boolean);
+}
+
+function onlyValue<T>(values: Iterable<T>): T | null {
+  const unique = new Set(values);
+  const [only = null] = unique;
+  return unique.size === 1 ? only : null;
+}
+
+/**
+ * The sex of every UTMB profile sharing the name, else the one the certain matches give this
+ * first name. Both known and different: no sex, a profile of the other sex is a wrong homonym.
+ */
+function guessSex(
+  firstName: string,
+  candidates: UtmbCandidate[],
+  sexesByFirstName: Map<string, Set<string>>,
+): string | null {
+  const fromCandidates = onlyValue(
+    candidates.map((candidate) => candidate.sex),
+  );
+  const fromFirstName =
+    firstNameKeys(firstName)
+      .map((key) => onlyValue(sexesByFirstName.get(key) ?? []))
+      .find((sex) => sex !== null) ?? null;
+  if (fromCandidates && fromFirstName && fromCandidates !== fromFirstName) {
+    return null;
+  }
+  return fromCandidates ?? fromFirstName;
+}
+
+/**
+ * Official registrants, each looked up on UTMB, strongest index first. A doubtful match leaves
+ * the runner without index, in the field its namesakes or its first name tell.
+ */
 export async function buildFromGrandRaid(
   client: HttpClient,
   {
@@ -303,14 +359,20 @@ export async function buildFromGrandRaid(
   }
 
   const rowsBySex = new Map<string, Map<string, StartListRow>>();
-  const review: ReviewRow[] = [];
-  let unmatchedCount = 0;
+  const addRow = (sex: string, key: string, row: StartListRow) => {
+    const rows = rowsBySex.get(sex) ?? new Map<string, StartListRow>();
+    rowsBySex.set(sex, rows.set(key, row));
+  };
+  const sexesByFirstName = new Map<string, Set<string>>();
+  const doubts: Doubt[] = [];
   let acceptedCount = 0;
   for (const { registrant, nationality, candidates, result } of lookups) {
     // Namesakes of the list both match the strongest profile: at most one of them is that runner.
-    const isSharedMatch =
+    const sharedCandidate =
       result.kind === 'match' &&
-      (matchCountByUri.get(result.candidate.uri) ?? 0) > 1;
+      (matchCountByUri.get(result.candidate.uri) ?? 0) > 1
+        ? result.candidate
+        : null;
     const acceptedUri = accepted.get(registrant.bib);
     const reviewed = acceptedUri
       ? (candidates.find((candidate) => candidate.uri === acceptedUri) ?? null)
@@ -321,48 +383,91 @@ export async function buildFromGrandRaid(
       );
     }
     const automatic =
-      result.kind === 'match' && !isSharedMatch ? result.candidate : null;
+      result.kind === 'match' && !sharedCandidate ? result.candidate : null;
     const candidate = reviewed ?? automatic;
     const sex = candidate?.sex ?? null;
     if (candidate && sex) {
       acceptedCount += reviewed ? 1 : 0;
-      const rows = rowsBySex.get(sex) ?? new Map<string, StartListRow>();
-      if (rows.has(candidate.uri)) {
+      if (rowsBySex.get(sex)?.has(candidate.uri)) {
         log(
           `  profil UTMB déjà pris par un autre dossard : ${registrant.bib} ${registrant.name} → ${candidate.uri}`,
         );
       }
-      rows.set(candidate.uri, {
+      const row = {
         ...splitUtmbFullname(
           restoreApostrophes(candidate.fullname, registrant.name),
         ),
         nationality: toAlpha3(candidate.nationality) ?? toAlpha3(nationality),
         index: candidate.index,
         utmbUrl: utmbProfileUrl(candidate.uri),
-      });
-      rowsBySex.set(sex, rows);
+      };
+      addRow(sex, candidate.uri, row);
+      for (const key of firstNameKeys(row.firstName)) {
+        sexesByFirstName.set(
+          key,
+          (sexesByFirstName.get(key) ?? new Set<string>()).add(sex),
+        );
+      }
     } else {
-      unmatchedCount += 1;
-      const doubtful = isSharedMatch
+      const doubt = sharedCandidate
         ? { reason: 'Profil commun à plusieurs dossards', candidates }
         : describeDoubt(result);
-      const isWorthReviewing =
-        top === 'all' ||
-        (doubtful.candidates.length > 0 &&
-          strongestIndex(doubtful.candidates) >= reviewMinIndex);
-      if (isWorthReviewing) {
-        const suggestion = isSharedMatch
+      doubts.push({
+        registrant,
+        nationality,
+        ...doubt,
+        namesakes: sharedCandidate ? [sharedCandidate] : doubt.candidates,
+        suggestion: sharedCandidate
           ? null
-          : suggestReviewedCandidate(registrant.name, doubtful.candidates);
-        review.push({
-          bib: registrant.bib,
-          name: registrant.name,
-          country: registrant.country,
-          reason: doubtful.reason,
-          suggestion: suggestion ? utmbProfileUrl(suggestion.uri) : null,
-          candidates: describeCandidates(doubtful.candidates),
-        });
-      }
+          : suggestReviewedCandidate(registrant.name, doubt.candidates),
+      });
+    }
+  }
+
+  const knownFirstNameTokens = new Set(
+    [...sexesByFirstName.keys()].flatMap((key) => key.split(' ')),
+  );
+  const isKnownFirstName = (word: string) =>
+    nameTokens(word).every((token) => knownFirstNameTokens.has(token));
+  const review: ReviewRow[] = [];
+  let leftOutCount = 0;
+  for (const doubt of doubts) {
+    const { registrant, namesakes } = doubt;
+    const [closest] = namesakes;
+    const name = splitListName(registrant.name, {
+      utmbName: closest ? splitUtmbFullname(closest.fullname) : null,
+      isKnownFirstName,
+    });
+    const sex = name
+      ? guessSex(name.firstName, namesakes, sexesByFirstName)
+      : null;
+    const field = FIELDS.find(({ utmbSex }) => utmbSex === sex);
+    if (name && field) {
+      addRow(field.utmbSex, `dossard ${registrant.bib}`, {
+        ...name,
+        nationality: toAlpha3(doubt.nationality),
+        index: null,
+        utmbUrl: null,
+      });
+    } else {
+      leftOutCount += 1;
+    }
+    const isWorthReviewing =
+      top === 'all' ||
+      (doubt.candidates.length > 0 &&
+        strongestIndex(doubt.candidates) >= reviewMinIndex);
+    if (isWorthReviewing) {
+      review.push({
+        bib: registrant.bib,
+        name: registrant.name,
+        country: registrant.country,
+        reason: doubt.reason,
+        exportedTo: field?.slug ?? (name ? 'Sexe inconnu' : 'Nom incomplet'),
+        suggestion: doubt.suggestion
+          ? utmbProfileUrl(doubt.suggestion.uri)
+          : null,
+        candidates: describeCandidates(doubt.candidates),
+      });
     }
   }
 
@@ -373,7 +478,11 @@ export async function buildFromGrandRaid(
       byIndexDesc,
     );
     const rows = top === 'all' ? all : all.slice(0, top);
-    fields.push({ label: field.label, rows, matchedCount: all.length });
+    fields.push({
+      label: field.label,
+      rows,
+      matchedCount: all.filter((row) => row.utmbUrl !== null).length,
+    });
     files.push({
       name: `${filePrefix}-${field.slug}.csv`,
       content: toStartListCsv(rows),
@@ -387,8 +496,9 @@ export async function buildFromGrandRaid(
     files,
     fields,
     scannedCount: scanned.length,
-    unmatchedCount,
+    unmatchedCount: doubts.length,
     reviewCount: review.length,
     acceptedCount,
+    leftOutCount,
   };
 }

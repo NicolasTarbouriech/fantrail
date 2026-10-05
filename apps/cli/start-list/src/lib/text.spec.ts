@@ -3,6 +3,7 @@ import {
   nameTokens,
   restoreApostrophes,
   sameTokens,
+  splitListName,
   splitUtmbFullname,
   stripAccents,
 } from './text';
@@ -34,6 +35,10 @@ describe('text', () => {
   });
 
   it('splits a UTMB full name', () => {
+    expect(splitUtmbFullname('Boris HERNANDEZ (Hernandez BORIS)')).toEqual({
+      firstName: 'Boris',
+      lastName: 'Hernandez',
+    });
     expect(splitUtmbFullname('Ludovic POMMERET')).toEqual({
       firstName: 'Ludovic',
       lastName: 'Pommeret',
@@ -81,5 +86,55 @@ describe('text', () => {
         restoreApostrophes('Mélanie KERANFLEC H', 'Keranflec’h Mélanie'),
       ),
     ).toEqual({ firstName: 'Mélanie', lastName: "Keranflec'h" });
+  });
+
+  it('splits a list name on the UTMB profile sharing its words', () => {
+    const split = (name: string, utmbFullname: string) =>
+      splitListName(name, {
+        utmbName: splitUtmbFullname(utmbFullname),
+        isKnownFirstName: () => false,
+      });
+    expect(split('bouaidat cazaux lorenne', 'Lorenne BOUAIDAT')).toEqual({
+      firstName: 'Lorenne',
+      lastName: 'Bouaidat Cazaux',
+    });
+    expect(split('Chouchou Adrien Karim', 'Adrien CHOUCHOU')).toEqual({
+      firstName: 'Adrien Karim',
+      lastName: 'Chouchou',
+    });
+    expect(split('Florian Francois', 'Florian FRANCOIS')).toEqual({
+      firstName: 'Florian',
+      lastName: 'Francois',
+    });
+    expect(split('MARTIN Martin', 'Martin MARTIN')).toEqual({
+      firstName: 'Martin',
+      lastName: 'Martin',
+    });
+  });
+
+  it('splits a list name alone on its case, then on known first names', () => {
+    const split = (name: string) =>
+      splitListName(name, {
+        utmbName: null,
+        isKnownFirstName: (word) =>
+          ['marie', 'isabelle'].includes(word.toLowerCase()),
+      });
+    expect(split('ALQUIER THIBAULT Aude')).toEqual({
+      firstName: 'Aude',
+      lastName: 'Alquier Thibault',
+    });
+    expect(split('Bolon Marie Isabelle')).toEqual({
+      firstName: 'Marie Isabelle',
+      lastName: 'Bolon',
+    });
+    expect(split('MARIE ISABELLE')).toEqual({
+      firstName: 'Isabelle',
+      lastName: 'Marie',
+    });
+    expect(split('Ben zaki Fabienne')).toEqual({
+      firstName: 'Fabienne',
+      lastName: 'Ben Zaki',
+    });
+    expect(split('Solo')).toBeNull();
   });
 });

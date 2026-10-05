@@ -323,9 +323,10 @@ describe('buildFromGrandRaid', () => {
     expect(result.files[0]?.content).toContain(
       'Gautier;Airiau;FRA;901;utmb;https://utmb.world/runner/3.gautier.airiau;',
     );
+    expect(result.files[0]?.content).toContain('Frederic;Abas;FRA;;;;\n');
     expect(result.files[1]?.content).toContain('Marjorie;Amiel;FRA;541');
     expect(result.files[2]?.content).toContain(
-      '2;Abas Frederic;France;Homonymes;;' +
+      '2;Abas Frederic;France;Homonymes;hommes;;' +
         'Frédéric ABAS (721, FR, H) https://utmb.world/runner/4.frederic.abas | ' +
         'Frederic ABAS (715, FR, H) https://utmb.world/runner/5.frederic.abas\n',
     );
@@ -334,7 +335,10 @@ describe('buildFromGrandRaid', () => {
       unmatchedCount: 2,
       reviewCount: 1,
       acceptedCount: 0,
+      leftOutCount: 1,
     });
+    expect(result.fields[0]).toMatchObject({ matchedCount: 1 });
+    expect(result.fields[0]?.rows).toHaveLength(2);
   });
 
   it('keeps every runner with top all and takes the reviewed matches', async () => {
@@ -374,12 +378,13 @@ describe('buildFromGrandRaid', () => {
     expect(result.files[1]?.content).toBe(
       'prenom;nom;nationalite;index;source;utmb;itra\n' +
         'Marjorie;Amiel;FRA;541;utmb;https://utmb.world/runner/6.marjorie.amiel;\n' +
+        'Marianne;Hogan;FRA;;;;\n' +
         "Mélanie;Keranflec'h;FRA;;;https://utmb.world/runner/7.melanie.keranflec.h;\n",
     );
     expect(result.files[2]?.content).toBe(
-      'dossard;nom_liste;pays_liste;raison;suggestion;candidats\n' +
-        '4;Personne Inconnue;France;Absent d’UTMB;;\n' +
-        '5;Hogan Marianne;France;Nationalité différente;https://utmb.world/runner/8.marianne.hogan;' +
+      'dossard;nom_liste;pays_liste;raison;export_sans_index;suggestion;candidats\n' +
+        '4;Personne Inconnue;France;Absent d’UTMB;Sexe inconnu;;\n' +
+        '5;Hogan Marianne;France;Nationalité différente;femmes;https://utmb.world/runner/8.marianne.hogan;' +
         'Marianne HOGAN (810, CA, F) https://utmb.world/runner/8.marianne.hogan\n',
     );
     expect(logs).toContain(
@@ -413,10 +418,18 @@ describe('buildFromGrandRaid', () => {
       new Map([['9', '3.gautier.airiau']]),
       () => undefined,
     );
-    expect(result.fields[0]?.rows).toHaveLength(1);
+    expect(result.fields[0]?.rows).toEqual([
+      expect.objectContaining({ index: 901 }),
+      expect.objectContaining({
+        firstName: 'Gautier',
+        lastName: 'Airiau',
+        index: null,
+        utmbUrl: null,
+      }),
+    ]);
     expect(result.files[2]?.content).toBe(
-      'dossard;nom_liste;pays_liste;raison;suggestion;candidats\n' +
-        '1;Airiau Gautier;France;Profil commun à plusieurs dossards;;' +
+      'dossard;nom_liste;pays_liste;raison;export_sans_index;suggestion;candidats\n' +
+        '1;Airiau Gautier;France;Profil commun à plusieurs dossards;hommes;;' +
         'Gautier AIRIAU (901, FR, H) https://utmb.world/runner/3.gautier.airiau\n',
     );
 
@@ -430,6 +443,106 @@ describe('buildFromGrandRaid', () => {
     );
     expect(logs).toContain(
       '  profil UTMB déjà pris par un autre dossard : 9 Airiau Gautier → 3.gautier.airiau',
+    );
+  });
+
+  it('exports both namesakes without index when neither is reviewed', async () => {
+    const client = createClient((url) =>
+      url.hostname === 'api.utmb.world'
+        ? utmbRoute(url)
+        : LIST_PAGE(row('1', 'Airiau Gautier') + row('9', 'Airiau Gautier')),
+    );
+    const result = await buildFromGrandRaid(client, {
+      raceType: 'GRR',
+      top: 'all',
+      filePrefix: 'grr',
+      log: () => undefined,
+      baseUrl: 'https://example.org/liste/',
+    });
+    expect(result.files[0]?.content).toBe(
+      'prenom;nom;nationalite;index;source;utmb;itra\n' +
+        'Gautier;Airiau;FRA;;;;\n' +
+        'Gautier;Airiau;FRA;;;;\n',
+    );
+    expect(result).toMatchObject({ unmatchedCount: 2, leftOutCount: 0 });
+  });
+
+  it('tells the sex of an unknown runner by the first names already matched', async () => {
+    const client = createClient((url) =>
+      url.hostname === 'api.utmb.world'
+        ? utmbRoute(url)
+        : LIST_PAGE(
+            row('1', 'Airiau Gautier') +
+              row('2', 'Amiel Marjorie') +
+              row('3', 'DURAND DUPONT Gautier') +
+              row('4', 'Petit Marjorie Gautier') +
+              row('5', 'grand gautier') +
+              row('6', 'Solo') +
+              row('7', 'Martin Camille'),
+          ),
+    );
+    const result = await buildFromGrandRaid(client, {
+      raceType: 'GRR',
+      top: 'all',
+      filePrefix: 'grr',
+      log: () => undefined,
+      baseUrl: 'https://example.org/liste/',
+    });
+    expect(result.fields[0]?.rows.slice(1)).toEqual([
+      expect.objectContaining({
+        firstName: 'Gautier',
+        lastName: 'Durand Dupont',
+      }),
+      expect.objectContaining({ firstName: 'Gautier', lastName: 'Grand' }),
+    ]);
+    expect(result.fields[1]?.rows[1]).toMatchObject({
+      firstName: 'Marjorie Gautier',
+      lastName: 'Petit',
+    });
+    expect(result.files[2]?.content).toContain(
+      '4;Petit Marjorie Gautier;France;Absent d’UTMB;femmes;;\n',
+    );
+    expect(result.files[2]?.content).toContain(
+      '6;Solo;France;Absent d’UTMB;Nom incomplet;;\n',
+    );
+    expect(result.files[2]?.content).toContain(
+      '7;Martin Camille;France;Absent d’UTMB;Sexe inconnu;;\n',
+    );
+    expect(result).toMatchObject({ unmatchedCount: 5, leftOutCount: 2 });
+  });
+
+  it('leaves out a runner whose namesakes contradict the first name', async () => {
+    const client = createClient((url) => {
+      if (url.hostname !== 'api.utmb.world') {
+        return LIST_PAGE(
+          row('1', 'Amiel Marjorie') + row('2', 'Gonzalez Marjorie'),
+        );
+      }
+      return url.searchParams.get('search') === 'Gonzalez Marjorie'
+        ? {
+            runners: [
+              {
+                id: 9,
+                fullname: 'Marjorie GONZALEZ',
+                uri: '9.marjorie.gonzalez',
+                ip: 640,
+                nationality: 'ES',
+                sex: 'H',
+              },
+            ],
+          }
+        : utmbRoute(url);
+    });
+    const result = await buildFromGrandRaid(client, {
+      raceType: 'GRR',
+      top: 'all',
+      filePrefix: 'grr',
+      log: () => undefined,
+      baseUrl: 'https://example.org/liste/',
+    });
+    expect(result.fields[0]?.rows).toEqual([]);
+    expect(result.files[2]?.content).toContain(
+      '2;Gonzalez Marjorie;France;Nationalité différente;Sexe inconnu;',
     );
   });
 
