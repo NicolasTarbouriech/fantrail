@@ -8,11 +8,10 @@ import {
   AdminField,
   AdminInput,
   AdminNotice,
-  AdminSelect,
 } from '@trail/shared/design/ui-react-admin';
 
 import { ConfirmDialog } from './ConfirmDialog';
-import type { AdminField as RaceFieldType } from './raceTypes';
+import type { AdminRunner, AdminField as RaceFieldType } from './raceTypes';
 
 const RANKED_PLACES = 10;
 
@@ -38,11 +37,27 @@ export function ResultForm({
   const runnerById = new Map(
     field.startList.runners.map((runner) => [runner.id, runner]),
   );
-  const [ranking, setRanking] = useState<string[]>(() =>
-    Array.from(
-      { length: RANKED_PLACES },
-      (_, index) => field.result?.rankingList[index] ?? '',
-    ),
+  // Typed labels map back to runners; the rank tells namesakes apart.
+  const labelOf = (runner: AdminRunner) =>
+    [
+      `${runner.lastName.toUpperCase()} ${runner.firstName}`,
+      runner.nationality,
+      runner.favoriteRank ? `n°${runner.favoriteRank}` : null,
+    ]
+      .filter(Boolean)
+      .join(' · ');
+  const idByLabel = new Map(
+    runners.map((runner) => [labelOf(runner), runner.id]),
+  );
+  const [texts, setTexts] = useState<string[]>(() =>
+    Array.from({ length: RANKED_PLACES }, (_, index) => {
+      const runner = runnerById.get(field.result?.rankingList[index] ?? '');
+      return runner ? labelOf(runner) : '';
+    }),
+  );
+  const ranking = texts.map((text) => idByLabel.get(text) ?? '');
+  const unknownPlaces = texts.filter(
+    (text, index) => text.trim() && !ranking[index],
   );
   const [timeInput, setTimeInput] = useState(
     field.result ? formatClockTime(field.result.winnerTimeInSeconds) : '',
@@ -61,6 +76,9 @@ export function ResultForm({
   const version = field.result?.version ?? 0;
 
   const check = () => {
+    if (unknownPlaces.length > 0) {
+      return 'Choisis chaque coureur dans les suggestions.';
+    }
     if (filled.length === 0) {
       return 'Saisis au moins le vainqueur.';
     }
@@ -94,41 +112,43 @@ export function ResultForm({
           />
         </div>
         <ol className="m-0 flex list-none flex-col p-0">
-          {ranking.map((runnerId, index) => (
+          {texts.map((text, index) => (
             <li
               key={index}
               className="grid grid-cols-[56px_minmax(0,1fr)_96px] items-center gap-2 border-t border-zinc-100 px-5 py-1.5"
             >
               <span className="font-bold tabular-nums">{index + 1}</span>
-              <AdminSelect
+              <AdminInput
                 aria-label={`Coureur en position ${index + 1}`}
-                value={runnerId}
+                list={`result-runners-${field.id}`}
+                placeholder="Tape un nom"
+                autoComplete="off"
+                value={text}
                 onChange={(event) =>
-                  setRanking((current) =>
-                    current.map((id, position) =>
-                      position === index ? event.target.value : id,
+                  setTexts((current) =>
+                    current.map((item, position) =>
+                      position === index ? event.target.value : item,
                     ),
                   )
                 }
                 className={
-                  duplicates.has(runnerId) ? 'border-red-400' : undefined
+                  duplicates.has(ranking[index]) ||
+                  (text.trim() && !ranking[index])
+                    ? 'border-red-400'
+                    : undefined
                 }
-              >
-                <option value="">—</option>
-                {runners.map((runner) => (
-                  <option key={runner.id} value={runner.id}>
-                    {runner.lastName.toUpperCase()} {runner.firstName}
-                  </option>
-                ))}
-              </AdminSelect>
+              />
               <span className="text-right text-[13px] text-zinc-500">
-                {runnerId && runnerById.get(runnerId)?.favoriteRank
-                  ? `favori n°${runnerById.get(runnerId)?.favoriteRank}`
-                  : ''}
+                {text.trim() && !ranking[index] ? 'inconnu' : ''}
               </span>
             </li>
           ))}
         </ol>
+        <datalist id={`result-runners-${field.id}`}>
+          {runners.map((runner) => (
+            <option key={runner.id} value={labelOf(runner)} />
+          ))}
+        </datalist>
       </AdminCard>
       <div className="flex flex-col gap-4 lg:sticky lg:top-6">
         <AdminCard>

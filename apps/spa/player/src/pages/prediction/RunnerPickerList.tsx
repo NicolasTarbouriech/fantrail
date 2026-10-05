@@ -2,8 +2,10 @@ import { useMemo, useState } from 'react';
 
 import {
   type PickList,
+  type PickerOrder,
   RunnerOption,
   formatRank,
+  selectPickerRunners,
 } from '@trail/modules-frontend';
 import { SearchIcon, cx } from '@trail/shared/design/ui-react';
 
@@ -16,28 +18,7 @@ export type RunnerPickerListProps = {
   onPick: (runnerId: string) => void;
 };
 
-type SortOrder = 'index' | 'name';
-
-const SORT_ORDERS: SortOrder[] = ['index', 'name'];
-
-function compareRunners(order: SortOrder) {
-  return (a: PredictionRunner, b: PredictionRunner) => {
-    if (order === 'name') {
-      return a.lastName.localeCompare(b.lastName, 'fr');
-    }
-    return (
-      (a.favoriteRank ?? Number.MAX_SAFE_INTEGER) -
-      (b.favoriteRank ?? Number.MAX_SAFE_INTEGER)
-    );
-  };
-}
-
-function normalize(value: string): string {
-  return value
-    .normalize('NFD')
-    .replace(/\p{Diacritic}/gu, '')
-    .toLowerCase();
-}
+const SORT_ORDERS: PickerOrder[] = ['index', 'name'];
 
 export function getActiveRunners(
   runners: PredictionRunner[],
@@ -53,13 +34,11 @@ export function RunnerPickerList({
   onPick,
 }: RunnerPickerListProps) {
   const [search, setSearch] = useState('');
-  const [order, setOrder] = useState<SortOrder>('index');
-  const visibleRunners = useMemo(() => {
-    const query = normalize(search.trim());
-    return getActiveRunners(runners)
-      .filter((runner) => !query || normalize(runner.fullName).includes(query))
-      .sort(compareRunners(order));
-  }, [runners, order, search]);
+  const [order, setOrder] = useState<PickerOrder>('index');
+  const { runners: visibleRunners, hiddenCount } = useMemo(
+    () => selectPickerRunners(runners, { query: search, order }),
+    [runners, order, search],
+  );
 
   return (
     <>
@@ -115,6 +94,12 @@ export function RunnerPickerList({
           />
         );
       })}
+      {hiddenCount > 0 ? (
+        <p className="text-muted m-0 py-2 text-center text-[13px]">
+          Les {visibleRunners.length} meilleurs index du champ. Cherche un nom
+          pour trouver l’un des {hiddenCount} autres coureurs.
+        </p>
+      ) : null}
       {visibleRunners.length === 0 ? (
         <p className="text-muted m-0 py-4 text-center text-sm">
           Aucun coureur trouvé.

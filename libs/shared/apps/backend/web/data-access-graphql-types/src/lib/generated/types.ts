@@ -525,8 +525,11 @@ export type Scorecard = {
 
 export type StartList = {
   __typename?: 'StartList';
+  activeRunnerCount: Scalars['Int']['output'];
   fieldId: Scalars['ID']['output'];
   runners: Array<Runner>;
+  /** Withdrawn runners only, without loading the whole list */
+  withdrawnRunners: Array<Runner>;
 };
 
 export type TimeScore = {

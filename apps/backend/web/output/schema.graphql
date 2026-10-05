@@ -158,6 +158,10 @@ enum IndexSource {
 type StartList {
   fieldId: ID!
   runners: [Runner!]!
+
+  """Withdrawn runners only, without loading the whole list"""
+  withdrawnRunners: [Runner!]!
+  activeRunnerCount: Int!
 }
 
 type PickScore {

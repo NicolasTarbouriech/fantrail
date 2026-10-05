@@ -12,10 +12,7 @@ query RacesPage {
       startAt
       startList {
         fieldId
-        runners {
-          id
-          isWithdrawn
-        }
+        activeRunnerCount
       }
     }
   }

@@ -60,11 +60,7 @@ export function RacesPage() {
                 .map((field) => field.startAt)
                 .sort()[0];
               const runnerCount = race.fields.reduce(
-                (sum, field) =>
-                  sum +
-                  field.startList.runners.filter(
-                    (runner) => !runner.isWithdrawn,
-                  ).length,
+                (sum, field) => sum + field.startList.activeRunnerCount,
                 0,
               );
               return (

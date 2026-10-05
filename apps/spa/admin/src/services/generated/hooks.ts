@@ -992,10 +992,7 @@ export const RacesPageDocument = gql`
       startAt
       startList {
         fieldId
-        runners {
-          id
-          isWithdrawn
-        }
+        activeRunnerCount
       }
     }
   }

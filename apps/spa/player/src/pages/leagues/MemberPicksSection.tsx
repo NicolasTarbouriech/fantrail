@@ -34,7 +34,7 @@ export function MemberPicksSection({
     lockedFields.find((candidate) => candidate.id === selectedFieldId) ??
     lockedFields[0];
   const { data, loading } = useLeaguePageGetFieldPredictionsQuery({
-    variables: { leagueId, fieldId: field?.id ?? '' },
+    variables: { leagueId, fieldId: field?.id ?? '', raceId: race.id },
     skip: !field,
   });
 
@@ -48,7 +48,10 @@ export function MemberPicksSection({
   }
 
   const runnerById = new Map(
-    field.startList.runners.map((runner) => [runner.id, runner]),
+    (
+      data?.race.fields.find((candidate) => candidate.id === field.id)
+        ?.startList.runners ?? []
+    ).map((runner) => [runner.id, runner]),
   );
   const predictions = data?.league.fieldPredictions ?? [];
   const predictedIds = new Set(

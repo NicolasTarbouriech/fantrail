@@ -1,4 +1,4 @@
-import { Field, ID, ObjectType } from '@nestjs/graphql';
+import { Field, ID, Int, ObjectType } from '@nestjs/graphql';
 
 import { StartListAggregate } from '@trail/modules/race/domain';
 
@@ -20,5 +20,18 @@ export class StartListType {
       (runner) =>
         new RunnerType(runner, favoriteRankByRunnerId[runner.id] ?? null),
     );
+  }
+
+  @Field(() => [RunnerType], {
+    description: 'Withdrawn runners only, without loading the whole list',
+  })
+  get withdrawnRunners(): RunnerType[] {
+    return this.runners.filter((runner) => runner.isWithdrawn);
+  }
+
+  @Field(() => Int)
+  get activeRunnerCount(): number {
+    return this.aggregate.runnerList.filter((runner) => !runner.isWithdrawn)
+      .length;
   }
 }

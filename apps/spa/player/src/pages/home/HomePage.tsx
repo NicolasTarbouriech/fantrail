@@ -34,7 +34,7 @@ function getWithdrawnItems(
       .flatMap((field) => {
         const prediction = predictionByFieldId.get(field.id);
         const runnerById = new Map(
-          field.startList.runners.map((runner) => [runner.id, runner]),
+          field.startList.withdrawnRunners.map((runner) => [runner.id, runner]),
         );
         return (prediction?.withdrawnRunnerIds ?? []).map((runnerId) => ({
           id: `${field.id}-${runnerId}`,

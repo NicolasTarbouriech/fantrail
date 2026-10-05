@@ -18,6 +18,8 @@ import {
 
 import type { AdminRunner } from './raceTypes';
 
+const PREVIEW_READY_LINES = 50;
+
 export type CsvImportDialogProps = {
   open: boolean;
   fieldLabel: string;
@@ -53,6 +55,13 @@ export function CsvImportDialog({
   };
 
   const readyCount = result.readyRunners.length;
+  const problemLines = result.lines.filter((line) => line.state !== 'ready');
+  const readyLines = result.lines.filter((line) => line.state === 'ready');
+  const previewLines = [
+    ...problemLines,
+    ...readyLines.slice(0, PREVIEW_READY_LINES),
+  ];
+  const hiddenReadyCount = Math.max(readyLines.length - PREVIEW_READY_LINES, 0);
 
   return (
     <AdminDialog
@@ -127,7 +136,7 @@ export function CsvImportDialog({
             </tr>
           </thead>
           <tbody>
-            {result.lines.map((line) => (
+            {previewLines.map((line) => (
               <tr
                 key={line.lineNumber}
                 className={cx(
@@ -159,6 +168,11 @@ export function CsvImportDialog({
             ))}
           </tbody>
         </AdminTable>
+      ) : null}
+      {hiddenReadyCount > 0 ? (
+        <p className="m-0 text-center text-[13px] text-zinc-500">
+          … et {hiddenReadyCount} autres lignes prêtes.
+        </p>
       ) : null}
       {error ? <AdminNotice tone="danger">{error}</AdminNotice> : null}
     </AdminDialog>

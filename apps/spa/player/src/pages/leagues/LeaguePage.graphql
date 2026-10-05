@@ -21,15 +21,6 @@ query LeaguePage($leagueId: ID!, $raceId: ID) {
         id
         gender
         isLocked
-        startList {
-          fieldId
-          runners {
-            id
-            lastName
-            favoriteRank
-            isWithdrawn
-          }
-        }
       }
     }
     leaderboard(raceId: $raceId) {
@@ -45,7 +36,26 @@ query LeaguePage($leagueId: ID!, $raceId: ID) {
   }
 }
 
-query LeaguePageGetFieldPredictions($leagueId: ID!, $fieldId: ID!) {
+query LeaguePageGetFieldPredictions(
+  $leagueId: ID!
+  $fieldId: ID!
+  $raceId: ID!
+) {
+  race(raceId: $raceId) {
+    id
+    fields {
+      id
+      startList {
+        fieldId
+        runners {
+          id
+          lastName
+          favoriteRank
+          isWithdrawn
+        }
+      }
+    }
+  }
   league(leagueId: $leagueId) {
     id
     fieldPredictions(fieldId: $fieldId) {

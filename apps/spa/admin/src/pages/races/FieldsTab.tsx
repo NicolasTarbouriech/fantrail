@@ -39,6 +39,8 @@ import { RunnerSheet } from './RunnerSheet';
 import { StartListTable } from './StartListTable';
 import type { AdminRace, AdminRunner } from './raceTypes';
 
+const IMPORT_BATCH_SIZE = 200;
+
 type Panel =
   | { kind: 'runner'; runner: AdminRunner | null }
   | { kind: 'csv' }
@@ -241,10 +243,21 @@ export function FieldsTab({ race }: { race: AdminRace }) {
           isPending={addRunnersState.loading}
           error={error}
           onImport={(dataList) =>
-            void run(
-              () => addRunners({ variables: { fieldId: field.id, dataList } }),
-              `${dataList.length} coureurs importés.`,
-            )
+            void run(async () => {
+              // Batches keep each request small, whatever the size of the start list.
+              for (
+                let start = 0;
+                start < dataList.length;
+                start += IMPORT_BATCH_SIZE
+              ) {
+                await addRunners({
+                  variables: {
+                    fieldId: field.id,
+                    dataList: dataList.slice(start, start + IMPORT_BATCH_SIZE),
+                  },
+                });
+              }
+            }, `${dataList.length} coureurs importés.`)
           }
           onClose={() => setPanel(null)}
         />

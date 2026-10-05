@@ -15,10 +15,9 @@ query HomePage {
       isLocked
       startList {
         fieldId
-        runners {
+        withdrawnRunners {
           id
           fullName
-          isWithdrawn
         }
       }
       result {

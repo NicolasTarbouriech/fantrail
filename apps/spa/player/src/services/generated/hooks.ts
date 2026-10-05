@@ -298,10 +298,9 @@ export const HomePageDocument = gql`
       isLocked
       startList {
         fieldId
-        runners {
+        withdrawnRunners {
           id
           fullName
-          isWithdrawn
         }
       }
       result {
@@ -610,15 +609,6 @@ export const LeaguePageDocument = gql`
         id
         gender
         isLocked
-        startList {
-          fieldId
-          runners {
-            id
-            lastName
-            favoriteRank
-            isWithdrawn
-          }
-        }
       }
     }
     leaderboard(raceId: $raceId) {
@@ -669,7 +659,22 @@ export type LeaguePageLazyQueryHookResult = ReturnType<typeof useLeaguePageLazyQ
 export type LeaguePageSuspenseQueryHookResult = ReturnType<typeof useLeaguePageSuspenseQuery>;
 export type LeaguePageQueryResult = Apollo.QueryResult<Types.LeaguePageQuery, Types.LeaguePageQueryVariables>;
 export const LeaguePageGetFieldPredictionsDocument = gql`
-    query LeaguePageGetFieldPredictions($leagueId: ID!, $fieldId: ID!) {
+    query LeaguePageGetFieldPredictions($leagueId: ID!, $fieldId: ID!, $raceId: ID!) {
+  race(raceId: $raceId) {
+    id
+    fields {
+      id
+      startList {
+        fieldId
+        runners {
+          id
+          lastName
+          favoriteRank
+          isWithdrawn
+        }
+      }
+    }
+  }
   league(leagueId: $leagueId) {
     id
     fieldPredictions(fieldId: $fieldId) {
@@ -700,6 +705,7 @@ export const LeaguePageGetFieldPredictionsDocument = gql`
  *   variables: {
  *      leagueId: // value for 'leagueId'
  *      fieldId: // value for 'fieldId'
+ *      raceId: // value for 'raceId'
  *   },
  * });
  */

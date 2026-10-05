@@ -185,7 +185,7 @@ export type RacePageQuery = { __typename?: 'Query', race: { __typename?: 'Race',
 export type RacesPageQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type RacesPageQuery = { __typename?: 'Query', adminRaces: Array<{ __typename?: 'Race', id: string, name: string, location: string, distanceInKm: number, status: Types.RaceStatus, timezone: string, fields: Array<{ __typename?: 'RaceField', id: string, gender: Types.Gender, startAt: string, startList: { __typename?: 'StartList', fieldId: string, runners: Array<{ __typename?: 'Runner', id: string, isWithdrawn: boolean }> } }> }> };
+export type RacesPageQuery = { __typename?: 'Query', adminRaces: Array<{ __typename?: 'Race', id: string, name: string, location: string, distanceInKm: number, status: Types.RaceStatus, timezone: string, fields: Array<{ __typename?: 'RaceField', id: string, gender: Types.Gender, startAt: string, startList: { __typename?: 'StartList', fieldId: string, activeRunnerCount: number } }> }> };
 
 export type ResultsTabMutatePublishMutationVariables = Types.Exact<{
   fieldId: Types.Scalars['ID']['input'];
