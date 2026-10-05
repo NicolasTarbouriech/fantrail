@@ -74,7 +74,7 @@ describe('parseStartListCsv', () => {
       '"Félix","Garnier","FRA","870","",,',
     ].join('\n');
     const result = parseStartListCsv(csv, [
-      { firstName: 'Nils', lastName: 'Berg' },
+      { firstName: 'Nils', lastName: 'Berg', nationality: 'NOR', index: 902 },
     ]);
     expect(result.lines.map((line) => line.state)).toEqual([
       'ready',
@@ -122,6 +122,22 @@ describe('parseStartListCsv', () => {
       lineNumber: 3,
       message: 'Nationalité : 3 lettres attendues (FRA)',
     });
+  });
+
+  it('keeps namesakes with another nationality or index', () => {
+    const result = parseStartListCsv(
+      [
+        'Simon;Martin;FRA;624;utmb;;',
+        'Simon;Martin;FRA;616;utmb;;',
+        'Simon;Martin;FRA;624;utmb;;',
+      ].join('\n'),
+      [],
+    );
+    expect(result.lines.map((line) => line.state)).toEqual([
+      'ready',
+      'ready',
+      'duplicate',
+    ]);
   });
 
   it('reads a file without header', () => {

@@ -49,8 +49,26 @@ function normalizeName(value: string): string {
     .toLowerCase();
 }
 
-export function getRunnerKey(firstName: string, lastName: string): string {
-  return `${normalizeName(firstName)} ${normalizeName(lastName)}`;
+export type RunnerIdentity = {
+  firstName: string;
+  lastName: string;
+  nationality: string | null;
+  index: number | null;
+};
+
+/** Namesakes are distinct runners: the nationality and the index tell them apart. */
+export function getRunnerKey({
+  firstName,
+  lastName,
+  nationality,
+  index,
+}: RunnerIdentity): string {
+  return [
+    normalizeName(firstName),
+    normalizeName(lastName),
+    nationality ?? '',
+    index ?? '',
+  ].join('|');
 }
 
 function splitLine(line: string): string[] {
@@ -103,13 +121,9 @@ function parseRunner(cells: string[]): {
 /** Parses a start list in the browser; known runners and repeated lines are skipped. */
 export function parseStartListCsv(
   text: string,
-  existingRunners: Array<{ firstName: string; lastName: string }>,
+  existingRunners: RunnerIdentity[],
 ): CsvParseResult {
-  const knownKeys = new Set(
-    existingRunners.map((runner) =>
-      getRunnerKey(runner.firstName, runner.lastName),
-    ),
-  );
+  const knownKeys = new Set(existingRunners.map(getRunnerKey));
   const lines: CsvLine[] = [];
   text.split(/\r?\n/).forEach((rawLine, position) => {
     if (!rawLine.trim()) {
@@ -136,7 +150,7 @@ export function parseStartListCsv(
       });
       return;
     }
-    const key = getRunnerKey(runner.firstName, runner.lastName);
+    const key = getRunnerKey(runner);
     if (knownKeys.has(key)) {
       lines.push({
         ...base,
