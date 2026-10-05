@@ -261,6 +261,11 @@ type Mutation {
 
   """Closes a locked race once its fields have their result"""
   markRaceScored(raceId: ID!): Race!
+
+  """
+  Deletes the race with its fields, start lists, predictions, results and scores
+  """
+  deleteRace(raceId: ID!): Boolean!
   cancelRace(raceId: ID!): Race!
   addRaceField(raceId: ID!, data: RaceFieldInput!): Race!
   updateRaceField(fieldId: ID!, data: RaceFieldInput!): Race!

@@ -18,6 +18,7 @@ export abstract class LeagueRepository {
   abstract list(filters?: {
     visibility?: LeagueVisibility;
     memberId?: UserId;
+    raceId?: RaceId;
   }): Promise<LeagueAggregate[]>;
   // The owner is the first member.
   abstract create(params: CreateLeagueParams): Promise<LeagueAggregate>;

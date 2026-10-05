@@ -6,6 +6,8 @@ export * from './CancelRaceCommand';
 export * from './CancelRaceCommandHandler';
 export * from './CreateRaceCommand';
 export * from './CreateRaceCommandHandler';
+export * from './DeleteRaceCommand';
+export * from './DeleteRaceCommandHandler';
 export * from './LockFieldCommand';
 export * from './LockFieldCommandHandler';
 export * from './LockRaceCommand';

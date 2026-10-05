@@ -25,6 +25,7 @@ describe('TypeormRaceRepository', () => {
       findOne: jest.fn().mockResolvedValue(entity),
       create: jest.fn((value) => value),
       save: jest.fn((value) => Promise.resolve({ ...value, id: RACE_ID })),
+      delete: jest.fn(),
     } as unknown as Repository<RaceEntity>;
     publisher = {
       mergeObjectContext: jest.fn((aggregate) => aggregate),
@@ -57,6 +58,11 @@ describe('TypeormRaceRepository', () => {
       relations: ['field_list'],
     });
     expect(publisher.mergeObjectContext).toHaveBeenCalledWith(race);
+  });
+
+  it('deletes the race row, its dependants cascade', async () => {
+    await repository.delete(buildRaceAggregate());
+    expect(raceRepository.delete).toHaveBeenCalledWith({ id: RACE_ID });
   });
 
   it('throws when the race does not exist', async () => {

@@ -35,6 +35,8 @@ import { RegenerateLeagueInviteCodeCommand } from './RegenerateLeagueInviteCodeC
 import { RegenerateLeagueInviteCodeCommandHandler } from './RegenerateLeagueInviteCodeCommandHandler';
 import { RemoveLeagueMemberCommand } from './RemoveLeagueMemberCommand';
 import { RemoveLeagueMemberCommandHandler } from './RemoveLeagueMemberCommandHandler';
+import { RemoveRaceFromLeaguesCommand } from './RemoveRaceFromLeaguesCommand';
+import { RemoveRaceFromLeaguesCommandHandler } from './RemoveRaceFromLeaguesCommandHandler';
 import { RenameLeagueCommand } from './RenameLeagueCommand';
 import { RenameLeagueCommandHandler } from './RenameLeagueCommandHandler';
 
@@ -59,6 +61,7 @@ describe('league command handlers', () => {
       create: jest.fn(() => Promise.resolve(league)),
       save: jest.fn((aggregate) => Promise.resolve(aggregate)),
       delete: jest.fn(),
+      list: jest.fn(() => Promise.resolve([])),
     } as unknown as LeagueRepository;
   });
 
@@ -222,5 +225,16 @@ describe('league command handlers', () => {
       ),
     ).resolves.toBe(true);
     expect(leagueRepository.delete).toHaveBeenCalledWith(LEAGUE_ID);
+  });
+  it('RemoveRaceFromLeaguesCommandHandler drops a deleted race from its leagues', async () => {
+    jest.mocked(leagueRepository.list).mockResolvedValueOnce([league]);
+    await new RemoveRaceFromLeaguesCommandHandler(leagueRepository).execute(
+      new RemoveRaceFromLeaguesCommand({ raceId: LEAGUE_RACE_ID }),
+    );
+    expect(leagueRepository.list).toHaveBeenCalledWith({
+      raceId: LEAGUE_RACE_ID,
+    });
+    expect(league.raceIdList).toEqual([]);
+    expect(leagueRepository.save).toHaveBeenCalledWith(league);
   });
 });

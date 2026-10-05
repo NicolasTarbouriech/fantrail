@@ -937,6 +937,37 @@ export function useRaceInfoTabMutateCancelMutation(baseOptions?: Apollo.Mutation
 export type RaceInfoTabMutateCancelMutationHookResult = ReturnType<typeof useRaceInfoTabMutateCancelMutation>;
 export type RaceInfoTabMutateCancelMutationResult = Apollo.MutationResult<Types.RaceInfoTabMutateCancelMutation>;
 export type RaceInfoTabMutateCancelMutationOptions = Apollo.BaseMutationOptions<Types.RaceInfoTabMutateCancelMutation, Types.RaceInfoTabMutateCancelMutationVariables>;
+export const RaceInfoTabMutateDeleteDocument = gql`
+    mutation RaceInfoTabMutateDelete($raceId: ID!) {
+  deleteRace(raceId: $raceId)
+}
+    `;
+export type RaceInfoTabMutateDeleteMutationFn = Apollo.MutationFunction<Types.RaceInfoTabMutateDeleteMutation, Types.RaceInfoTabMutateDeleteMutationVariables>;
+
+/**
+ * __useRaceInfoTabMutateDeleteMutation__
+ *
+ * To run a mutation, you first call `useRaceInfoTabMutateDeleteMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useRaceInfoTabMutateDeleteMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [raceInfoTabMutateDeleteMutation, { data, loading, error }] = useRaceInfoTabMutateDeleteMutation({
+ *   variables: {
+ *      raceId: // value for 'raceId'
+ *   },
+ * });
+ */
+export function useRaceInfoTabMutateDeleteMutation(baseOptions?: Apollo.MutationHookOptions<Types.RaceInfoTabMutateDeleteMutation, Types.RaceInfoTabMutateDeleteMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<Types.RaceInfoTabMutateDeleteMutation, Types.RaceInfoTabMutateDeleteMutationVariables>(RaceInfoTabMutateDeleteDocument, options);
+      }
+export type RaceInfoTabMutateDeleteMutationHookResult = ReturnType<typeof useRaceInfoTabMutateDeleteMutation>;
+export type RaceInfoTabMutateDeleteMutationResult = Apollo.MutationResult<Types.RaceInfoTabMutateDeleteMutation>;
+export type RaceInfoTabMutateDeleteMutationOptions = Apollo.BaseMutationOptions<Types.RaceInfoTabMutateDeleteMutation, Types.RaceInfoTabMutateDeleteMutationVariables>;
 export const RacePageDocument = gql`
     query RacePage($raceId: ID!) {
   race(raceId: $raceId) {

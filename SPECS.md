@@ -187,7 +187,7 @@ Code court (8 caractères, alphanumérique sans ambiguïté O/0, I/1), régéné
 
 Ce que fait l'admin, par ordre d'importance pour le POC :
 
-1. **Courses** : créer, éditer (nom, lieu, distance, D+, date, site, URL LiveTrail), fixer le nombre de picks, passer le statut : `Draft` → `Open` → `Locked` → `Scored`, ou `Cancelled`.
+1. **Courses** : créer, éditer (nom, lieu, distance, D+, date, site, URL LiveTrail), fixer le nombre de picks, passer le statut : `Draft` → `Open` → `Locked` → `Scored`, ou `Cancelled`, et supprimer une course quel que soit son statut.
 2. **Champs et coureurs** : pour chaque champ, saisir la liste des élites : prénom, nom, nationalité, index, source de l'index, liens ITRA / UTMB. Import CSV pour aller vite. Ajout et retrait possibles jusqu'au verrouillage. Un coureur retiré reste dans les picks qui le contiennent, marqué « retiré », et y rapporte 0 point, comme un abandon. Le pronostic reste complet. Le joueur voit l'alerte sur l'accueil et sur son pronostic et peut le remplacer jusqu'au verrouillage.
 3. **Verrouillage** : heure de verrouillage par champ, et bouton de verrouillage manuel immédiat en cas de départ avancé ou retardé.
 4. **Résultats** : saisir positions 1 à 10 et temps du vainqueur ; publier ; corriger et republier.
@@ -244,7 +244,7 @@ Navigation par une barre d'onglets en bas : Accueil, Ligues, Mes scores, Profil.
 Back-office séparé, menu latéral Courses, Ligues, Joueurs.
 
 12. **Courses** : liste avec statut, nombre de champs et de coureurs, menu d'actions par course.
-13. **Course, onglet Infos** : nom, lieu, fuseau horaire, distance, D+, site officiel, page LiveTrail, nombre de picks (modifiable tant que la course est en brouillon), tolérance du chrono. Une carte Statut montre l'étape courante et l'action suivante : « Ouvrir aux pronos » (chaque champ doit avoir au moins autant de coureurs actifs que de picks), « Verrouiller toute la course », « Marquer notée » (une fois les résultats des deux champs publiés). « Annuler la course » est à part, irréversible.
+13. **Course, onglet Infos** : nom, lieu, fuseau horaire, distance, D+, site officiel, page LiveTrail, nombre de picks (modifiable tant que la course est en brouillon), tolérance du chrono. Une carte Statut montre l'étape courante et l'action suivante : « Ouvrir aux pronos » (chaque champ doit avoir au moins autant de coureurs actifs que de picks), « Verrouiller toute la course », « Marquer notée » (une fois les résultats des deux champs publiés). « Annuler la course » est à part, irréversible. « Supprimer la course » efface la course et tout ce qui en dépend (start lists, pronos, résultats, scores) et la retire des ligues ; dès que des joueurs ont pu pronostiquer, l'admin doit retaper le nom de la course pour confirmer.
 14. **Course, onglet Champs et start lists** : par champ, heure de départ et heure de verrouillage (heure locale de la course), bouton « Verrouiller maintenant ». Start list triée par rang de favori : nationalité, index, source, liens UTMB et ITRA, coureurs retirés barrés avec « Réintégrer », coureurs sans index signalés.
 15. **Fiche coureur** (panneau latéral) : ajout ou modification, et « Retirer de la start list ».
 16. **Import CSV** d'une start list : voir la décision 13.

@@ -161,6 +161,12 @@ describe('LeagueAggregate', () => {
       );
     });
 
+    it('drops a deleted race', () => {
+      const league = buildLeagueAggregate();
+      league.removeRace(LEAGUE_RACE_ID);
+      expect(league.raceIdList).toEqual([]);
+    });
+
     it('needs at least one available race', () => {
       const league = buildLeagueAggregate();
       expect(() => league.changeRaces(owner, [], available)).toThrow(

@@ -11,6 +11,7 @@ import {
   RaceStatusTransitionError,
   RaceWithoutFieldError,
 } from '../errors';
+import { RaceDeletedNestEvent, RaceEventName } from '../events';
 import {
   MEN_FIELD_ID,
   WOMEN_FIELD_ID,
@@ -154,6 +155,27 @@ describe('RaceAggregate', () => {
     expect(() =>
       buildRaceAggregate({ status: RaceStatus.Scored }).cancel(),
     ).toThrow(RaceStatusTransitionError);
+  });
+
+  it('records the deletion of a race, whatever its status', () => {
+    const now = new Date('2026-10-05T20:00:00Z');
+    const race = buildRaceAggregate({ status: RaceStatus.Cancelled });
+    race.delete(now);
+    const [event] = race.getUncommittedEvents();
+    expect(event).toBeInstanceOf(RaceDeletedNestEvent);
+    expect(event).toMatchObject({
+      event: {
+        name: RaceEventName.RaceDeleted,
+        timestamp: now.getTime(),
+        payload: {
+          raceId: race.id,
+          fieldIdList: [MEN_FIELD_ID, WOMEN_FIELD_ID],
+        },
+      },
+    });
+    expect(() =>
+      buildRaceAggregate({ status: RaceStatus.Open }).delete(now),
+    ).not.toThrow();
   });
 
   describe('fields', () => {

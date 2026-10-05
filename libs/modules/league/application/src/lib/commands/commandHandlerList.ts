@@ -7,6 +7,7 @@ import { JoinLeagueCommandHandler } from './JoinLeagueCommandHandler';
 import { LeaveLeagueCommandHandler } from './LeaveLeagueCommandHandler';
 import { RegenerateLeagueInviteCodeCommandHandler } from './RegenerateLeagueInviteCodeCommandHandler';
 import { RemoveLeagueMemberCommandHandler } from './RemoveLeagueMemberCommandHandler';
+import { RemoveRaceFromLeaguesCommandHandler } from './RemoveRaceFromLeaguesCommandHandler';
 import { RenameLeagueCommandHandler } from './RenameLeagueCommandHandler';
 
 export const commandHandlerList = [
@@ -19,5 +20,6 @@ export const commandHandlerList = [
   LeaveLeagueCommandHandler,
   RegenerateLeagueInviteCodeCommandHandler,
   RemoveLeagueMemberCommandHandler,
+  RemoveRaceFromLeaguesCommandHandler,
   RenameLeagueCommandHandler,
 ];

@@ -16,5 +16,7 @@ export * from './RegenerateLeagueInviteCodeCommand';
 export * from './RegenerateLeagueInviteCodeCommandHandler';
 export * from './RemoveLeagueMemberCommand';
 export * from './RemoveLeagueMemberCommandHandler';
+export * from './RemoveRaceFromLeaguesCommand';
+export * from './RemoveRaceFromLeaguesCommandHandler';
 export * from './RenameLeagueCommand';
 export * from './RenameLeagueCommandHandler';

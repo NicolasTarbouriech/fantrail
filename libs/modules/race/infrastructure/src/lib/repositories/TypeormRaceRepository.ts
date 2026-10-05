@@ -82,6 +82,11 @@ export class TypeormRaceRepository extends RaceRepository {
     return this.getById(race.id);
   }
 
+  // Fields, start lists, predictions, results and scores go with it (ON DELETE CASCADE).
+  async delete(race: RaceAggregate): Promise<void> {
+    await this._raceRepository.delete({ id: race.id });
+  }
+
   private async _getOne(
     where: FindOptionsWhere<RaceEntity>,
   ): Promise<RaceAggregate> {

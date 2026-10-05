@@ -148,6 +148,11 @@ export class LeagueAggregate extends AggregateRoot {
     );
   }
 
+  /** A deleted race leaves every league, even the last race of one. */
+  removeRace(raceId: RaceId): void {
+    this._raceIdList = this._raceIdList.filter((id) => id !== raceId);
+  }
+
   regenerateInviteCode(actor: LeagueActor): InviteCode {
     this._assertOwner(actor);
     this._inviteCode = InviteCodeGenerator.generate();

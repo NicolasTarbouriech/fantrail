@@ -12,4 +12,5 @@ export abstract class RaceRepository {
   abstract getByFieldId(fieldId: FieldId): Promise<RaceAggregate>;
   abstract create(data: RaceData): Promise<RaceAggregate>;
   abstract save(race: RaceAggregate): Promise<RaceAggregate>;
+  abstract delete(race: RaceAggregate): Promise<void>;
 }

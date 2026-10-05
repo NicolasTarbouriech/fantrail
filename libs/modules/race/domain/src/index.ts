@@ -4,6 +4,7 @@ export * from './lib/assertions';
 export * from './lib/constants';
 export * from './lib/enums';
 export * from './lib/errors';
+export * from './lib/events';
 export * from './lib/repositories';
 export * from './lib/services';
 export * from './lib/types';

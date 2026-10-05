@@ -11,6 +11,11 @@ import {
   PickCountLockedError,
   RaceWithoutFieldError,
 } from '../errors';
+import {
+  RaceDeletedEvent,
+  RaceDeletedNestEvent,
+  RaceEventName,
+} from '../events';
 import { FieldData, FieldId, PickCount, RaceData, RaceId } from '../types';
 import { RaceField } from '../valueObjects';
 
@@ -129,6 +134,23 @@ export class RaceAggregate extends AggregateRoot {
   cancel(): void {
     RaceStatusAssertion.assertTransition(this._status, RaceStatus.Cancelled);
     this._status = RaceStatus.Cancelled;
+  }
+
+  /** Records the deletion, whatever the status; other modules clean up on the event. */
+  delete(now: Date): void {
+    this.apply(
+      new RaceDeletedNestEvent(
+        RaceDeletedEvent.parse({
+          eventId: randomUUID(),
+          timestamp: now.getTime(),
+          name: RaceEventName.RaceDeleted,
+          payload: {
+            raceId: this.id,
+            fieldIdList: this._fieldList.map(({ id }) => id),
+          },
+        }),
+      ),
+    );
   }
 
   addField(data: FieldData): RaceField {

@@ -5,6 +5,7 @@ import {
   AddFieldCommand,
   CancelRaceCommand,
   CreateRaceCommand,
+  DeleteRaceCommand,
   GetRaceQuery,
   ListRacesQuery,
   LockFieldCommand,
@@ -124,6 +125,18 @@ export class RaceResolver {
     return new RaceType(
       await this._commandBus.execute(new MarkRaceScoredCommand({ raceId })),
     );
+  }
+
+  @Mutation(() => Boolean, {
+    description:
+      'Deletes the race with its fields, start lists, predictions, results and scores',
+  })
+  @UseGuards(AuthGuard, AdminGuard)
+  async deleteRace(
+    @Args('raceId', { type: () => ID }) raceId: string,
+  ): Promise<boolean> {
+    await this._commandBus.execute(new DeleteRaceCommand({ raceId }));
+    return true;
   }
 
   @Mutation(() => RaceType)

@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { EventPublisher } from '@nestjs/cqrs';
 import { InjectRepository } from '@nestjs/typeorm';
-import { FindOptionsWhere, In, Repository } from 'typeorm';
+import { FindOptionsWhere, In, Raw, Repository } from 'typeorm';
 
 import {
   CreateLeagueParams,
@@ -12,6 +12,7 @@ import {
   LeagueNotFoundError,
   LeagueRepository,
   LeagueVisibility,
+  RaceId,
   UserId,
 } from '@trail/modules/league/domain';
 import {
@@ -62,12 +63,20 @@ export class TypeormLeagueRepository extends LeagueRepository {
   async list({
     visibility,
     memberId,
-  }: { visibility?: LeagueVisibility; memberId?: UserId } = {}): Promise<
-    LeagueAggregate[]
-  > {
+    raceId,
+  }: {
+    visibility?: LeagueVisibility;
+    memberId?: UserId;
+    raceId?: RaceId;
+  } = {}): Promise<LeagueAggregate[]> {
     const where: FindOptionsWhere<LeagueEntity> = visibility
       ? { visibility }
       : {};
+    if (raceId) {
+      where.race_id_list = Raw((column) => `${column} @> :raceIdList`, {
+        raceIdList: JSON.stringify([raceId]),
+      });
+    }
     if (memberId) {
       const membershipList = await this._memberRepository.find({
         where: { user_id: memberId },

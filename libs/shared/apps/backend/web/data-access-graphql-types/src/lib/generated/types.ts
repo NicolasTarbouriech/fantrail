@@ -132,6 +132,8 @@ export type Mutation = {
   createLeague: League;
   createRace: Race;
   deleteLeague: Scalars['Boolean']['output'];
+  /** Deletes the race with its fields, start lists, predictions, results and scores */
+  deleteRace: Scalars['Boolean']['output'];
   disableUser: AdminUser;
   enableUser: AdminUser;
   /** Joins a public league */
@@ -205,6 +207,11 @@ export type MutationCreateRaceArgs = {
 
 export type MutationDeleteLeagueArgs = {
   leagueId: Scalars['ID']['input'];
+};
+
+
+export type MutationDeleteRaceArgs = {
+  raceId: Scalars['ID']['input'];
 };
 
 

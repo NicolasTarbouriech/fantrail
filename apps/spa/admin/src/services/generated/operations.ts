@@ -171,6 +171,13 @@ export type RaceInfoTabMutateCancelMutationVariables = Types.Exact<{
 
 export type RaceInfoTabMutateCancelMutation = { __typename?: 'Mutation', cancelRace: { __typename?: 'Race', id: string, name: string, location: string, distanceInKm: number, elevationGainInMeters: number, timezone: string, websiteUrl: string | null, liveTrailUrl: string | null, pickCount: number, timeTolerancePercent: number, status: Types.RaceStatus, fields: Array<{ __typename?: 'RaceField', id: string, gender: Types.Gender, startAt: string, lockAt: string, lockedAt: string | null, isLocked: boolean, startList: { __typename?: 'StartList', fieldId: string, runners: Array<{ __typename?: 'Runner', id: string, firstName: string, lastName: string, fullName: string, nationality: string | null, index: number | null, indexSource: Types.IndexSource | null, utmbUrl: string | null, itraUrl: string | null, isWithdrawn: boolean, withdrawnAt: string | null, favoriteRank: number | null }> }, result: { __typename?: 'FieldResult', fieldId: string, version: number, rankingList: Array<string>, winnerTimeInSeconds: number, publishedAt: string | null } | null }> } };
 
+export type RaceInfoTabMutateDeleteMutationVariables = Types.Exact<{
+  raceId: Types.Scalars['ID']['input'];
+}>;
+
+
+export type RaceInfoTabMutateDeleteMutation = { __typename?: 'Mutation', deleteRace: boolean };
+
 export type RacePageRunnerFragment = { __typename?: 'Runner', id: string, firstName: string, lastName: string, fullName: string, nationality: string | null, index: number | null, indexSource: Types.IndexSource | null, utmbUrl: string | null, itraUrl: string | null, isWithdrawn: boolean, withdrawnAt: string | null, favoriteRank: number | null };
 
 export type RacePageRaceFragment = { __typename?: 'Race', id: string, name: string, location: string, distanceInKm: number, elevationGainInMeters: number, timezone: string, websiteUrl: string | null, liveTrailUrl: string | null, pickCount: number, timeTolerancePercent: number, status: Types.RaceStatus, fields: Array<{ __typename?: 'RaceField', id: string, gender: Types.Gender, startAt: string, lockAt: string, lockedAt: string | null, isLocked: boolean, startList: { __typename?: 'StartList', fieldId: string, runners: Array<{ __typename?: 'Runner', id: string, firstName: string, lastName: string, fullName: string, nationality: string | null, index: number | null, indexSource: Types.IndexSource | null, utmbUrl: string | null, itraUrl: string | null, isWithdrawn: boolean, withdrawnAt: string | null, favoriteRank: number | null }> }, result: { __typename?: 'FieldResult', fieldId: string, version: number, rankingList: Array<string>, winnerTimeInSeconds: number, publishedAt: string | null } | null }> };

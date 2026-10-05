@@ -33,3 +33,7 @@ mutation RaceInfoTabMutateCancel($raceId: ID!) {
     ...RacePageRace
   }
 }
+
+mutation RaceInfoTabMutateDelete($raceId: ID!) {
+  deleteRace(raceId: $raceId)
+}

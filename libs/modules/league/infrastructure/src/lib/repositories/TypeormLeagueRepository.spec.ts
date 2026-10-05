@@ -114,6 +114,22 @@ describe('TypeormLeagueRepository', () => {
     expect(await repository.list()).toHaveLength(1);
   });
 
+  it('lists the leagues covering a race', async () => {
+    await repository.list({ raceId: LEAGUE_RACE_ID });
+    expect(leagueRepository.find).toHaveBeenLastCalledWith(
+      expect.objectContaining({
+        where: {
+          race_id_list: expect.objectContaining({
+            _type: 'raw',
+            _objectLiteralParameters: {
+              raceIdList: JSON.stringify([LEAGUE_RACE_ID]),
+            },
+          }),
+        },
+      }),
+    );
+  });
+
   it('creates the league with its owner as first member', async () => {
     await repository.create({
       name: 'Les Chamois',

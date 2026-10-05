@@ -17,17 +17,19 @@ import { getErrorMessage } from '../../services/errors';
 import {
   useRaceInfoTabMutateCancelMutation,
   useRaceInfoTabMutateCreateMutation,
+  useRaceInfoTabMutateDeleteMutation,
   useRaceInfoTabMutateLockMutation,
   useRaceInfoTabMutateMarkScoredMutation,
   useRaceInfoTabMutateOpenMutation,
   useRaceInfoTabMutateUpdateMutation,
 } from '../../services/graphql';
 import { ConfirmDialog } from './ConfirmDialog';
+import { DeleteRaceDialog } from './DeleteRaceDialog';
 import { RaceForm } from './RaceForm';
 import { RaceStatusCard } from './RaceStatusCard';
 import type { AdminRace } from './raceTypes';
 
-type PendingAction = 'lock' | 'cancel' | null;
+type PendingAction = 'lock' | 'cancel' | 'delete' | null;
 
 export function RaceInfoTab({ race }: { race: AdminRace | null }) {
   const navigate = useNavigate();
@@ -40,6 +42,9 @@ export function RaceInfoTab({ race }: { race: AdminRace | null }) {
   const [markScored, markScoredState] =
     useRaceInfoTabMutateMarkScoredMutation();
   const [cancel, cancelState] = useRaceInfoTabMutateCancelMutation();
+  const [deleteRace, deleteState] = useRaceInfoTabMutateDeleteMutation({
+    refetchQueries: ['RacesPage'],
+  });
   const [formError, setFormError] = useState<string | null>(null);
   const [statusError, setStatusError] = useState<string | null>(null);
   const [pending, setPending] = useState<PendingAction>(null);
@@ -123,6 +128,19 @@ export function RaceInfoTab({ race }: { race: AdminRace | null }) {
             </AdminButton>
           </AdminCard>
         ) : null}
+        <AdminCard tone="danger">
+          <AdminCardHeader
+            title="Supprimer la course"
+            description="Efface la course, ses start lists, les pronos, les résultats et les scores. Elle sort des ligues."
+          />
+          <AdminButton
+            variant="destructive"
+            className="justify-center"
+            onClick={() => setPending('delete')}
+          >
+            Supprimer la course…
+          </AdminButton>
+        </AdminCard>
       </div>
       <ConfirmDialog
         open={pending === 'lock'}
@@ -151,6 +169,22 @@ export function RaceInfoTab({ race }: { race: AdminRace | null }) {
         point et la course sort de tous les classements. Cette action est
         définitive.
       </ConfirmDialog>
+      {pending === 'delete' ? (
+        <DeleteRaceDialog
+          open
+          raceName={race.name}
+          status={race.status}
+          isPending={deleteState.loading}
+          error={statusError}
+          onConfirm={() =>
+            run(async () => {
+              await deleteRace({ variables: { raceId } });
+              navigate(paths.races, { replace: true });
+            })
+          }
+          onClose={() => setPending(null)}
+        />
+      ) : null}
     </div>
   );
 }
