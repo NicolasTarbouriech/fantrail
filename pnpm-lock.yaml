@@ -252,6 +252,9 @@ importers:
       babel-jest:
         specifier: ^30.0.2
         version: 30.5.2(@babel/core@7.29.7)
+      esbuild:
+        specifier: 0.28.2
+        version: 0.28.2
       eslint:
         specifier: ^9.8.0
         version: 9.39.5(jiti@2.4.2)

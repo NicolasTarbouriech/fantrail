@@ -1,0 +1,36 @@
+{
+  "name": "cli-start-list",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/cli/start-list/src",
+  "projectType": "application",
+  "tags": ["cli"],
+  "targets": {
+    "build": {
+      "executor": "@nx/esbuild:esbuild",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "platform": "node",
+        "outputPath": "dist/apps/cli/start-list",
+        "format": ["cjs"],
+        "bundle": true,
+        "thirdParty": true,
+        "main": "apps/cli/start-list/src/main.ts",
+        "tsConfig": "apps/cli/start-list/tsconfig.app.json",
+        "generatePackageJson": false,
+        "esbuildOptions": {
+          "sourcemap": false,
+          "outExtension": {
+            ".js": ".js"
+          }
+        }
+      }
+    },
+    "start-list": {
+      "executor": "nx:run-commands",
+      "dependsOn": ["build"],
+      "options": {
+        "command": "node dist/apps/cli/start-list/main.js"
+      }
+    }
+  }
+}
