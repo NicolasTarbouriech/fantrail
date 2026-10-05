@@ -1,4 +1,7 @@
-import { ApolloError } from '@apollo/client';
+import {
+  getErrorCode as readErrorCode,
+  getErrorMessage as readErrorMessage,
+} from '@trail/shared/apps/backend/web/util-react-apollo';
 
 const MESSAGES: Record<string, string> = {
   INVALID_CREDENTIALS: 'Email ou mot de passe incorrect',
@@ -17,17 +20,8 @@ const MESSAGES: Record<string, string> = {
   DUPLICATE_PICK: 'Un coureur ne peut être choisi qu’une fois.',
 };
 
-const FALLBACK = 'Une erreur est survenue, réessaie.';
-
-export function getErrorCode(error: unknown): string | null {
-  if (!(error instanceof ApolloError)) {
-    return null;
-  }
-  const code = error.graphQLErrors[0]?.extensions?.['code'];
-  return typeof code === 'string' ? code : null;
-}
+export const getErrorCode = readErrorCode;
 
 export function getErrorMessage(error: unknown): string {
-  const code = getErrorCode(error);
-  return (code && MESSAGES[code]) || FALLBACK;
+  return readErrorMessage(error, MESSAGES);
 }

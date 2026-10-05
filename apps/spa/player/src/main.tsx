@@ -3,8 +3,9 @@ import { StrictMode } from 'react';
 import * as ReactDOM from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';
 
+import { createApolloClient } from '@trail/shared/apps/backend/web/util-react-apollo';
+
 import { App } from './app/App';
-import { createApolloClient } from './services/apollo';
 
 import './styles.css';
 

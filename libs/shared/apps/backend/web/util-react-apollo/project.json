@@ -1,0 +1,9 @@
+{
+  "name": "shared-apps-backend-web-util-react-apollo",
+  "$schema": "../../../../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/shared/apps/backend/web/util-react-apollo/src",
+  "projectType": "library",
+  "tags": [],
+  "// targets": "to see all targets run: nx show project shared-apps-backend-web-util-react-apollo --web",
+  "targets": {}
+}

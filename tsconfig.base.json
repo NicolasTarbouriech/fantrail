@@ -123,7 +123,13 @@
         "libs/shared/design/ui-react/src/index.ts"
       ],
       "@trail/modules-frontend": ["libs/modules-frontend/src/index.ts"],
-      "@trail/shell/fantrail": ["libs/shell/fantrail/src/index.ts"]
+      "@trail/shell/fantrail": ["libs/shell/fantrail/src/index.ts"],
+      "@trail/shared/design/ui-react-admin": [
+        "libs/shared/design/ui-react-admin/src/index.ts"
+      ],
+      "@trail/shared/apps/backend/web/util-react-apollo": [
+        "libs/shared/apps/backend/web/util-react-apollo/src/index.ts"
+      ]
     },
     "esModuleInterop": true
   },

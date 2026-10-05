@@ -1,0 +1,9 @@
+{
+  "name": "shared-design-ui-react-admin",
+  "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/shared/design/ui-react-admin/src",
+  "projectType": "library",
+  "tags": [],
+  "// targets": "to see all targets run: nx show project shared-design-ui-react-admin --web",
+  "targets": {}
+}
