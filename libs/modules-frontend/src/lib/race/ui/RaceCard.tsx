@@ -41,7 +41,7 @@ export function RaceCard({
   return (
     <article
       className={cx(
-        'overflow-hidden rounded-[18px] border-2',
+        'flex flex-col overflow-hidden rounded-[18px] border-2',
         isCancelled
           ? 'border-muted bg-disabled border-dashed'
           : 'border-ink shadow-block-lg bg-white',
@@ -49,7 +49,7 @@ export function RaceCard({
     >
       <div
         className={cx(
-          'flex items-start justify-between gap-3 px-4 pt-3.5 pb-4',
+          'flex grow items-start justify-between gap-3 px-4 pt-3.5 pb-4',
           tone === 'primary' && 'bg-primary text-white',
           tone === 'ink' && 'bg-ink text-white',
           isCancelled && 'border-muted text-muted border-b-2 border-dashed',
@@ -58,7 +58,8 @@ export function RaceCard({
         <div className="flex flex-col gap-0.5">
           <h2
             className={cx(
-              'font-display m-0 text-[28px] leading-none font-black uppercase',
+              // Two lines reserved so that cards side by side keep the same height.
+              'font-display m-0 min-h-[2em] text-[28px] leading-none font-black uppercase',
               isCancelled && 'line-through',
             )}
           >

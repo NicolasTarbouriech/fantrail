@@ -88,7 +88,7 @@ export function HomePage() {
           <WithdrawnAlert
             items={getWithdrawnItems(races, predictionByFieldId)}
           />
-          <div className="grid items-start gap-[18px] md:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2">
+          <div className="grid gap-[18px] md:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2">
             {races.map((race, index) => (
               <RaceCardContainer
                 key={race.id}
