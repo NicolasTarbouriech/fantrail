@@ -1,0 +1,22 @@
+query RacesPage {
+  adminRaces {
+    id
+    name
+    location
+    distanceInKm
+    status
+    timezone
+    fields {
+      id
+      gender
+      startAt
+      startList {
+        fieldId
+        runners {
+          id
+          isWithdrawn
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,55 @@
+fragment RacePageRunner on Runner {
+  id
+  firstName
+  lastName
+  fullName
+  nationality
+  index
+  indexSource
+  utmbUrl
+  itraUrl
+  isWithdrawn
+  withdrawnAt
+  favoriteRank
+}
+
+fragment RacePageRace on Race {
+  id
+  name
+  location
+  distanceInKm
+  elevationGainInMeters
+  timezone
+  websiteUrl
+  liveTrailUrl
+  pickCount
+  timeTolerancePercent
+  status
+  fields {
+    id
+    gender
+    startAt
+    lockAt
+    lockedAt
+    isLocked
+    startList {
+      fieldId
+      runners {
+        ...RacePageRunner
+      }
+    }
+    result {
+      fieldId
+      version
+      rankingList
+      winnerTimeInSeconds
+      publishedAt
+    }
+  }
+}
+
+query RacePage($raceId: ID!) {
+  race(raceId: $raceId) {
+    ...RacePageRace
+  }
+}

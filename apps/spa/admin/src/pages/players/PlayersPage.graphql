@@ -1,0 +1,24 @@
+query PlayersPage {
+  adminUsers {
+    id
+    email
+    pseudo
+    role
+    disabledAt
+    createdAt
+  }
+}
+
+mutation PlayersPageMutateDisable($userId: ID!) {
+  disableUser(userId: $userId) {
+    id
+    disabledAt
+  }
+}
+
+mutation PlayersPageMutateEnable($userId: ID!) {
+  enableUser(userId: $userId) {
+    id
+    disabledAt
+  }
+}

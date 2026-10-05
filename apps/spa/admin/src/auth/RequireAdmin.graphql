@@ -1,0 +1,12 @@
+query RequireAdmin {
+  me {
+    id
+    email
+    pseudo
+    role
+  }
+}
+
+mutation RequireAdminMutateLogout {
+  logout
+}

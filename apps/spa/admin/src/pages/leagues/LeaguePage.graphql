@@ -1,0 +1,42 @@
+query LeaguePage($leagueId: ID!) {
+  league(leagueId: $leagueId) {
+    id
+    name
+    visibility
+    memberCount
+    ownerId
+    inviteCode
+    createdAt
+    members {
+      id
+      pseudo
+    }
+    leaderboard {
+      rank
+      userId
+      total
+    }
+  }
+}
+
+mutation LeaguePageMutateRename($leagueId: ID!, $name: String!) {
+  renameLeague(leagueId: $leagueId, name: $name) {
+    id
+    name
+  }
+}
+
+mutation LeaguePageMutateRemoveMember($leagueId: ID!, $userId: ID!) {
+  removeLeagueMember(leagueId: $leagueId, userId: $userId) {
+    id
+    memberCount
+    members {
+      id
+      pseudo
+    }
+  }
+}
+
+mutation LeaguePageMutateDelete($leagueId: ID!) {
+  deleteLeague(leagueId: $leagueId)
+}

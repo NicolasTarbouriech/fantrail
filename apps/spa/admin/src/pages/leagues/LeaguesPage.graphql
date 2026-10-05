@@ -1,0 +1,14 @@
+query LeaguesPage {
+  adminLeagues {
+    id
+    name
+    visibility
+    memberCount
+    ownerId
+    createdAt
+    members {
+      id
+      pseudo
+    }
+  }
+}

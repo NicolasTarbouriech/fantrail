@@ -1,0 +1,17 @@
+mutation ResultsTabMutatePublish(
+  $fieldId: ID!
+  $rankingList: [ID!]!
+  $winnerTimeInSeconds: Int!
+) {
+  publishFieldResult(
+    fieldId: $fieldId
+    rankingList: $rankingList
+    winnerTimeInSeconds: $winnerTimeInSeconds
+  ) {
+    fieldId
+    version
+    rankingList
+    winnerTimeInSeconds
+    publishedAt
+  }
+}

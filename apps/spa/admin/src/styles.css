@@ -1,0 +1,20 @@
+@import 'tailwindcss';
+@import '../../../../libs/shared/design/ui-react/src/lib/theme.css';
+
+@source '../../../../libs/shared/design/ui-react/src';
+@source '../../../../libs/shared/design/ui-react-admin/src';
+@source '../../../../libs/modules-frontend/src';
+
+@layer base {
+  body {
+    margin: 0;
+    background: #ffffff;
+    color: #09090b;
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  a {
+    color: inherit;
+  }
+}

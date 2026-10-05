@@ -1,0 +1,35 @@
+mutation RaceInfoTabMutateCreate($data: RaceInput!) {
+  createRace(data: $data) {
+    ...RacePageRace
+  }
+}
+
+mutation RaceInfoTabMutateUpdate($raceId: ID!, $data: RaceInput!) {
+  updateRace(raceId: $raceId, data: $data) {
+    ...RacePageRace
+  }
+}
+
+mutation RaceInfoTabMutateOpen($raceId: ID!) {
+  openRace(raceId: $raceId) {
+    ...RacePageRace
+  }
+}
+
+mutation RaceInfoTabMutateLock($raceId: ID!) {
+  lockRace(raceId: $raceId) {
+    ...RacePageRace
+  }
+}
+
+mutation RaceInfoTabMutateMarkScored($raceId: ID!) {
+  markRaceScored(raceId: $raceId) {
+    ...RacePageRace
+  }
+}
+
+mutation RaceInfoTabMutateCancel($raceId: ID!) {
+  cancelRace(raceId: $raceId) {
+    ...RacePageRace
+  }
+}

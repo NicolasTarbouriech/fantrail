@@ -1,0 +1,57 @@
+mutation FieldsTabMutateAddField($raceId: ID!, $data: RaceFieldInput!) {
+  addRaceField(raceId: $raceId, data: $data) {
+    ...RacePageRace
+  }
+}
+
+mutation FieldsTabMutateUpdateField($fieldId: ID!, $data: RaceFieldInput!) {
+  updateRaceField(fieldId: $fieldId, data: $data) {
+    ...RacePageRace
+  }
+}
+
+mutation FieldsTabMutateLockField($fieldId: ID!) {
+  lockRaceField(fieldId: $fieldId) {
+    ...RacePageRace
+  }
+}
+
+mutation FieldsTabMutateAddRunners($fieldId: ID!, $dataList: [RunnerInput!]!) {
+  addRunners(fieldId: $fieldId, dataList: $dataList) {
+    fieldId
+    runners {
+      ...RacePageRunner
+    }
+  }
+}
+
+mutation FieldsTabMutateUpdateRunner(
+  $fieldId: ID!
+  $runnerId: ID!
+  $data: RunnerInput!
+) {
+  updateRunner(fieldId: $fieldId, runnerId: $runnerId, data: $data) {
+    fieldId
+    runners {
+      ...RacePageRunner
+    }
+  }
+}
+
+mutation FieldsTabMutateWithdrawRunner($fieldId: ID!, $runnerId: ID!) {
+  withdrawRunner(fieldId: $fieldId, runnerId: $runnerId) {
+    fieldId
+    runners {
+      ...RacePageRunner
+    }
+  }
+}
+
+mutation FieldsTabMutateReinstateRunner($fieldId: ID!, $runnerId: ID!) {
+  reinstateRunner(fieldId: $fieldId, runnerId: $runnerId) {
+    fieldId
+    runners {
+      ...RacePageRunner
+    }
+  }
+}
