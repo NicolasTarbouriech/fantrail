@@ -51,3 +51,9 @@ Pour nommer un admin : s'inscrire sur le site joueur, puis
 ```sql
 UPDATE users SET role = 'admin' WHERE email = '<email>';
 ```
+
+## Déployer
+
+Un `git push` sur `main` suffit : Render rebuild l'API et joue les migrations au démarrage, Vercel rebuild les deux SPA. Une autre branche poussée donne une preview Vercel, sans toucher la prod. En cas de souci : Render → Events → Rollback, Vercel → Deployments → Promote sur le déploiement précédent.
+
+Une migration risquée (index, `NOT NULL`, gros `UPDATE`) se joue à la main sur Neon avant le push, voir `.claude/CLAUDE.md`.
