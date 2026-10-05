@@ -131,7 +131,7 @@
       "y": 0
     },
     "LigueReglages.dc.html": {
-      "h": 1480,
+      "h": 1760,
       "is_interactive": true,
       "title": "Ligue — réglages du propriétaire",
       "w": 390,
@@ -227,7 +227,7 @@
       "y": 4860
     },
     "CreerLigue.dc.html": {
-      "h": 900,
+      "h": 1180,
       "is_interactive": true,
       "title": "Créer une ligue",
       "w": 390,

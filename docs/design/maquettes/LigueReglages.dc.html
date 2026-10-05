@@ -15,7 +15,7 @@ body{margin:0}
 a{color:#2B3BFF}a:hover{color:#1A26B8}
 </style>
 </helmet>
-<div style="width: 390px; height: 1480px; box-sizing: border-box; display: flex; flex-direction: column; background: #F4F5FF; color: #0E1330; font-family: 'Outfit', sans-serif">
+<div style="width: 390px; height: 1760px; box-sizing: border-box; display: flex; flex-direction: column; background: #F4F5FF; color: #0E1330; font-family: 'Outfit', sans-serif">
 <div style="padding: 20px 20px 22px; display: flex; flex-direction: column; gap: 14px; background: #2B3BFF; color: #FFFFFF">
 <div style="display: flex; align-items: center; gap: 12px">
 <a href="Ligue.dc.html" aria-label="Retour à la ligue" style="width: 44px; height: 44px; flex-shrink: 0; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid #0E1330; border-radius: 999px; background: #FFFFFF; color: #0E1330">
@@ -34,6 +34,27 @@ a{color:#2B3BFF}a:hover{color:#1A26B8}
 </div>
 <span style="font-size: 12px; color: #4A5070">3 à 40 caractères, unique.</span>
 </form>
+<fieldset style="margin: 0; padding: 14px; display: flex; flex-direction: column; gap: 10px; border: 2px solid #0E1330; border-radius: 14px; background: #FFFFFF">
+<legend style="float: left; width: 100%; margin-bottom: 10px; padding: 0; font-family: 'Big Shoulders Display', sans-serif; font-size: 20px; font-weight: 900; letter-spacing: 0.02em">COURSES DE LA LIGUE</legend>
+<label style="display: flex; align-items: center; gap: 12px; padding: 14px; border: 2px solid #0E1330; border-radius: 14px; background: #EEF0FF; box-shadow: 0 3px 0 #0E1330; cursor: pointer">
+<input type="checkbox" name="league-races" checked style="position: absolute; width: 1px; height: 1px; opacity: 0">
+<span aria-hidden="true" style="width: 24px; height: 24px; flex-shrink: 0; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid #0E1330; border-radius: 6px; background: #2B3BFF; color: #FFFFFF"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5 9-10"></path></svg></span>
+<span style="display: flex; flex-direction: column; gap: 2px">
+<span style="font-family: 'Big Shoulders Display', sans-serif; font-size: 22px; line-height: 1; font-weight: 900">DIAGONALE DES FOUS</span>
+<span style="font-size: 13px; color: #4A5070">jeu. 15 oct.</span>
+</span>
+</label>
+<label style="display: flex; align-items: center; gap: 12px; padding: 14px; border: 2px solid #D5D8EB; border-radius: 14px; background: #FFFFFF; cursor: pointer">
+<input type="checkbox" name="league-races" style="position: absolute; width: 1px; height: 1px; opacity: 0">
+<span aria-hidden="true" style="width: 24px; height: 24px; flex-shrink: 0; box-sizing: border-box; border: 2px solid #0E1330; border-radius: 6px; background: #FFFFFF"></span>
+<span style="display: flex; flex-direction: column; gap: 2px">
+<span style="font-family: 'Big Shoulders Display', sans-serif; font-size: 22px; line-height: 1; font-weight: 900">GRAND TRAIL DES TEMPLIERS</span>
+<span style="font-size: 13px; color: #4A5070">dim. 18 oct.</span>
+</span>
+</label>
+<button type="button" style="height: 48px; border: 2px solid #0E1330; border-radius: 12px; background: #2B3BFF; color: #FFFFFF; font-family: inherit; font-size: 14px; font-weight: 700; cursor: pointer">Enregistrer les courses</button>
+<span style="font-size: 12px; color: #4A5070">Le classement est recalculé sur les courses cochées. Garde au moins une course.</span>
+</fieldset>
 <fieldset style="margin: 0; padding: 14px; display: flex; flex-direction: column; gap: 10px; border: 2px solid #0E1330; border-radius: 14px; background: #FFFFFF">
 <legend style="float: left; width: 100%; margin-bottom: 10px; padding: 0; font-family: 'Big Shoulders Display', sans-serif; font-size: 20px; font-weight: 900; letter-spacing: 0.02em">VISIBILITÉ</legend>
 <label style="display: flex; align-items: flex-start; gap: 12px; padding: 12px; border: 2px solid #0E1330; border-radius: 12px; background: #EEF0FF; cursor: pointer">
@@ -90,7 +111,7 @@ Générer un nouveau code</button>
 </div>
 </div>
 </x-dc>
-<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":1480}}'>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":1760}}'>
 class Component extends DCLogic {
 renderVals() {
 const members = [

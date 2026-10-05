@@ -15,7 +15,7 @@ body{margin:0}
 a{color:#2B3BFF}a:hover{color:#1A26B8}
 </style>
 </helmet>
-<div style="width: 390px; height: 900px; box-sizing: border-box; display: flex; flex-direction: column; background: #F4F5FF; color: #0E1330; font-family: 'Outfit', sans-serif">
+<div style="width: 390px; height: 1180px; box-sizing: border-box; display: flex; flex-direction: column; background: #F4F5FF; color: #0E1330; font-family: 'Outfit', sans-serif">
 <div style="flex-grow: 1; box-sizing: border-box; padding: 16px 20px 24px; display: flex; flex-direction: column; gap: 18px">
 <div style="display: flex; align-items: center; justify-content: space-between; height: 44px">
 <span style="font-family: 'Big Shoulders Display', sans-serif; font-size: 30px; font-weight: 900; letter-spacing: 0.04em; color: #2B3BFF">FANTRAIL</span>
@@ -50,9 +50,28 @@ a{color:#2B3BFF}a:hover{color:#1A26B8}
 </span>
 </label>
 </fieldset>
+<fieldset style="margin: 0; padding: 0; border: 0; display: flex; flex-direction: column; gap: 10px">
+<legend style="margin-bottom: 10px; padding: 0; font-size: 14px; font-weight: 700">Quelles courses compte-t-elle ?</legend>
+<label style="display: flex; align-items: center; gap: 12px; padding: 14px; border: 2px solid #0E1330; border-radius: 14px; background: #EEF0FF; box-shadow: 0 3px 0 #0E1330; cursor: pointer">
+<input type="checkbox" name="races" checked style="position: absolute; width: 1px; height: 1px; opacity: 0">
+<span aria-hidden="true" style="width: 24px; height: 24px; flex-shrink: 0; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid #0E1330; border-radius: 6px; background: #2B3BFF; color: #FFFFFF"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5 9-10"></path></svg></span>
+<span style="display: flex; flex-direction: column; gap: 2px">
+<span style="font-family: 'Big Shoulders Display', sans-serif; font-size: 22px; line-height: 1; font-weight: 900">DIAGONALE DES FOUS</span>
+<span style="font-size: 13px; color: #4A5070">jeu. 15 oct. · ouverte aux pronos</span>
+</span>
+</label>
+<label style="display: flex; align-items: center; gap: 12px; padding: 14px; border: 2px solid #0E1330; border-radius: 14px; background: #EEF0FF; box-shadow: 0 3px 0 #0E1330; cursor: pointer">
+<input type="checkbox" name="races" checked style="position: absolute; width: 1px; height: 1px; opacity: 0">
+<span aria-hidden="true" style="width: 24px; height: 24px; flex-shrink: 0; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid #0E1330; border-radius: 6px; background: #2B3BFF; color: #FFFFFF"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5 9-10"></path></svg></span>
+<span style="display: flex; flex-direction: column; gap: 2px">
+<span style="font-family: 'Big Shoulders Display', sans-serif; font-size: 22px; line-height: 1; font-weight: 900">GRAND TRAIL DES TEMPLIERS</span>
+<span style="font-size: 13px; color: #4A5070">dim. 18 oct. · ouverte aux pronos</span>
+</span>
+</label>
+</fieldset>
 <div style="display: flex; gap: 10px; padding: 12px 14px; border: 2px solid #0E1330; border-radius: 14px; background: #FFFFFF">
 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#2B3BFF" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex-shrink: 0"><circle cx="12" cy="12" r="9"></circle><path d="M12 11v5"></path><path d="M12 8h.01"></path></svg>
-<span style="font-size: 13px; line-height: 1.4">Ta ligue couvre toutes les courses ouvertes. Tu en es le propriétaire : tu pourras la renommer, changer sa visibilité et retirer des membres.</span>
+<span style="font-size: 13px; line-height: 1.4">Le classement de ta ligue additionne les courses cochées, ouvertes aux pronos par défaut. Tu en es le propriétaire : tu pourras changer ses courses, la renommer, changer sa visibilité et retirer des membres.</span>
 </div>
 <a href="Ligue.dc.html" style="height: 56px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid #0E1330; border-radius: 16px; background: #FFD60A; color: #0E1330; box-shadow: 0 4px 0 #0E1330; font-family: 'Big Shoulders Display', sans-serif; font-size: 24px; font-weight: 900; letter-spacing: 0.03em; text-decoration: none">CRÉER LA LIGUE</a>
 </form>
@@ -73,7 +92,7 @@ Profil</a>
 </nav>
 </div>
 </x-dc>
-<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":900}}'>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":1180}}'>
 class Component extends DCLogic {
 renderVals() {
 return {};
