@@ -1,4 +1,4 @@
-import { mkdir, readFile, writeFile } from 'node:fs/promises';
+import { appendFile, mkdir, readFile, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join, resolve } from 'node:path';
 
@@ -9,7 +9,9 @@ import {
   buildFromLiveTrail,
 } from './lib/commands';
 import { parseAcceptedMatches } from './lib/csv';
+import { FantrailApi } from './lib/fantrailApi';
 import { HttpClient } from './lib/http';
+import { formatSyncReport, syncStartLists } from './lib/sync';
 
 const USAGE = `Construit les start lists à importer dans l'admin (CSV prenom;nom;nationalite;index;source;utmb;itra).
 
@@ -23,6 +25,11 @@ const USAGE = `Construit les start lists à importer dans l'admin (CSV prenom;no
       --top all garde toutes les correspondances certaines et envoie les autres inscrits dans <préfixe>-a-verifier.csv.
       --accept lit les correspondances validées à la main (dossard;utmb;…), prises avant la recherche automatique.
       ex. grandraid --type GRR --top all --name diagonale --accept apps/cli/start-list/review/diagonale-acceptes.csv
+
+  sync --api <url graphql> [--dry-run]
+      Met les start lists des courses ouvertes à jour depuis leur page de course LiveTrail :
+      index, nouveaux inscrits ; les absents sont seulement signalés. Clé admin dans FANTRAIL_ADMIN_API_KEY.
+      ex. sync --api https://fantrail-api.onrender.com/graphql --dry-run
 
 Options communes : --cache <dossier> (réponses gardées sur disque), --delay <ms> (pause entre requêtes, 250 par défaut).`;
 
@@ -51,6 +58,10 @@ async function main(): Promise<void> {
   const { command, flags } = parseArgs(process.argv.slice(2));
   if (!command || flags.has('help')) {
     console.log(USAGE);
+    return;
+  }
+  if (command === 'sync') {
+    await runSync(flags);
     return;
   }
   const outDir = resolve(flags.get('out') ?? 'apps/cli/start-list/output');
@@ -106,6 +117,45 @@ async function main(): Promise<void> {
   console.log(
     `${client.requestCount} requêtes envoyées (le reste venait du cache).`,
   );
+}
+
+async function runSync(flags: Map<string, string>): Promise<void> {
+  const apiKey = process.env['FANTRAIL_ADMIN_API_KEY'];
+  if (!apiKey) {
+    throw new Error('FANTRAIL_ADMIN_API_KEY est obligatoire');
+  }
+  const log = (message: string) => console.log(message);
+  const api = new FantrailApi({
+    url: requireFlag(flags, 'api'),
+    apiKey,
+    fetchImpl: (url, init) =>
+      fetch(url, { ...init, signal: AbortSignal.timeout(120_000) }),
+    sleep,
+    log,
+  });
+  // Every night reads fresh lists: no disk cache here.
+  const client = new HttpClient({
+    fetchImpl: (url, init) => fetch(url, init),
+    cacheDir: null,
+    delayInMs: intFlag(flags, 'delay', 500),
+    retries: 2,
+    sleep,
+    now: () => Date.now(),
+    log,
+  });
+  const report = await syncStartLists(api, client, {
+    dryRun: flags.has('dry-run'),
+    log,
+  });
+  const markdown = formatSyncReport(report);
+  console.log(`\n${markdown}`);
+  const summaryPath = process.env['GITHUB_STEP_SUMMARY'];
+  if (summaryPath) {
+    await appendFile(summaryPath, markdown, 'utf8');
+  }
+  if (report.fields.some(({ errors }) => errors.length > 0)) {
+    process.exitCode = 1;
+  }
 }
 
 main().catch((error: unknown) => {

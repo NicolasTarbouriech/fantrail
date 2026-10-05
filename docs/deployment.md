@@ -57,3 +57,9 @@ UPDATE users SET role = 'admin' WHERE email = '<email>';
 Un `git push` sur `main` suffit : Render rebuild l'API et joue les migrations au démarrage, Vercel rebuild les deux SPA. Une autre branche poussée donne une preview Vercel, sans toucher la prod. En cas de souci : Render → Events → Rollback, Vercel → Deployments → Promote sur le déploiement précédent.
 
 Une migration risquée (index, `NOT NULL`, gros `UPDATE`) se joue à la main sur Neon avant le push, voir `.claude/CLAUDE.md`.
+
+## Synchro nocturne des start lists
+
+`.github/workflows/sync-start-lists.yml` lance chaque nuit à 3 h `cli-start-list sync` contre l'API de prod. Pour chaque course ouverte dont la page LiveTrail pointe sur une course (`…/fr/2026/races/<code>`), et chaque champ non verrouillé : index mis à jour, nouveaux inscrits ajoutés, absents seulement signalés. Un écart de plus de 10 % (ou 20 coureurs) n'écrit rien. Le rapport est dans le résumé du job GitHub.
+
+Secret du dépôt à créer : `FANTRAIL_ADMIN_API_KEY`, la valeur de `ADMIN_API_KEY` dans Render. Lancé à la main (Actions → Run workflow), le job est une simulation par défaut.
