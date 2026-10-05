@@ -10,6 +10,7 @@ export function mapRaceEntity(race: RaceAggregate): DeepPartial<RaceEntity> {
   return {
     id: race.id,
     name: race.data.name,
+    start_date: race.data.startDate,
     location: race.data.location,
     distance_in_km: race.data.distanceInKm,
     elevation_gain_in_meters: race.data.elevationGainInMeters,

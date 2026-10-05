@@ -2,14 +2,13 @@ query RacesPage {
   adminRaces {
     id
     name
+    startDate
     location
     distanceInKm
     status
-    timezone
     fields {
       id
       gender
-      startAt
       startList {
         fieldId
         activeRunnerCount

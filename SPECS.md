@@ -187,7 +187,7 @@ Code court (8 caractères, alphanumérique sans ambiguïté O/0, I/1), régéné
 
 Ce que fait l'admin, par ordre d'importance pour le POC :
 
-1. **Courses** : créer, éditer (nom, lieu, distance, D+, date, site, URL LiveTrail), fixer le nombre de picks, passer le statut : `Draft` → `Open` → `Locked` → `Scored`, ou `Cancelled`, et supprimer une course quel que soit son statut.
+1. **Courses** : créer, éditer (nom sans l'année, date de départ qui distingue les éditions, lieu, distance, D+, site, URL LiveTrail), fixer le nombre de picks, passer le statut : `Draft` → `Open` → `Locked` → `Scored`, ou `Cancelled`, et supprimer une course quel que soit son statut.
 2. **Champs et coureurs** : pour chaque champ, saisir la liste des élites : prénom, nom, nationalité, index, source de l'index, liens ITRA / UTMB. Import CSV pour aller vite. Ajout et retrait possibles jusqu'au verrouillage. Un coureur retiré reste dans les picks qui le contiennent, marqué « retiré », et y rapporte 0 point, comme un abandon. Le pronostic reste complet. Le joueur voit l'alerte sur l'accueil et sur son pronostic et peut le remplacer jusqu'au verrouillage.
 3. **Verrouillage** : heure de verrouillage par champ, et bouton de verrouillage manuel immédiat en cas de départ avancé ou retardé.
 4. **Résultats** : saisir positions 1 à 10 et temps du vainqueur ; publier ; corriger et republier.

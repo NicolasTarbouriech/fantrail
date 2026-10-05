@@ -7,7 +7,6 @@ export interface RaceListFilters {
 }
 
 export abstract class RaceRepository {
-  /** Races by first start, see `RaceAggregate.compareByStart`. */
   abstract list(filters?: RaceListFilters): Promise<RaceAggregate[]>;
   abstract getById(id: RaceId): Promise<RaceAggregate>;
   abstract getByFieldId(fieldId: FieldId): Promise<RaceAggregate>;

@@ -46,6 +46,9 @@ enum Gender {
 type Race {
   id: ID!
   name: String!
+
+  """Local day of the start, YYYY-MM-DD"""
+  startDate: String!
   location: String!
   distanceInKm: Float!
   elevationGainInMeters: Int!
@@ -309,6 +312,9 @@ type Mutation {
 
 input RaceInput {
   name: String!
+
+  """Local day of the start, YYYY-MM-DD, tells editions apart"""
+  startDate: String!
   location: String!
   distanceInKm: Float!
   elevationGainInMeters: Int!

@@ -12,7 +12,8 @@ export const buildRunnerId = (n: number): string =>
 
 export function buildRaceData(overrides: Partial<RaceData> = {}): RaceData {
   return {
-    name: 'Diagonale des Fous 2026',
+    name: 'Diagonale des Fous',
+    startDate: '2026-10-15',
     location: 'Saint-Pierre, La Réunion',
     distanceInKm: 175,
     elevationGainInMeters: 10150,

@@ -31,6 +31,7 @@ export function mapRaceAggregate(entity: RaceEntity): RaceAggregate {
     entity.id,
     {
       name: entity.name,
+      startDate: entity.start_date,
       location: entity.location,
       distanceInKm: entity.distance_in_km,
       elevationGainInMeters: entity.elevation_gain_in_meters,

@@ -16,6 +16,7 @@ fragment RacePageRunner on Runner {
 fragment RacePageRace on Race {
   id
   name
+  startDate
   location
   distanceInKm
   elevationGainInMeters

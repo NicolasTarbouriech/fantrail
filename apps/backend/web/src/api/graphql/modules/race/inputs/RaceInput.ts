@@ -5,6 +5,11 @@ export class RaceInput {
   @Field(() => String)
   name: string;
 
+  @Field(() => String, {
+    description: 'Local day of the start, YYYY-MM-DD, tells editions apart',
+  })
+  startDate: string;
+
   @Field(() => String)
   location: string;
 

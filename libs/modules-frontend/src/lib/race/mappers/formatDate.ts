@@ -19,6 +19,17 @@ export function formatDay(iso: string, timeZone?: string): string {
   return formatParts(new Date(iso), timeZone).day;
 }
 
+/** A race start date, YYYY-MM-DD, with its year. */
+export function formatRaceDate(startDate: string): string {
+  return new Intl.DateTimeFormat(LOCALE, {
+    weekday: 'short',
+    day: 'numeric',
+    month: 'short',
+    year: 'numeric',
+    timeZone: 'UTC',
+  }).format(new Date(`${startDate}T00:00:00Z`));
+}
+
 export function formatDayTime(iso: string, timeZone?: string): string {
   const { day, time } = formatParts(new Date(iso), timeZone);
   return `${day} · ${time}`;

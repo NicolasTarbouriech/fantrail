@@ -23,6 +23,7 @@ export const RacePageRaceFragmentDoc = gql`
     fragment RacePageRace on Race {
   id
   name
+  startDate
   location
   distanceInKm
   elevationGainInMeters
@@ -1013,14 +1014,13 @@ export const RacesPageDocument = gql`
   adminRaces {
     id
     name
+    startDate
     location
     distanceInKm
     status
-    timezone
     fields {
       id
       gender
-      startAt
       startList {
         fieldId
         activeRunnerCount

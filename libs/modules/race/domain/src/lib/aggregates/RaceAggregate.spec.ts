@@ -20,7 +20,6 @@ import {
   buildRaceAggregate,
   buildRaceData,
 } from '../testing';
-import { RaceAggregate } from './RaceAggregate';
 
 describe('RaceAggregate', () => {
   const beforeLock = new Date('2026-10-14T10:00:00Z');
@@ -35,6 +34,15 @@ describe('RaceAggregate', () => {
       ).toThrow(ZodError);
     });
 
+    it.each(['2026-02-30', '15/10/2026', '2026-10-15T22:00:00Z'])(
+      'rejects the start date %s',
+      (startDate) => {
+        expect(() =>
+          buildRaceAggregate().update(buildRaceData({ startDate })),
+        ).toThrow(ZodError);
+      },
+    );
+
     it.each([3, 5])('accepts %i picks', (pickCount) => {
       expect(() =>
         buildRaceAggregate().update(
@@ -47,39 +55,14 @@ describe('RaceAggregate', () => {
   it('exposes its data', () => {
     const race = buildRaceAggregate();
     expect(race).toMatchObject({
-      name: 'Diagonale des Fous 2026',
+      name: 'Diagonale des Fous',
+      startDate: '2026-10-15',
       timezone: 'Indian/Reunion',
       pickCount: 5,
       timeTolerancePercent: 3,
       status: RaceStatus.Draft,
     });
     expect(race.data.distanceInKm).toBe(175);
-  });
-
-  it('starts with its first field and sorts by start', () => {
-    const later = buildRaceAggregate({
-      id: 'later',
-      fieldList: [
-        buildField({ data: { startAt: new Date('2026-10-18T03:10:00Z') } }),
-        buildField({
-          id: WOMEN_FIELD_ID,
-          data: {
-            gender: Gender.Women,
-            startAt: new Date('2026-10-17T03:10:00Z'),
-            lockAt: new Date('2026-10-17T03:10:00Z'),
-          },
-        }),
-      ],
-    });
-    const earlier = buildRaceAggregate({ id: 'earlier' });
-    const withoutField = buildRaceAggregate({ id: 'empty', fieldList: [] });
-    expect(later.startAt).toEqual(new Date('2026-10-17T03:10:00Z'));
-    expect(withoutField.startAt).toBeNull();
-    expect(
-      [withoutField, later, earlier]
-        .sort(RaceAggregate.compareByStart)
-        .map(({ id }) => id),
-    ).toEqual(['earlier', 'later', 'empty']);
   });
 
   describe('update', () => {

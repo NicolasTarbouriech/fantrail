@@ -6,6 +6,7 @@ import { RunnerInput } from './RunnerInput';
 export function mapRaceData(input: RaceInput): RaceData {
   return {
     name: input.name,
+    startDate: input.startDate,
     location: input.location,
     distanceInKm: input.distanceInKm,
     elevationGainInMeters: input.elevationGainInMeters,

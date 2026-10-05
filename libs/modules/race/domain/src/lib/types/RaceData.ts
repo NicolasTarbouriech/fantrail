@@ -12,6 +12,8 @@ const isTimezone = (timezone: string): boolean => {
 };
 
 export const RaceName = z.string().trim().min(3).max(100);
+/** Local day of the start, YYYY-MM-DD: tells the editions of a race apart. */
+export const RaceStartDate = z.string().date();
 export const RaceTimezone = z
   .string()
   .refine(isTimezone, 'Unknown IANA timezone');
@@ -24,6 +26,7 @@ export const TimeTolerancePercent = z.number().positive().max(100);
 
 export const RaceData = z.object({
   name: RaceName,
+  startDate: RaceStartDate,
   location: z.string().trim().min(1).max(100),
   distanceInKm: z.number().positive().max(1000),
   elevationGainInMeters: z.number().int().nonnegative().max(50000),

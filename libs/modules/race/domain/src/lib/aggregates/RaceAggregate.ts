@@ -41,6 +41,10 @@ export class RaceAggregate extends AggregateRoot {
     return this._data.name;
   }
 
+  get startDate(): string {
+    return this._data.startDate;
+  }
+
   get timezone(): string {
     return this._data.timezone;
   }
@@ -59,20 +63,6 @@ export class RaceAggregate extends AggregateRoot {
 
   get fieldList(): RaceField[] {
     return this._fieldList;
-  }
-
-  get startAt(): Date | null {
-    return this._fieldList.reduce<Date | null>(
-      (earliest, field) =>
-        earliest && earliest <= field.startAt ? earliest : field.startAt,
-      null,
-    );
-  }
-
-  /** By first start, races without a field last. */
-  static compareByStart(a: RaceAggregate, b: RaceAggregate): number {
-    const never = Number.MAX_SAFE_INTEGER;
-    return (a.startAt?.getTime() ?? never) - (b.startAt?.getTime() ?? never);
   }
 
   findField(fieldId: FieldId): RaceField {

@@ -34,11 +34,9 @@ export class TypeormRaceRepository extends RaceRepository {
     const entityList = await this._raceRepository.find({
       where: statusList ? { status: In(statusList) } : {},
       relations: RELATIONS,
-      order: { created_at: 'ASC' },
+      order: { start_date: 'ASC', created_at: 'ASC' },
     });
-    return entityList
-      .map((entity) => this._mapEntity(entity))
-      .sort(RaceAggregate.compareByStart);
+    return entityList.map((entity) => this._mapEntity(entity));
   }
 
   getById(id: RaceId): Promise<RaceAggregate> {

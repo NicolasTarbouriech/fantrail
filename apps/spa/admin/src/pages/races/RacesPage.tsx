@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 
-import { formatDay } from '@trail/modules-frontend';
+import { formatRaceDate } from '@trail/modules-frontend';
 import { PlusIcon, Spinner } from '@trail/shared/design/ui-react';
 import {
   AdminNotice,
@@ -56,9 +56,6 @@ export function RacesPage() {
               </tr>
             ) : null}
             {data.adminRaces.map((race) => {
-              const firstStart = race.fields
-                .map((field) => field.startAt)
-                .sort()[0];
               const runnerCount = race.fields.reduce(
                 (sum, field) => sum + field.startList.activeRunnerCount,
                 0,
@@ -77,7 +74,7 @@ export function RacesPage() {
                     </Link>
                   </AdminTd>
                   <AdminTd className="whitespace-nowrap">
-                    {firstStart ? formatDay(firstStart, race.timezone) : '—'}
+                    {formatRaceDate(race.startDate)}
                   </AdminTd>
                   <AdminTd>
                     <RaceStatusBadge status={race.status} />

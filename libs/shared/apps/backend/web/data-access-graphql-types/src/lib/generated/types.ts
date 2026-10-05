@@ -435,6 +435,8 @@ export type Race = {
   location: Scalars['String']['output'];
   name: Scalars['String']['output'];
   pickCount: Scalars['Int']['output'];
+  /** Local day of the start, YYYY-MM-DD */
+  startDate: Scalars['String']['output'];
   status: RaceStatus;
   timeTolerancePercent: Scalars['Float']['output'];
   /** IANA timezone of the race, e.g. Indian/Reunion */
@@ -469,6 +471,8 @@ export type RaceInput = {
   name: Scalars['String']['input'];
   /** 3 or 5 */
   pickCount: Scalars['Int']['input'];
+  /** Local day of the start, YYYY-MM-DD, tells editions apart */
+  startDate: Scalars['String']['input'];
   timeTolerancePercent: Scalars['Float']['input'];
   /** IANA timezone of the race, e.g. Europe/Paris */
   timezone: Scalars['String']['input'];

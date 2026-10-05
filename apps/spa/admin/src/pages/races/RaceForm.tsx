@@ -19,6 +19,7 @@ import type { AdminRace } from './raceTypes';
 
 type RaceFormValues = {
   name: string;
+  startDate: string;
   location: string;
   timezone: string;
   distanceInKm: string;
@@ -32,6 +33,7 @@ type RaceFormValues = {
 function toValues(race: AdminRace | null): RaceFormValues {
   return {
     name: race?.name ?? '',
+    startDate: race?.startDate ?? '',
     location: race?.location ?? '',
     timezone: race?.timezone ?? 'Europe/Paris',
     distanceInKm: race ? String(race.distanceInKm) : '',
@@ -50,6 +52,9 @@ function toInput(values: RaceFormValues): RaceInput | string {
   if (!values.name.trim() || !values.location.trim()) {
     return 'Le nom et le lieu sont obligatoires.';
   }
+  if (!values.startDate) {
+    return 'La date de départ est obligatoire.';
+  }
   if (!(distance > 0) || !Number.isInteger(elevation) || elevation < 0) {
     return 'Distance et dénivelé doivent être des nombres positifs.';
   }
@@ -58,6 +63,7 @@ function toInput(values: RaceFormValues): RaceInput | string {
   }
   return {
     name: values.name.trim(),
+    startDate: values.startDate,
     location: values.location.trim(),
     timezone: values.timezone,
     distanceInKm: distance,
@@ -115,12 +121,29 @@ export function RaceForm({
           disabled={!isEditable}
           className="m-0 grid gap-4 border-0 p-0 sm:grid-cols-2"
         >
-          <AdminField id="race-name" label="Nom" className="sm:col-span-2">
+          <AdminField
+            id="race-name"
+            label="Nom"
+            hint="Sans l’année : la date de départ distingue les éditions."
+          >
             <AdminInput
               id="race-name"
               value={values.name}
               onChange={(event) => set('name', event.target.value)}
-              placeholder="Grand Trail des Templiers 2026"
+              placeholder="Grand Trail des Templiers"
+            />
+          </AdminField>
+          <AdminField
+            id="race-start-date"
+            label="Date de départ"
+            hint="Jour du départ, sur place."
+          >
+            <AdminInput
+              id="race-start-date"
+              type="date"
+              value={values.startDate}
+              onChange={(event) => set('startDate', event.target.value)}
+              className="tabular-nums"
             />
           </AdminField>
           <AdminField id="race-location" label="Lieu">

@@ -19,6 +19,11 @@ export class RaceType {
     return this.aggregate.name;
   }
 
+  @Field(() => String, { description: 'Local day of the start, YYYY-MM-DD' })
+  get startDate(): string {
+    return this.aggregate.startDate;
+  }
+
   @Field(() => String)
   get location(): string {
     return this.aggregate.data.location;

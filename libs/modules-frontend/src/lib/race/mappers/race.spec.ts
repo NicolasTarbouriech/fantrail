@@ -8,6 +8,7 @@ import {
   formatCountdown,
   formatDay,
   formatDayTime,
+  formatRaceDate,
   formatStartTime,
   getFieldLabel,
   getFieldShortLabel,
@@ -39,6 +40,10 @@ describe('formatDate', () => {
   it('formats a day and a time in a timezone', () => {
     expect(formatDay(start, 'Europe/Paris')).toBe('jeu. 15 oct.');
     expect(formatDayTime(start, 'Europe/Paris')).toBe('jeu. 15 oct. · 20:00');
+  });
+
+  it('formats a race start date with its year, whatever the timezone', () => {
+    expect(formatRaceDate('2026-10-15')).toBe('jeu. 15 oct. 2026');
   });
 
   it('adds the race local time when it differs', () => {

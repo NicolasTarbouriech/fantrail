@@ -18,6 +18,9 @@ export class RaceEntity {
   @Column({ type: 'character varying', length: 100 })
   name!: string;
 
+  @Column({ type: 'date' })
+  start_date!: string;
+
   @Column({ type: 'character varying', length: 100 })
   location!: string;
 
