@@ -10,3 +10,6 @@ export * from './RaceNotFoundError';
 export * from './RaceStatusTransitionError';
 export * from './RaceWithoutFieldError';
 export * from './RunnerNotFoundError';
+export * from './TrailEventLogoInvalidError';
+export * from './TrailEventNameAlreadyUsedError';
+export * from './TrailEventNotFoundError';

@@ -19,6 +19,7 @@ export function mapRaceEntity(race: RaceAggregate): DeepPartial<RaceEntity> {
     live_trail_url: race.data.liveTrailUrl,
     pick_count: race.data.pickCount,
     time_tolerance_percent: race.data.timeTolerancePercent,
+    trail_event_id: race.data.trailEventId,
     status: race.status,
     field_list: race.fieldList.map(
       (field): DeepPartial<RaceFieldEntity> => ({

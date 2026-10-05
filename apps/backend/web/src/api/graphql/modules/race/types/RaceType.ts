@@ -66,6 +66,14 @@ export class RaceType {
     return this.aggregate.timeTolerancePercent;
   }
 
+  @Field(() => ID, {
+    nullable: true,
+    description: 'Festival or raid the race belongs to',
+  })
+  get trailEventId(): string | null {
+    return this.aggregate.data.trailEventId;
+  }
+
   @Field(() => RaceStatusEnumType)
   get status(): RaceStatusEnumType {
     return this.aggregate.status;

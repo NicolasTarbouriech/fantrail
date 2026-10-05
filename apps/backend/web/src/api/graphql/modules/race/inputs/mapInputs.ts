@@ -15,6 +15,7 @@ export function mapRaceData(input: RaceInput): RaceData {
     liveTrailUrl: input.liveTrailUrl ?? null,
     pickCount: PickCount.parse(input.pickCount),
     timeTolerancePercent: input.timeTolerancePercent,
+    trailEventId: input.trailEventId ?? null,
   };
 }
 

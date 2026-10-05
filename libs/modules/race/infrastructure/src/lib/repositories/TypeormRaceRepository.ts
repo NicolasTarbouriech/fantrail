@@ -60,6 +60,7 @@ export class TypeormRaceRepository extends RaceRepository {
     const entity = await this._raceRepository.save(
       this._raceRepository.create({
         name: parsed.name,
+        start_date: parsed.startDate,
         location: parsed.location,
         distance_in_km: parsed.distanceInKm,
         elevation_gain_in_meters: parsed.elevationGainInMeters,
@@ -68,6 +69,7 @@ export class TypeormRaceRepository extends RaceRepository {
         live_trail_url: parsed.liveTrailUrl,
         pick_count: parsed.pickCount,
         time_tolerance_percent: parsed.timeTolerancePercent,
+        trail_event_id: parsed.trailEventId,
         status: RaceStatus.Draft,
         field_list: [],
       }),

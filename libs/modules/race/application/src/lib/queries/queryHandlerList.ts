@@ -3,6 +3,8 @@ import { GetRaceQueryHandler } from './GetRaceQueryHandler';
 import { GetStartListQueryHandler } from './GetStartListQueryHandler';
 import { ListRacesQueryHandler } from './ListRacesQueryHandler';
 import { ListStartListsQueryHandler } from './ListStartListsQueryHandler';
+import { ListTrailEventsByIdListQueryHandler } from './ListTrailEventsByIdListQueryHandler';
+import { ListTrailEventsQueryHandler } from './ListTrailEventsQueryHandler';
 
 export const queryHandlerList = [
   GetRaceByFieldIdQueryHandler,
@@ -10,4 +12,6 @@ export const queryHandlerList = [
   GetStartListQueryHandler,
   ListRacesQueryHandler,
   ListStartListsQueryHandler,
+  ListTrailEventsByIdListQueryHandler,
+  ListTrailEventsQueryHandler,
 ];

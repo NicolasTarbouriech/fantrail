@@ -3,12 +3,15 @@ import {
   CreateDateColumn,
   Entity,
   Index,
+  JoinColumn,
+  ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 
 import { RaceFieldEntity } from './RaceFieldEntity';
+import { TrailEventEntity } from './TrailEventEntity';
 
 @Entity('races')
 export class RaceEntity {
@@ -64,6 +67,17 @@ export class RaceEntity {
   @Index()
   @Column({ type: 'character varying', length: 16 })
   status!: string;
+
+  @Index('IDX_races_trail_event_id')
+  @Column({ type: 'uuid', nullable: true })
+  trail_event_id!: string | null;
+
+  @ManyToOne(() => TrailEventEntity, { onDelete: 'SET NULL' })
+  @JoinColumn({
+    name: 'trail_event_id',
+    foreignKeyConstraintName: 'FK_races_trail_event_id',
+  })
+  trail_event?: TrailEventEntity | null;
 
   @OneToMany(() => RaceFieldEntity, (field) => field.race, { cascade: true })
   field_list!: RaceFieldEntity[];

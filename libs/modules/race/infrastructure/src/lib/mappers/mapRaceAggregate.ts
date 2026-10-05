@@ -40,6 +40,7 @@ export function mapRaceAggregate(entity: RaceEntity): RaceAggregate {
       liveTrailUrl: entity.live_trail_url,
       pickCount: z.union([z.literal(3), z.literal(5)]).parse(entity.pick_count),
       timeTolerancePercent: entity.time_tolerance_percent,
+      trailEventId: entity.trail_event_id,
     },
     z.nativeEnum(RaceStatus).parse(entity.status),
     fieldList.map(mapField),

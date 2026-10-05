@@ -1,4 +1,4 @@
-import { Field, Float, InputType, Int } from '@nestjs/graphql';
+import { Field, Float, ID, InputType, Int } from '@nestjs/graphql';
 
 @InputType()
 export class RaceInput {
@@ -35,4 +35,10 @@ export class RaceInput {
 
   @Field(() => Float)
   timeTolerancePercent: number;
+
+  @Field(() => ID, {
+    nullable: true,
+    description: 'Festival or raid the race belongs to',
+  })
+  trailEventId?: string | null;
 }

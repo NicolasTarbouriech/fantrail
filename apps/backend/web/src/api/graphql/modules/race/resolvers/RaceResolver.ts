@@ -1,5 +1,13 @@
 import { UseGuards } from '@nestjs/common';
-import { Args, ID, Mutation, Query, Resolver } from '@nestjs/graphql';
+import {
+  Args,
+  ID,
+  Mutation,
+  Parent,
+  Query,
+  ResolveField,
+  Resolver,
+} from '@nestjs/graphql';
 
 import {
   AddFieldCommand,
@@ -26,10 +34,12 @@ import {
 
 import { AdminGuard } from '../../../../../services/auth/guards/AdminGuard';
 import { AuthGuard } from '../../../../../services/auth/guards/AuthGuard';
+import { TrailEventDataLoader } from '../../../../../services/dataloader/TrailEventDataLoader';
 import { RaceFieldInput } from '../inputs/RaceFieldInput';
 import { RaceInput } from '../inputs/RaceInput';
 import { mapRaceData } from '../inputs/mapInputs';
 import { RaceType } from '../types/RaceType';
+import { TrailEventType } from '../types/TrailEventType';
 import { RaceStatusEnumType } from '../types/enums';
 
 @Resolver(() => RaceType)
@@ -37,7 +47,19 @@ export class RaceResolver {
   constructor(
     private readonly _commandBus: EnhancedCommandBus,
     private readonly _queryBus: EnhancedQueryBus,
+    private readonly _trailEventDataLoader: TrailEventDataLoader,
   ) {}
+
+  @ResolveField(() => TrailEventType, { nullable: true })
+  async trailEvent(@Parent() race: RaceType): Promise<TrailEventType | null> {
+    if (!race.trailEventId) {
+      return null;
+    }
+    const trailEvent = await this._trailEventDataLoader.loader.load(
+      race.trailEventId,
+    );
+    return new TrailEventType(trailEvent);
+  }
 
   @Query(() => [RaceType], {
     description: 'Races open to predictions, locked, scored or cancelled',

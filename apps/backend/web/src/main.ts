@@ -1,4 +1,5 @@
 import { NestFactory } from '@nestjs/core';
+import { NestExpressApplication } from '@nestjs/platform-express';
 
 import { MonitoringLogger } from '@trail/shared/monitoring/util-logger';
 
@@ -7,7 +8,7 @@ import { configure } from './app';
 import { CORS_ORIGIN_LIST, PORT } from './config/app';
 
 async function bootstrap(): Promise<void> {
-  const app = await NestFactory.create(AppModule, {
+  const app = await NestFactory.create<NestExpressApplication>(AppModule, {
     cors: { origin: CORS_ORIGIN_LIST, credentials: true },
   });
   configure(app);

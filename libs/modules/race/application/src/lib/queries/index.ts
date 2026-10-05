@@ -8,3 +8,7 @@ export * from './ListRacesQuery';
 export * from './ListRacesQueryHandler';
 export * from './ListStartListsQuery';
 export * from './ListStartListsQueryHandler';
+export * from './ListTrailEventsByIdListQuery';
+export * from './ListTrailEventsByIdListQueryHandler';
+export * from './ListTrailEventsQuery';
+export * from './ListTrailEventsQueryHandler';

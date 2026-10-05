@@ -6,4 +6,5 @@ export * from './PredictionEntity';
 export * from './RaceEntity';
 export * from './RaceFieldEntity';
 export * from './RunnerEntity';
+export * from './TrailEventEntity';
 export * from './UserEntity';

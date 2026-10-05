@@ -1,6 +1,7 @@
 import { z } from 'zod';
 
 import { PICK_COUNT_LIST } from '../constants';
+import { TrailEventId } from './ids';
 
 const isTimezone = (timezone: string): boolean => {
   try {
@@ -35,5 +36,6 @@ export const RaceData = z.object({
   liveTrailUrl: z.string().url().nullable(),
   pickCount: PickCount,
   timeTolerancePercent: TimeTolerancePercent,
+  trailEventId: TrailEventId.nullable(),
 });
 export type RaceData = z.infer<typeof RaceData>;

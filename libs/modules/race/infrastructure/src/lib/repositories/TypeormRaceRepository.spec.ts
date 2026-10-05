@@ -5,6 +5,7 @@ import { RaceNotFoundError, RaceStatus } from '@trail/modules/race/domain';
 import {
   MEN_FIELD_ID,
   RACE_ID,
+  TRAIL_EVENT_ID,
   buildRaceAggregate,
   buildRaceData,
 } from '@trail/modules/race/domain-testing';
@@ -79,12 +80,14 @@ describe('TypeormRaceRepository', () => {
     );
   });
 
-  it('creates a draft race', async () => {
-    await repository.create(buildRaceData());
+  it('creates a draft race with its start date and event', async () => {
+    await repository.create(buildRaceData({ trailEventId: TRAIL_EVENT_ID }));
     expect(raceRepository.save).toHaveBeenCalledWith(
       expect.objectContaining({
         status: RaceStatus.Draft,
         name: 'Diagonale des Fous',
+        start_date: '2026-10-15',
+        trail_event_id: TRAIL_EVENT_ID,
         field_list: [],
       }),
     );

@@ -6,3 +6,5 @@ export * from './typeorm/1790791289416-CreateFieldScores';
 export * from './typeorm/1790791670135-CreateLeagues';
 export * from './typeorm/1791230000000-AddLeagueRaces';
 export * from './typeorm/1791240000000-AddRaceStartDate';
+export * from './typeorm/1791250000000-CreateTrailEvents';
+export * from './typeorm/1791250000001-AddRacesTrailEventIndex';

@@ -4,11 +4,15 @@ import {
   RaceAggregate,
   RaceRepository,
   RaceStatus,
+  TrailEventNotFoundError,
+  TrailEventRepository,
 } from '@trail/modules/race/domain';
 import {
   RACE_ID,
+  TRAIL_EVENT_ID,
   buildRaceAggregate,
   buildRaceData,
+  buildTrailEventAggregate,
 } from '@trail/modules/race/domain-testing';
 
 import { UpdateRaceCommand } from './UpdateRaceCommand';
@@ -19,6 +23,7 @@ const NOW = new Date('2026-10-14T10:00:00Z');
 describe('UpdateRaceCommandHandler', () => {
   let race: RaceAggregate;
   let raceRepository: RaceRepository;
+  let trailEventRepository: TrailEventRepository;
   let handler: UpdateRaceCommandHandler;
 
   beforeEach(() => {
@@ -28,7 +33,13 @@ describe('UpdateRaceCommandHandler', () => {
       getById: jest.fn().mockResolvedValue(race),
       save: jest.fn((aggregate) => Promise.resolve(aggregate)),
     } as unknown as RaceRepository;
-    handler = new UpdateRaceCommandHandler(raceRepository);
+    trailEventRepository = {
+      getById: jest.fn().mockResolvedValue(buildTrailEventAggregate()),
+    } as unknown as TrailEventRepository;
+    handler = new UpdateRaceCommandHandler(
+      raceRepository,
+      trailEventRepository,
+    );
   });
 
   afterEach(() => {
@@ -44,6 +55,22 @@ describe('UpdateRaceCommandHandler', () => {
     );
     expect(saved.name).toBe('Diagonale 2026');
     expect(raceRepository.save).toHaveBeenCalledWith(race);
+    expect(trailEventRepository.getById).not.toHaveBeenCalled();
+  });
+
+  it('attaches the race to an existing trail event only', async () => {
+    const data = buildRaceData({ trailEventId: TRAIL_EVENT_ID });
+    const saved = await handler.execute(
+      new UpdateRaceCommand({ raceId: RACE_ID, data }),
+    );
+    expect(saved.data.trailEventId).toBe(TRAIL_EVENT_ID);
+    jest
+      .mocked(trailEventRepository.getById)
+      .mockRejectedValueOnce(new TrailEventNotFoundError());
+    await expect(
+      handler.execute(new UpdateRaceCommand({ raceId: RACE_ID, data })),
+    ).rejects.toThrow(TrailEventNotFoundError);
+    expect(raceRepository.save).toHaveBeenCalledTimes(1);
   });
 
   it('rejects an invalid input', () => {

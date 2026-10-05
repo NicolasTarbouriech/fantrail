@@ -22,6 +22,7 @@ export function buildRaceData(overrides: Partial<RaceData> = {}): RaceData {
     liveTrailUrl: null,
     pickCount: 5,
     timeTolerancePercent: 3,
+    trailEventId: null,
     ...overrides,
   };
 }

@@ -6,6 +6,7 @@ import { GraphQLModule as NestGraphQLModule } from '@nestjs/graphql';
 import { Request, Response } from 'express';
 
 import { GRAPHQL_PLAYGROUND } from '../../config/app';
+import { TrailEventDataLoader } from '../../services/dataloader/TrailEventDataLoader';
 import { UserDataLoader } from '../../services/dataloader/UserDataLoader';
 import { DomainErrorFilter } from './errors/DomainErrorFilter';
 import { GraphQLErrorFilter } from './errors/GraphQLErrorFilter';
@@ -34,6 +35,7 @@ import { resolvers } from './resolvers';
   providers: [
     ...resolvers,
     UserDataLoader,
+    TrailEventDataLoader,
     { provide: APP_FILTER, useClass: DomainErrorFilter },
     { provide: APP_FILTER, useClass: GraphQLErrorFilter },
   ],

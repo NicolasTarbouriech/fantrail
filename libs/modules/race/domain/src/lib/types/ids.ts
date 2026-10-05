@@ -8,3 +8,6 @@ export type FieldId = z.infer<typeof FieldId>;
 
 export const RunnerId = z.string().uuid();
 export type RunnerId = z.infer<typeof RunnerId>;
+
+export const TrailEventId = z.string().uuid();
+export type TrailEventId = z.infer<typeof TrailEventId>;

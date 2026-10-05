@@ -28,6 +28,8 @@ export const datasourceOptions: DataSourceOptions = {
     ? { ssl: { rejectUnauthorized: false } }
     : undefined,
   migrationsRun: DATABASE_RUN_MIGRATIONS,
+  // One transaction per migration, so that an index built CONCURRENTLY can opt out (transaction = false).
+  migrationsTransactionMode: 'each',
   synchronize: false,
   logging: false,
   entities,
