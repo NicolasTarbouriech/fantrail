@@ -1,0 +1,10 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "rewrites": [
+    {
+      "source": "/graphql",
+      "destination": "https://fantrail-api.onrender.com/graphql"
+    },
+    { "source": "/(.*)", "destination": "/index.html" }
+  ]
+}

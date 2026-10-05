@@ -1,0 +1,42 @@
+# API on Render, free plan. The database lives on Neon: fill the DATABASE_* values from its
+# connection string (direct connection, not the pooler) when creating the Blueprint.
+services:
+  - type: web
+    name: fantrail-api
+    runtime: node
+    plan: free
+    region: frankfurt
+    branch: main
+    buildCommand: corepack pnpm install --frozen-lockfile && corepack pnpm nx build backend-web
+    startCommand: __COMMIT=$RENDER_GIT_COMMIT node dist/apps/backend/web/main.js
+    healthCheckPath: /health
+    autoDeploy: true
+    envVars:
+      - key: NODE_VERSION
+        value: 22.20.0
+      - key: COREPACK_ENABLE_DOWNLOAD_PROMPT
+        value: '0'
+      - key: NX_DAEMON
+        value: 'false'
+      - key: NX_NO_CLOUD
+        value: 'true'
+      - key: AUTHENTICATION_SECRET
+        generateValue: true
+      - key: ADMIN_API_KEY
+        generateValue: true
+      - key: COOKIE_SECURE
+        value: 'true'
+      - key: GRAPHQL_PLAYGROUND
+        value: 'false'
+      - key: DATABASE_HOST
+        sync: false
+      - key: DATABASE_PORT
+        value: '5432'
+      - key: DATABASE_USERNAME
+        sync: false
+      - key: DATABASE_PASSWORD
+        sync: false
+      - key: DATABASE_NAME
+        value: neondb
+      - key: DATABASE_SSL_ENABLED
+        value: 'true'
