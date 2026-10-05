@@ -15,6 +15,7 @@ import {
   Button,
   Callout,
   GlobeIcon,
+  Heading,
   Hero,
   LockIcon,
   LogOutIcon,
@@ -27,12 +28,16 @@ import { BackLink, DetailPage } from '@trail/shell/fantrail';
 
 import { paths } from '../../app/paths';
 import { useCurrentPlayer } from '../../auth/CurrentPlayer';
+import { useNow } from '../../hooks/useNow';
 import { getErrorMessage } from '../../services/errors';
 import {
+  useHomePageQuery,
   useLeaguePageMutateJoinMutation,
   useLeaguePageMutateLeaveMutation,
   useLeaguePageQuery,
 } from '../../services/graphql';
+import { RaceCardContainer } from '../home/RaceCardContainer';
+import { getPredictionByFieldId } from '../home/homeRace';
 import { InviteButton } from './InviteButton';
 import { LeaderboardList } from './LeaderboardList';
 import { LeaveLeagueSheet } from './LeaveLeagueSheet';
@@ -45,9 +50,11 @@ export function LeaguePage() {
   const { leagueId = '' } = useParams();
   const [searchParams, setSearchParams] = useSearchParams();
   const raceId = searchParams.get('course');
+  const now = useNow();
   const { data, loading, error } = useLeaguePageQuery({
     variables: { leagueId, raceId },
   });
+  const { data: homeData } = useHomePageQuery();
   const [join, joinState] = useLeaguePageMutateJoinMutation({
     refetchQueries: ['LeaguePage', 'LeaguesPage', 'HomePage'],
   });
@@ -84,6 +91,13 @@ export function LeaguePage() {
     (race) => race.status !== RaceStatus.Cancelled,
   );
   const selectedRace = races.find((race) => race.id === raceId) ?? null;
+  const leagueRaceIds = new Set(races.map((race) => race.id));
+  const myRaceCards = (homeData?.races ?? []).filter((race) =>
+    selectedRace ? race.id === selectedRace.id : leagueRaceIds.has(race.id),
+  );
+  const predictionByFieldId = getPredictionByFieldId(
+    homeData?.myPredictions ?? [],
+  );
 
   const joinLeague = async () => {
     setActionError(null);
@@ -174,7 +188,21 @@ export function LeaguePage() {
             limit={league.isMember ? undefined : 6}
           />
         </div>
-        <div className="flex flex-col gap-3.5 md:gap-5 lg:sticky lg:top-24">
+        <div className="flex flex-col gap-3.5 md:gap-5">
+          {league.isMember && myRaceCards.length > 0 ? (
+            <section className="flex flex-col gap-3">
+              <Heading>{selectedRace ? 'Ton prono' : 'Tes pronos'}</Heading>
+              {myRaceCards.map((race, index) => (
+                <RaceCardContainer
+                  key={race.id}
+                  race={race}
+                  predictionByFieldId={predictionByFieldId}
+                  tone={index % 2 === 0 ? 'primary' : 'ink'}
+                  now={now}
+                />
+              ))}
+            </section>
+          ) : null}
           {league.isMember && selectedRace ? (
             <MemberPicksSection
               leagueId={league.id}
