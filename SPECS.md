@@ -1,6 +1,6 @@
 # Fantrail — Spécifications du POC
 
-Version 0.2 — 30 septembre 2026 (questions de la section 11 tranchées)
+Version 0.3 — 5 octobre 2026 (écrans de la section 9 alignés sur les maquettes, décisions 10 à 15)
 Cible : Festival des Templiers (Millau, 15–18 octobre 2026) et Grand Raid de La Réunion / Diagonale des Fous (15–18 octobre 2026).
 
 ---
@@ -157,6 +157,7 @@ Les bonus se cumulent (un top 3 exact donne aussi le top 3 désordre et le vainq
 - Mot de passe : 8 caractères minimum, avec au moins une lettre, un chiffre et un caractère spécial.
 - Deux rôles : `Player` et `Admin`. Le rôle admin est attribué en base, pas d'auto-inscription.
 - Suppression de compte : hors POC.
+- Un compte désactivé par l'admin ne peut plus se connecter. Il sort du classement Communauté mais reste dans ses ligues, avec ses points.
 
 ## 6. Ligues
 
@@ -215,21 +216,41 @@ Après le POC : import automatique depuis les pages UTMB, avec revalidation manu
 
 ## 9. Parcours et écrans
 
+Les maquettes de référence sont dans `docs/design/maquettes/` (copie du canevas de design).
+
 ### Joueur
 
-1. **Inscription / connexion**.
-2. **Accueil** : courses ouvertes avec compte à rebours avant verrouillage, état de mes picks (vide, incomplet, complet, verrouillé), mes ligues.
-3. **Pronostic d'un champ** : liste des élites avec index et rang de favori, sélection ordonnée de 5 coureurs, saisie du temps, sauvegarde, indicateur « pronostic complet ».
-4. **Mes picks** : récapitulatif par course, avec le score détaillé une fois la course notée.
-5. **Ligues** : créer (nom, visibilité), rejoindre (liste publique ou code), page de ligue avec classement par course et cumulé, membres, lien d'invitation.
-6. **Classement d'une course** : score de chaque membre, picks des membres visibles après verrouillage.
-7. **Scorecard** : pour chaque pick, position réelle, points de position, multiplicateur, bonus, points de temps.
+Navigation par une barre d'onglets en bas : Accueil, Ligues, Mes scores, Profil. Mobile d'abord, 390 px.
+
+1. **Inscription / connexion**. Le lien `/join/<code>` montre la ligue avant l'inscription, puis la rejoint une fois le compte créé. Cette page n'est pas indexée.
+2. **Accueil** : alerte groupée des coureurs retirés de mes picks, cartes des courses, mes ligues avec mon rang. Une carte de course a cinq états :
+   - ouverte, prono à faire ou incomplet (`3/5`), avec le compte à rebours avant verrouillage ;
+   - ouverte, pronos complets ;
+   - verrouillée, course en cours : champs « verrouillé » ou « incomplet · 0 pt », accès aux pronos de mes ligues ;
+   - notée : score de la course, score par champ vers la scorecard, rang dans mes ligues ;
+   - annulée : carte grisée, les pronos ne rapportent aucun point.
+3. **Pronostic d'un champ** : onglets hommes / femmes avec l'état de chaque champ, top 5 sous forme de dossards. Toucher une place ouvre le **choix d'un coureur** (panneau du bas, recherche, tri par index ou par nom, multiplicateur affiché pour chaque coureur, coureurs déjà choisis grisés). Les places se réordonnent par glisser-déposer. Saisie du chrono du vainqueur, puis « Valider mon prono ». Une fois enregistré et complet, le bouton passe à « Prono enregistré » et redevient actif au premier changement. Un coureur retiré s'affiche barré, « retiré · 0 pt », avec « Changer ».
+4. **Pronostic verrouillé** : même écran en lecture seule, sans poignées de déplacement, avec un accès aux pronos de mes ligues. La scorecard remplace cet écran une fois le résultat publié.
+5. **Ligues** : créer (nom, privée ou publique), rejoindre par code, liste des ligues publiques avec « Rejoindre ». La Communauté apparaît comme une ligue.
+6. **Ligue** : classement cumulé et par course, bouton d'invitation avec le code. Après le verrouillage d'un champ, l'onglet de la course montre le top 5 et le chrono de chaque membre, sans points tant que le résultat n'est pas publié. Un membre peut quitter la ligue, après confirmation.
+7. **Ligue publique vue par un non-membre** : classement visible, bouton « Rejoindre la ligue ». Ni code d'invitation ni pronos des membres.
+8. **Réglages d'une ligue** (propriétaire) : renommer, changer la visibilité, générer un nouveau code (l'ancien ne marche plus), retirer un membre, supprimer la ligue. Les actions destructives demandent une confirmation.
+9. **Mes scores** : score par course et par champ, vers la scorecard.
+10. **Scorecard** : pour chaque pick, position réelle, points de position, multiplicateur ; puis points de temps et bonus.
+11. **Profil** : pseudo, email, page « Comment on marque des points », déconnexion. Pas de statistiques.
 
 ### Admin
 
-8. Liste des courses, formulaire de course, formulaire de champ avec import CSV des coureurs.
-9. Saisie des résultats d'un champ et bouton « Publier ».
-10. Liste des ligues et des comptes avec actions de modération.
+Back-office séparé, menu latéral Courses, Ligues, Joueurs.
+
+12. **Courses** : liste avec statut, nombre de champs et de coureurs, menu d'actions par course.
+13. **Course, onglet Infos** : nom, lieu, fuseau horaire, distance, D+, site officiel, page LiveTrail, nombre de picks (modifiable tant que la course est en brouillon), tolérance du chrono. Une carte Statut montre l'étape courante et l'action suivante : « Ouvrir aux pronos » (chaque champ doit avoir au moins autant de coureurs actifs que de picks), « Verrouiller toute la course », « Marquer notée » (une fois les résultats des deux champs publiés). « Annuler la course » est à part, irréversible.
+14. **Course, onglet Champs et start lists** : par champ, heure de départ et heure de verrouillage (heure locale de la course), bouton « Verrouiller maintenant ». Start list triée par rang de favori : nationalité, index, source, liens UTMB et ITRA, coureurs retirés barrés avec « Réintégrer », coureurs sans index signalés.
+15. **Fiche coureur** (panneau latéral) : ajout ou modification, et « Retirer de la start list ».
+16. **Import CSV** d'une start list : voir la décision 13.
+17. **Course, onglet Résultats** : saisie du top 10 et du temps du vainqueur, publication. Une fois publié : la version en ligne, les positions changées par rapport à la version précédente, l'historique des versions et « Corriger ».
+18. **Ligues** et **détail d'une ligue** : renommer, supprimer, retirer un membre.
+19. **Joueurs** et **détail d'un joueur** : désactiver ou réactiver le compte, pronos en lecture seule, ligues.
 
 ## 10. Hors périmètre du POC
 
@@ -244,19 +265,25 @@ Après le POC : import automatique depuis les pages UTMB, avec revalidation manu
 
 ## 11. Décisions
 
-Questions tranchées le 30 septembre 2026.
+Questions tranchées le 30 septembre 2026 (1 à 9) et le 5 octobre 2026 (10 à 15).
 
-| #   | Question                        | Décision                                                                                                                                              |
-| --- | ------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 1   | Top 3 ou top 5                  | Top 5 pour le POC, nombre de picks paramétrable par course.                                                                                           |
-| 2   | Multiplicateur outsider         | Palier de 0.1 par rang, plafond ×2.0. À rejouer sur les résultats 2025 des deux courses avant l'ouverture.                                            |
-| 3   | Tolérance de temps              | 3 % du temps du vainqueur.                                                                                                                            |
-| 4   | Temps estimé                    | Un seul par champ : le temps du vainqueur. Un temps par pick viendra peut-être après le POC.                                                          |
-| 5   | Ligue publique                  | Rejoignable en un clic, sans validation du propriétaire.                                                                                              |
-| 6   | Résultats                       | Top 10 saisi par l'admin. Un pick hors top 10 s'affiche « hors top 10 ».                                                                              |
-| 7   | Fuseau                          | Heure locale du joueur, heure locale de la course en rappel.                                                                                          |
-| 8   | Coureur retiré de la start list | Le pick est conservé et rapporte 0 point, comme un abandon. Le joueur est averti dans l'interface et peut remplacer le coureur jusqu'au verrouillage. |
-| 9   | Saisie des abandons             | Supprimée : un coureur hors du top 10 marque 0 dans tous les cas, la saisie n'apporterait qu'un libellé.                                              |
+| #   | Question                        | Décision                                                                                                                                                                     |
+| --- | ------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 1   | Top 3 ou top 5                  | Top 5 pour le POC, nombre de picks paramétrable par course.                                                                                                                  |
+| 2   | Multiplicateur outsider         | Palier de 0.1 par rang, plafond ×2.0. À rejouer sur les résultats 2025 des deux courses avant l'ouverture.                                                                   |
+| 3   | Tolérance de temps              | 3 % du temps du vainqueur.                                                                                                                                                   |
+| 4   | Temps estimé                    | Un seul par champ : le temps du vainqueur. Un temps par pick viendra peut-être après le POC.                                                                                 |
+| 5   | Ligue publique                  | Rejoignable en un clic, sans validation du propriétaire.                                                                                                                     |
+| 6   | Résultats                       | Top 10 saisi par l'admin. Un pick hors top 10 s'affiche « hors top 10 ».                                                                                                     |
+| 7   | Fuseau                          | Heure locale du joueur, heure locale de la course en rappel.                                                                                                                 |
+| 8   | Coureur retiré de la start list | Le pick est conservé et rapporte 0 point, comme un abandon. Le joueur est averti dans l'interface et peut remplacer le coureur jusqu'au verrouillage.                        |
+| 9   | Saisie des abandons             | Supprimée : un coureur hors du top 10 marque 0 dans tous les cas, la saisie n'apporterait qu'un libellé.                                                                     |
+| 10  | Compte désactivé                | Il sort du classement Communauté et reste dans ses ligues avec ses points.                                                                                                   |
+| 11  | Profil                          | Pas de statistiques (pronos faits, meilleur rang) dans le POC.                                                                                                               |
+| 12  | Course annulée                  | Reste visible des joueurs sur l'accueil, grisée. Ses pronos ne rapportent aucun point et elle sort de tous les classements.                                                  |
+| 13  | Import CSV                      | Colonnes `prenom;nom;nationalite;index;source;utmb;itra`, séparateur `;` ou `,`, analysé dans le navigateur. Lignes en erreur non importées, coureurs déjà présents ignorés. |
+| 14  | Pronos des membres              | Révélés au verrouillage de chaque champ, aux membres de la ligue seulement.                                                                                                  |
+| 15  | Historique des résultats        | Chaque publication crée une version datée. L'admin voit les versions et ce qui a changé ; les joueurs ne voient que la dernière.                                             |
 
 Sur le point 8 : vider le pick aurait rendu le pronostic incomplet, et un pronostic incomplet ne marque aucun point (§ 4.1). Un joueur qui ne se reconnecte pas avant le départ aurait perdu tout son pronostic pour un seul forfait. Conserver le pick limite la perte à ce pick.
 
