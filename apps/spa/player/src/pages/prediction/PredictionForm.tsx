@@ -9,6 +9,7 @@ import {
   getFieldLabel,
   getMissingPickHint,
   isSamePickList,
+  maskClockTime,
   movePick,
   parseWinnerTime,
   setPick,
@@ -189,7 +190,9 @@ export function PredictionForm({
           placeholder="hh:mm"
           autoComplete="off"
           value={timeInput}
-          onChange={(event) => setTimeInput(event.target.value)}
+          onChange={(event) =>
+            setTimeInput(maskClockTime(event.target.value, 2))
+          }
           aria-invalid={timeError || undefined}
           className={inputClasses('chrono')}
         />

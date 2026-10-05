@@ -14,6 +14,20 @@ export function parseClockTime(value: string): number | null {
   return total > 0 ? total : null;
 }
 
+/**
+ * Keeps the digits and places the colons from the right: the iOS numeric
+ * keypad has no ":" key, so "2345" must read "23:45".
+ */
+export function maskClockTime(value: string, partCount: 2 | 3): string {
+  let rest = value.replace(/\D/g, '').slice(0, 1 + partCount * 2);
+  const tail: string[] = [];
+  while (tail.length < partCount - 1 && rest.length > 2) {
+    tail.unshift(rest.slice(-2));
+    rest = rest.slice(0, -2);
+  }
+  return [rest, ...tail].join(':');
+}
+
 export function formatClockTime(totalSeconds: number): string {
   const hours = Math.floor(totalSeconds / 3600);
   const minutes = Math.floor((totalSeconds % 3600) / 60);

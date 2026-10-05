@@ -9,6 +9,7 @@ import {
   getRaceNextStep,
   getRaceStatusLabel,
   isRaceEditable,
+  maskClockTime,
   parseClockTime,
   parseStartListCsv,
   toRaceLocalInput,
@@ -50,6 +51,20 @@ describe('clockTime', () => {
     ['vingt', null],
   ])('parses %s', (value, expected) => {
     expect(parseClockTime(value)).toBe(expected);
+  });
+
+  it.each([
+    ['2', 2, '2'],
+    ['234', 2, '2:34'],
+    ['23h45', 2, '23:45'],
+    ['234567', 2, '234:56'],
+    ['2332', 3, '23:32'],
+    ['23320', 3, '2:33:20'],
+    ['23:32:00', 3, '23:32:00'],
+    ['10032001', 3, '100:32:00'],
+    ['', 3, ''],
+  ] as const)('masks %s in %s parts', (value, partCount, expected) => {
+    expect(maskClockTime(value, partCount)).toBe(expected);
   });
 
   it('formats seconds', () => {

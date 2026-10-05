@@ -1,6 +1,10 @@
 import { useState } from 'react';
 
-import { formatClockTime, parseClockTime } from '@trail/modules-frontend';
+import {
+  formatClockTime,
+  maskClockTime,
+  parseClockTime,
+} from '@trail/modules-frontend';
 import {
   AdminButton,
   AdminCard,
@@ -162,7 +166,9 @@ export function ResultForm({
               inputMode="numeric"
               placeholder="23:32:00"
               value={timeInput}
-              onChange={(event) => setTimeInput(event.target.value)}
+              onChange={(event) =>
+                setTimeInput(maskClockTime(event.target.value, 3))
+              }
               className="tabular-nums"
             />
           </AdminField>
