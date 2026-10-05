@@ -222,7 +222,7 @@ type AdminUser {
 }
 
 type Query {
-  """Races open to predictions, locked or scored"""
+  """Races open to predictions, locked, scored or cancelled"""
   races: [Race!]!
   race(raceId: ID!): Race!
   adminRaces(statusList: [RaceStatus!]): [Race!]!
@@ -250,6 +250,9 @@ type Mutation {
   updateRace(raceId: ID!, data: RaceInput!): Race!
   openRace(raceId: ID!): Race!
   lockRace(raceId: ID!): Race!
+
+  """Closes a locked race once its fields have their result"""
+  markRaceScored(raceId: ID!): Race!
   cancelRace(raceId: ID!): Race!
   addRaceField(raceId: ID!, data: RaceFieldInput!): Race!
   updateRaceField(fieldId: ID!, data: RaceFieldInput!): Race!

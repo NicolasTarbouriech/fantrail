@@ -9,12 +9,13 @@ import {
   ListRacesQuery,
   LockFieldCommand,
   LockRaceCommand,
+  MarkRaceScoredCommand,
   OpenRaceCommand,
   UpdateFieldCommand,
   UpdateRaceCommand,
 } from '@trail/modules/race/application';
 import {
-  PUBLIC_RACE_STATUS_LIST,
+  PLAYER_RACE_STATUS_LIST,
   RaceStatus,
 } from '@trail/modules/race/domain';
 import {
@@ -38,11 +39,11 @@ export class RaceResolver {
   ) {}
 
   @Query(() => [RaceType], {
-    description: 'Races open to predictions, locked or scored',
+    description: 'Races open to predictions, locked, scored or cancelled',
   })
   async races(): Promise<RaceType[]> {
     const raceList = await this._queryBus.execute(
-      new ListRacesQuery({ statusList: PUBLIC_RACE_STATUS_LIST }),
+      new ListRacesQuery({ statusList: PLAYER_RACE_STATUS_LIST }),
     );
     return raceList.map((race) => new RaceType(race));
   }
@@ -110,6 +111,18 @@ export class RaceResolver {
   ): Promise<RaceType> {
     return new RaceType(
       await this._commandBus.execute(new LockRaceCommand({ raceId })),
+    );
+  }
+
+  @Mutation(() => RaceType, {
+    description: 'Closes a locked race once its fields have their result',
+  })
+  @UseGuards(AuthGuard, AdminGuard)
+  async markRaceScored(
+    @Args('raceId', { type: () => ID }) raceId: string,
+  ): Promise<RaceType> {
+    return new RaceType(
+      await this._commandBus.execute(new MarkRaceScoredCommand({ raceId })),
     );
   }
 

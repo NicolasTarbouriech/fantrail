@@ -10,6 +10,8 @@ export * from './LockFieldCommand';
 export * from './LockFieldCommandHandler';
 export * from './LockRaceCommand';
 export * from './LockRaceCommandHandler';
+export * from './MarkRaceScoredCommand';
+export * from './MarkRaceScoredCommandHandler';
 export * from './OpenRaceCommand';
 export * from './OpenRaceCommandHandler';
 export * from './ReinstateRunnerCommand';

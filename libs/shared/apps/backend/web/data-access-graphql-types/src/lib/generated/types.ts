@@ -139,6 +139,8 @@ export type Mutation = {
   lockRaceField: Race;
   login: Me;
   logout: Scalars['Boolean']['output'];
+  /** Closes a locked race once its fields have their result */
+  markRaceScored: Race;
   openRace: Race;
   /** Publishes or corrects the result, then rescores the field */
   publishFieldResult: FieldResult;
@@ -233,6 +235,11 @@ export type MutationLockRaceFieldArgs = {
 export type MutationLoginArgs = {
   email: Scalars['String']['input'];
   password: Scalars['String']['input'];
+};
+
+
+export type MutationMarkRaceScoredArgs = {
+  raceId: Scalars['ID']['input'];
 };
 
 
@@ -361,7 +368,7 @@ export type Query = {
   myScorecard?: Maybe<Scorecard>;
   publicLeagues: Array<League>;
   race: Race;
-  /** Races open to predictions, locked or scored */
+  /** Races open to predictions, locked, scored or cancelled */
   races: Array<Race>;
 };
 

@@ -4,6 +4,7 @@ import { CancelRaceCommandHandler } from './CancelRaceCommandHandler';
 import { CreateRaceCommandHandler } from './CreateRaceCommandHandler';
 import { LockFieldCommandHandler } from './LockFieldCommandHandler';
 import { LockRaceCommandHandler } from './LockRaceCommandHandler';
+import { MarkRaceScoredCommandHandler } from './MarkRaceScoredCommandHandler';
 import { OpenRaceCommandHandler } from './OpenRaceCommandHandler';
 import { ReinstateRunnerCommandHandler } from './ReinstateRunnerCommandHandler';
 import { UpdateFieldCommandHandler } from './UpdateFieldCommandHandler';
@@ -18,6 +19,7 @@ export const commandHandlerList = [
   CreateRaceCommandHandler,
   LockFieldCommandHandler,
   LockRaceCommandHandler,
+  MarkRaceScoredCommandHandler,
   OpenRaceCommandHandler,
   ReinstateRunnerCommandHandler,
   UpdateFieldCommandHandler,
