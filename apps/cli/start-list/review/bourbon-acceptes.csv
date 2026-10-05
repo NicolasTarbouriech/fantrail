@@ -1,0 +1,20 @@
+dossard;utmb;nom
+# Trail de Bourbon 2026 (TDB), relecture de bourbon-a-verifier.csv, même règle que la Diagonale :
+# même nom exact, un seul profil UTMB indexé portant ce nom (vérifié sur 100 résultats de recherche), sexe cohérent.
+# Écartés :
+# 5295 Leclerc Baptiste : deux profils français indexés (696, 390) et une liste en Suisse, rien ne les départage.
+# Dossards au même nom qui prendraient le même profil (Payet Fabrice, Marot Vincent, Lebon Eric, Lebon Mathieu,
+# Poulain Thomas, La Hausse de Lalouvière Philippe) : au plus un des deux est ce coureur, rien ne dit lequel.
+5748;https://utmb.world/runner/7043094.simon.carrieremoindrot;Carriere Moindrot Simon
+6056;https://utmb.world/runner/8671920.bastien.demoffarts;de Moffarts Bastien
+6178;https://utmb.world/runner/1946401.jeanpascal.gross;Gross Jean-Pascal
+5402;https://utmb.world/runner/5371444.mariusdaniel.ilie;Ilie Marius-Daniel
+5752;https://utmb.world/runner/8744976.romain.mougel;Mougel Romain
+5084;https://utmb.world/runner/5666917.olivier.mutrelle;MUTRELLE OLIVIER
+5351;https://utmb.world/runner/7197996.andreas.nauroth;Nauroth Andreas
+5666;https://utmb.world/runner/5758224.adrien.proumen;Proumen Adrien
+5639;https://utmb.world/runner/641722.dorian.rodot;Rodot Dorian
+5707;https://utmb.world/runner/8671834.louise.thibaut;Thibaut Louise
+5985;https://utmb.world/runner/7288636.bryan.tiste;Tiste Bryan
+6285;https://utmb.world/runner/6652852.cynthia.trinocque;Trinocque Cynthia
+5110;https://utmb.world/runner/7889908.sofien.zayed;Zayed Sofien
