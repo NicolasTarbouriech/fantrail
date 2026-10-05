@@ -1,9 +1,4 @@
-import {
-  findMyStanding,
-  formatPoints,
-  formatRank,
-  getInitial,
-} from '@trail/modules-frontend';
+import { formatPoints, getInitial } from '@trail/modules-frontend';
 import { Callout, Card, Heading, Spinner } from '@trail/shared/design/ui-react';
 import { TabPage } from '@trail/shell/fantrail';
 
@@ -12,24 +7,18 @@ import { useCurrentPlayer } from '../../auth/CurrentPlayer';
 import { useNow } from '../../hooks/useNow';
 import { useHomePageQuery, useScoresPageQuery } from '../../services/graphql';
 import { RaceCardContainer } from '../home/RaceCardContainer';
+import { getPredictionByFieldId, selectMyRaces } from '../home/homeRace';
 
 export function ScoresPage() {
   const player = useCurrentPlayer();
   const now = useNow();
   const { data: homeData, loading } = useHomePageQuery();
   const { data } = useScoresPageQuery();
-  const standing = data
-    ? findMyStanding(data.communityLeaderboard, player.id)
-    : null;
-  const total =
-    data?.communityLeaderboard.find((entry) => entry.userId === player.id)
-      ?.total ?? 0;
-  const predictionByFieldId = new Map(
-    (homeData?.myPredictions ?? []).map((prediction) => [
-      prediction.fieldId,
-      prediction,
-    ]),
+  const total = data?.myTotalPoints ?? 0;
+  const predictionByFieldId = getPredictionByFieldId(
+    homeData?.myPredictions ?? [],
   );
+  const races = selectMyRaces(homeData?.races ?? [], predictionByFieldId);
 
   return (
     <TabPage initial={getInitial(player.pseudo)} paths={tabPaths}>
@@ -48,21 +37,16 @@ export function ScoresPage() {
         </Card>
         <Card variant="block" className="flex flex-col p-3.5">
           <span className="text-muted text-xs font-bold tracking-wide uppercase">
-            Communauté
+            Courses
           </span>
           <span className="font-display text-[40px] leading-none font-black">
-            {standing ? formatRank(standing.rank) : '—'}
-            {standing ? (
-              <span className="text-muted ml-1 font-sans text-sm font-semibold">
-                / {standing.playerCount}
-              </span>
-            ) : null}
+            {races.length}
           </span>
         </Card>
       </div>
       {loading && !homeData ? <Spinner /> : null}
-      <div className="grid items-start gap-[18px] md:grid-cols-2 md:gap-6">
-        {(homeData?.races ?? []).map((race, index) => (
+      <div className="grid gap-[18px] md:grid-cols-2 md:gap-6">
+        {races.map((race, index) => (
           <RaceCardContainer
             key={race.id}
             race={race}

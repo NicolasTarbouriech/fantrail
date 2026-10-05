@@ -143,14 +143,12 @@ export function LeaguesPage() {
                 to={paths.league(league.id)}
               />
             ))}
-            <LeagueRow
-              name="Communauté"
-              badge="TOUS"
-              badgeTone="ink"
-              details="tous les joueurs"
-              standing={findMyStanding(data.communityLeaderboard, player.id)}
-              to={paths.community}
-            />
+            {data.myLeagues.length === 0 ? (
+              <span className="text-muted text-sm">
+                Aucune ligue pour l’instant. Le classement de tous les joueurs
+                est sur chaque course.
+              </span>
+            ) : null}
           </section>
         ) : null}
         {publicLeagues.length > 0 ? (

@@ -3,6 +3,8 @@ export * from './lib/queries/GetCommunityLeaderboardQuery';
 export * from './lib/queries/GetCommunityLeaderboardQueryHandler';
 export * from './lib/queries/GetLeagueLeaderboardQuery';
 export * from './lib/queries/GetLeagueLeaderboardQueryHandler';
+export * from './lib/queries/GetPlayerTotalPointsQuery';
+export * from './lib/queries/GetPlayerTotalPointsQueryHandler';
 export * from './lib/queries/ListLeaderboardFieldIdsQuery';
 export * from './lib/queries/ListLeaderboardFieldIdsQueryHandler';
 export * from './lib/queries/ListLeagueFieldPredictionsQuery';

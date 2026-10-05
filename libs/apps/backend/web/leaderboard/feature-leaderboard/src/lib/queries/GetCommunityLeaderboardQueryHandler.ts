@@ -1,5 +1,6 @@
 import { QueryHandler } from '@nestjs/cqrs';
 
+import { ListPredictionsByFieldQuery } from '@trail/modules/prediction/application';
 import { GetLeaderboardQuery } from '@trail/modules/scoring/application';
 import { LeaderboardEntry } from '@trail/modules/scoring/domain';
 import { ListUsersQuery } from '@trail/modules/user/application';
@@ -24,11 +25,19 @@ export class GetCommunityLeaderboardQueryHandler implements IEnhancedQueryHandle
       ),
       this._queryBus.execute(new ListUsersQuery()),
     ]);
+    const predictionListByField = await Promise.all(
+      fieldIdList.map((fieldId) =>
+        this._queryBus.execute(new ListPredictionsByFieldQuery({ fieldId })),
+      ),
+    );
+    const participantIdSet = new Set(
+      predictionListByField.flat().map(({ userId }) => userId),
+    );
     return this._queryBus.execute(
       new GetLeaderboardQuery({
         fieldIdList,
         userIdList: userList
-          .filter((user) => !user.isDisabled)
+          .filter((user) => !user.isDisabled && participantIdSet.has(user.id))
           .map(({ id }) => id),
       }),
     );

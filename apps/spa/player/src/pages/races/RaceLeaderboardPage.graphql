@@ -1,0 +1,23 @@
+query RaceLeaderboardPage($raceId: ID!) {
+  race(raceId: $raceId) {
+    id
+    name
+    fields {
+      id
+      result {
+        fieldId
+        version
+      }
+    }
+  }
+  communityLeaderboard(raceId: $raceId) {
+    rank
+    userId
+    total
+    scoredFieldCount
+    player {
+      id
+      pseudo
+    }
+  }
+}

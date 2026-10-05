@@ -1,7 +1,10 @@
 import { UseGuards } from '@nestjs/common';
-import { Args, ID, Query, Resolver } from '@nestjs/graphql';
+import { Args, Float, ID, Query, Resolver } from '@nestjs/graphql';
 
-import { GetCommunityLeaderboardQuery } from '@trail/apps/backend/web/leaderboard/feature-leaderboard';
+import {
+  GetCommunityLeaderboardQuery,
+  GetPlayerTotalPointsQuery,
+} from '@trail/apps/backend/web/leaderboard/feature-leaderboard';
 import { GetPlayerFieldScoreQuery } from '@trail/modules/scoring/application';
 import { UserAggregate } from '@trail/modules/user/domain';
 import { EnhancedQueryBus } from '@trail/shared/cqrs/util-nestjs';
@@ -16,16 +19,24 @@ export class ScoringResolver {
   constructor(private readonly _queryBus: EnhancedQueryBus) {}
 
   @Query(() => [LeaderboardEntryType], {
-    description: 'Every player, on one race or on all public races',
+    description: 'Every player with a prediction on the race',
   })
   @UseGuards(AuthGuard)
   async communityLeaderboard(
-    @Args('raceId', { type: () => ID, nullable: true }) raceId?: string | null,
+    @Args('raceId', { type: () => ID }) raceId: string,
   ): Promise<LeaderboardEntryType[]> {
     const entryList = await this._queryBus.execute(
-      new GetCommunityLeaderboardQuery({ raceId: raceId ?? undefined }),
+      new GetCommunityLeaderboardQuery({ raceId }),
     );
     return entryList.map((entry) => new LeaderboardEntryType(entry));
+  }
+
+  @Query(() => Float, { description: 'My points on every public race' })
+  @UseGuards(AuthGuard)
+  myTotalPoints(@User() user: UserAggregate): Promise<number> {
+    return this._queryBus.execute(
+      new GetPlayerTotalPointsQuery({ userId: user.id }),
+    );
   }
 
   @Query(() => ScorecardType, {

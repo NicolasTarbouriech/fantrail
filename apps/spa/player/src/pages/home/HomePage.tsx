@@ -1,3 +1,5 @@
+import { Link } from 'react-router-dom';
+
 import {
   LeagueRow,
   WithdrawnAlert,
@@ -10,7 +12,13 @@ import {
   getRaceCardKind,
 } from '@trail/modules-frontend';
 import { LeagueVisibility } from '@trail/shared/apps/backend/web/data-access-graphql-types';
-import { Callout, Heading, Spinner } from '@trail/shared/design/ui-react';
+import {
+  Callout,
+  Card,
+  Heading,
+  Spinner,
+  buttonClasses,
+} from '@trail/shared/design/ui-react';
 import { TabPage } from '@trail/shell/fantrail';
 
 import { paths, tabPaths } from '../../app/paths';
@@ -21,7 +29,9 @@ import { RaceCardContainer } from './RaceCardContainer';
 import {
   type HomePrediction,
   type HomeRace,
+  getPredictionByFieldId,
   getRaceCardSource,
+  selectMyRaces,
 } from './homeRace';
 
 function getWithdrawnItems(
@@ -51,30 +61,24 @@ export function HomePage() {
   const now = useNow();
   const { data, loading, error } = useHomePageQuery();
 
-  const races = data?.races ?? [];
-  const predictionByFieldId = new Map(
-    (data?.myPredictions ?? []).map((prediction) => [
-      prediction.fieldId,
-      prediction,
-    ]),
-  );
+  const predictionByFieldId = getPredictionByFieldId(data?.myPredictions ?? []);
+  const races = selectMyRaces(data?.races ?? [], predictionByFieldId);
   const openCount = races.filter(
     (race) => getRaceCardKind(getRaceCardSource(race)) === 'open',
   ).length;
-  const community = data
-    ? findMyStanding(data.communityLeaderboard, player.id)
-    : null;
 
   return (
     <TabPage initial={getInitial(player.pseudo)} paths={tabPaths}>
       <div className="flex flex-col gap-0.5">
         <Heading level={1}>Salut {player.pseudo}</Heading>
         <span className="text-muted text-[15px]">
-          {openCount > 1
-            ? `${openCount} courses ouvertes aux pronos`
-            : openCount === 1
-              ? '1 course ouverte aux pronos'
-              : 'Aucune course ouverte aux pronos'}
+          {races.length === 0
+            ? 'Tes courses apparaissent ici dès ton premier prono'
+            : openCount > 1
+              ? `${openCount} de tes courses ouvertes aux pronos`
+              : openCount === 1
+                ? '1 de tes courses ouverte aux pronos'
+                : 'Tes courses'}
         </span>
       </div>
       <div className="grid gap-[18px] lg:grid-cols-[minmax(0,1fr)_340px] lg:items-start lg:gap-8">
@@ -88,6 +92,23 @@ export function HomePage() {
           <WithdrawnAlert
             items={getWithdrawnItems(races, predictionByFieldId)}
           />
+          {data && races.length === 0 ? (
+            <Card
+              variant="dashed"
+              className="flex flex-col items-start gap-3 p-4"
+            >
+              <span className="text-[15px] leading-snug">
+                Choisis tes courses dans la liste : fais ton prono et la course
+                rejoint ton accueil, avec son classement.
+              </span>
+              <Link
+                to={paths.races}
+                className={buttonClasses({ variant: 'cta', size: 'md' })}
+              >
+                Voir les courses
+              </Link>
+            </Card>
+          ) : null}
           <div className="grid gap-[18px] md:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2">
             {races.map((race, index) => (
               <RaceCardContainer
@@ -100,19 +121,13 @@ export function HomePage() {
             ))}
           </div>
         </div>
-        {data ? <HomeLeagues data={data} community={community} /> : null}
+        {data ? <HomeLeagues data={data} /> : null}
       </div>
     </TabPage>
   );
 }
 
-function HomeLeagues({
-  data,
-  community,
-}: {
-  data: HomePageQuery;
-  community: ReturnType<typeof findMyStanding>;
-}) {
+function HomeLeagues({ data }: { data: HomePageQuery }) {
   const player = useCurrentPlayer();
   return (
     <section className="flex flex-col gap-2.5 lg:sticky lg:top-24">
@@ -132,14 +147,11 @@ function HomeLeagues({
           to={paths.league(league.id)}
         />
       ))}
-      <LeagueRow
-        name="Communauté"
-        badge="TOUS"
-        badgeTone="ink"
-        details="tous les joueurs"
-        standing={community}
-        to={paths.community}
-      />
+      {data.myLeagues.length === 0 ? (
+        <Link to={paths.leagues} className="text-primary text-sm font-bold">
+          Créer ou rejoindre une ligue
+        </Link>
+      ) : null}
     </section>
   );
 }

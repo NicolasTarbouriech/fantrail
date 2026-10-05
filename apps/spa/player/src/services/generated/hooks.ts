@@ -329,12 +329,6 @@ export const HomePageDocument = gql`
       scoredFieldCount
     }
   }
-  communityLeaderboard {
-    rank
-    userId
-    total
-    scoredFieldCount
-  }
 }
     `;
 
@@ -453,58 +447,6 @@ export type HomePageGetFieldScoreQueryHookResult = ReturnType<typeof useHomePage
 export type HomePageGetFieldScoreLazyQueryHookResult = ReturnType<typeof useHomePageGetFieldScoreLazyQuery>;
 export type HomePageGetFieldScoreSuspenseQueryHookResult = ReturnType<typeof useHomePageGetFieldScoreSuspenseQuery>;
 export type HomePageGetFieldScoreQueryResult = Apollo.QueryResult<Types.HomePageGetFieldScoreQuery, Types.HomePageGetFieldScoreQueryVariables>;
-export const CommunityPageDocument = gql`
-    query CommunityPage($raceId: ID) {
-  communityLeaderboard(raceId: $raceId) {
-    rank
-    userId
-    total
-    scoredFieldCount
-    player {
-      id
-      pseudo
-    }
-  }
-  races {
-    id
-    name
-    status
-  }
-}
-    `;
-
-/**
- * __useCommunityPageQuery__
- *
- * To run a query within a React component, call `useCommunityPageQuery` and pass it any options that fit your needs.
- * When your component renders, `useCommunityPageQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useCommunityPageQuery({
- *   variables: {
- *      raceId: // value for 'raceId'
- *   },
- * });
- */
-export function useCommunityPageQuery(baseOptions?: Apollo.QueryHookOptions<Types.CommunityPageQuery, Types.CommunityPageQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<Types.CommunityPageQuery, Types.CommunityPageQueryVariables>(CommunityPageDocument, options);
-      }
-export function useCommunityPageLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<Types.CommunityPageQuery, Types.CommunityPageQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<Types.CommunityPageQuery, Types.CommunityPageQueryVariables>(CommunityPageDocument, options);
-        }
-export function useCommunityPageSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<Types.CommunityPageQuery, Types.CommunityPageQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useSuspenseQuery<Types.CommunityPageQuery, Types.CommunityPageQueryVariables>(CommunityPageDocument, options);
-        }
-export type CommunityPageQueryHookResult = ReturnType<typeof useCommunityPageQuery>;
-export type CommunityPageLazyQueryHookResult = ReturnType<typeof useCommunityPageLazyQuery>;
-export type CommunityPageSuspenseQueryHookResult = ReturnType<typeof useCommunityPageSuspenseQuery>;
-export type CommunityPageQueryResult = Apollo.QueryResult<Types.CommunityPageQuery, Types.CommunityPageQueryVariables>;
 export const CreateLeaguePageDocument = gql`
     query CreateLeaguePage {
   races {
@@ -1079,12 +1021,6 @@ export const LeaguesPageDocument = gql`
     memberCount
     isMember
   }
-  communityLeaderboard {
-    rank
-    userId
-    total
-    scoredFieldCount
-  }
 }
     `;
 
@@ -1311,6 +1247,64 @@ export function usePredictionPageMutateSaveMutation(baseOptions?: Apollo.Mutatio
 export type PredictionPageMutateSaveMutationHookResult = ReturnType<typeof usePredictionPageMutateSaveMutation>;
 export type PredictionPageMutateSaveMutationResult = Apollo.MutationResult<Types.PredictionPageMutateSaveMutation>;
 export type PredictionPageMutateSaveMutationOptions = Apollo.BaseMutationOptions<Types.PredictionPageMutateSaveMutation, Types.PredictionPageMutateSaveMutationVariables>;
+export const RaceLeaderboardPageDocument = gql`
+    query RaceLeaderboardPage($raceId: ID!) {
+  race(raceId: $raceId) {
+    id
+    name
+    fields {
+      id
+      result {
+        fieldId
+        version
+      }
+    }
+  }
+  communityLeaderboard(raceId: $raceId) {
+    rank
+    userId
+    total
+    scoredFieldCount
+    player {
+      id
+      pseudo
+    }
+  }
+}
+    `;
+
+/**
+ * __useRaceLeaderboardPageQuery__
+ *
+ * To run a query within a React component, call `useRaceLeaderboardPageQuery` and pass it any options that fit your needs.
+ * When your component renders, `useRaceLeaderboardPageQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useRaceLeaderboardPageQuery({
+ *   variables: {
+ *      raceId: // value for 'raceId'
+ *   },
+ * });
+ */
+export function useRaceLeaderboardPageQuery(baseOptions: Apollo.QueryHookOptions<Types.RaceLeaderboardPageQuery, Types.RaceLeaderboardPageQueryVariables> & ({ variables: Types.RaceLeaderboardPageQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<Types.RaceLeaderboardPageQuery, Types.RaceLeaderboardPageQueryVariables>(RaceLeaderboardPageDocument, options);
+      }
+export function useRaceLeaderboardPageLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<Types.RaceLeaderboardPageQuery, Types.RaceLeaderboardPageQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<Types.RaceLeaderboardPageQuery, Types.RaceLeaderboardPageQueryVariables>(RaceLeaderboardPageDocument, options);
+        }
+export function useRaceLeaderboardPageSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<Types.RaceLeaderboardPageQuery, Types.RaceLeaderboardPageQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<Types.RaceLeaderboardPageQuery, Types.RaceLeaderboardPageQueryVariables>(RaceLeaderboardPageDocument, options);
+        }
+export type RaceLeaderboardPageQueryHookResult = ReturnType<typeof useRaceLeaderboardPageQuery>;
+export type RaceLeaderboardPageLazyQueryHookResult = ReturnType<typeof useRaceLeaderboardPageLazyQuery>;
+export type RaceLeaderboardPageSuspenseQueryHookResult = ReturnType<typeof useRaceLeaderboardPageSuspenseQuery>;
+export type RaceLeaderboardPageQueryResult = Apollo.QueryResult<Types.RaceLeaderboardPageQuery, Types.RaceLeaderboardPageQueryVariables>;
 export const ScorecardPageDocument = gql`
     query ScorecardPage($raceId: ID!) {
   race(raceId: $raceId) {
@@ -1428,12 +1422,7 @@ export type ScorecardPageGetScorecardSuspenseQueryHookResult = ReturnType<typeof
 export type ScorecardPageGetScorecardQueryResult = Apollo.QueryResult<Types.ScorecardPageGetScorecardQuery, Types.ScorecardPageGetScorecardQueryVariables>;
 export const ScoresPageDocument = gql`
     query ScoresPage {
-  communityLeaderboard {
-    rank
-    userId
-    total
-    scoredFieldCount
-  }
+  myTotalPoints
 }
     `;
 

@@ -16,3 +16,21 @@ export function getRaceCardSource(race: HomeRace): RaceCardSource {
     })),
   };
 }
+
+export function getPredictionByFieldId(
+  predictionList: HomePrediction[],
+): Map<string, HomePrediction> {
+  return new Map(
+    predictionList.map((prediction) => [prediction.fieldId, prediction]),
+  );
+}
+
+/** A race becomes the player's own once they save a prediction on one of its fields. */
+export function selectMyRaces(
+  races: HomeRace[],
+  predictionByFieldId: Map<string, HomePrediction>,
+): HomeRace[] {
+  return races.filter((race) =>
+    race.fields.some((field) => predictionByFieldId.has(field.id)),
+  );
+}

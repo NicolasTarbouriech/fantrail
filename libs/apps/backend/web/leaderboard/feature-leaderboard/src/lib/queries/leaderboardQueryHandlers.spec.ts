@@ -6,7 +6,11 @@ import {
   buildLeagueAggregate,
   buildLeagueUserId,
 } from '@trail/modules/league/domain-testing';
-import { ListRevealedPredictionsByFieldQuery } from '@trail/modules/prediction/application';
+import {
+  ListPredictionsByFieldQuery,
+  ListRevealedPredictionsByFieldQuery,
+} from '@trail/modules/prediction/application';
+import { PredictionAggregate } from '@trail/modules/prediction/domain';
 import { buildPredictionAggregate } from '@trail/modules/prediction/domain-testing';
 import { GetRaceQuery, ListRacesQuery } from '@trail/modules/race/application';
 import { PUBLIC_RACE_STATUS_LIST } from '@trail/modules/race/domain';
@@ -25,6 +29,8 @@ import { GetCommunityLeaderboardQuery } from './GetCommunityLeaderboardQuery';
 import { GetCommunityLeaderboardQueryHandler } from './GetCommunityLeaderboardQueryHandler';
 import { GetLeagueLeaderboardQuery } from './GetLeagueLeaderboardQuery';
 import { GetLeagueLeaderboardQueryHandler } from './GetLeagueLeaderboardQueryHandler';
+import { GetPlayerTotalPointsQuery } from './GetPlayerTotalPointsQuery';
+import { GetPlayerTotalPointsQueryHandler } from './GetPlayerTotalPointsQueryHandler';
 import { ListLeaderboardFieldIdsQuery } from './ListLeaderboardFieldIdsQuery';
 import { ListLeaderboardFieldIdsQueryHandler } from './ListLeaderboardFieldIdsQueryHandler';
 import { ListLeagueFieldPredictionsQuery } from './ListLeagueFieldPredictionsQuery';
@@ -32,7 +38,6 @@ import { ListLeagueFieldPredictionsQueryHandler } from './ListLeagueFieldPredict
 
 const u = buildLeagueUserId;
 const viewer = { userId: OWNER_ID, isAdmin: false };
-const OTHER_RACE_FIELD_ID = '55555555-5555-4555-8555-555555555555';
 
 function queryBusAnswering(
   answers: [new (...args: never[]) => Query<unknown>, unknown][],
@@ -91,17 +96,35 @@ describe('ListLeaderboardFieldIdsQueryHandler', () => {
 });
 
 describe('GetCommunityLeaderboardQueryHandler', () => {
-  it('ranks every active player on the public races', async () => {
-    const active = buildUserAggregate({ id: u(1) });
+  it('ranks the active players with a prediction on the race', async () => {
+    const participant = buildUserAggregate({ id: u(1) });
     const disabled = buildUserAggregate({
       id: u(2),
       disabledAt: new Date('2026-10-01T10:00:00Z'),
     });
-    const queryBus = queryBusAnswering([
-      [ListLeaderboardFieldIdsQuery, [MEN_FIELD_ID, OTHER_RACE_FIELD_ID]],
-      [ListUsersQuery, [active, disabled]],
-      [GetLeaderboardQuery, []],
-    ]);
+    const bystander = buildUserAggregate({ id: u(3) });
+    const predictionsOf = (userIdList: string[]) =>
+      userIdList.map((userId) => ({
+        userId,
+      })) as unknown as PredictionAggregate[];
+    const queryBus = {
+      execute: jest.fn((query: Query<unknown>) => {
+        if (query instanceof ListLeaderboardFieldIdsQuery) {
+          return Promise.resolve([MEN_FIELD_ID, WOMEN_FIELD_ID]);
+        }
+        if (query instanceof ListUsersQuery) {
+          return Promise.resolve([participant, disabled, bystander]);
+        }
+        if (query instanceof ListPredictionsByFieldQuery) {
+          return Promise.resolve(
+            query.input.fieldId === MEN_FIELD_ID
+              ? predictionsOf([u(1), u(2)])
+              : predictionsOf([u(1)]),
+          );
+        }
+        return Promise.resolve([]);
+      }),
+    } as unknown as EnhancedQueryBus;
     await new GetCommunityLeaderboardQueryHandler(queryBus).execute(
       new GetCommunityLeaderboardQuery({ raceId: RACE_ID }),
     );
@@ -110,10 +133,42 @@ describe('GetCommunityLeaderboardQueryHandler', () => {
     );
     expect(queryBus.execute).toHaveBeenCalledWith(
       new GetLeaderboardQuery({
-        fieldIdList: [MEN_FIELD_ID, OTHER_RACE_FIELD_ID],
+        fieldIdList: [MEN_FIELD_ID, WOMEN_FIELD_ID],
         userIdList: [u(1)],
       }),
     );
+  });
+});
+
+describe('GetPlayerTotalPointsQueryHandler', () => {
+  it('adds up the points of the player on every public race', async () => {
+    const queryBus = queryBusAnswering([
+      [ListLeaderboardFieldIdsQuery, [MEN_FIELD_ID]],
+      [GetLeaderboardQuery, [{ total: 42 }]],
+    ]);
+    await expect(
+      new GetPlayerTotalPointsQueryHandler(queryBus).execute(
+        new GetPlayerTotalPointsQuery({ userId: u(1) }),
+      ),
+    ).resolves.toBe(42);
+    expect(queryBus.execute).toHaveBeenCalledWith(
+      new GetLeaderboardQuery({
+        fieldIdList: [MEN_FIELD_ID],
+        userIdList: [u(1)],
+      }),
+    );
+  });
+
+  it('counts 0 before any score', async () => {
+    const queryBus = queryBusAnswering([
+      [ListLeaderboardFieldIdsQuery, []],
+      [GetLeaderboardQuery, []],
+    ]);
+    await expect(
+      new GetPlayerTotalPointsQueryHandler(queryBus).execute(
+        new GetPlayerTotalPointsQuery({ userId: u(1) }),
+      ),
+    ).resolves.toBe(0);
   });
 });
 

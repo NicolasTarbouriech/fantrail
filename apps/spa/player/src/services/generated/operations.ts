@@ -47,7 +47,7 @@ export type LoginPageQuery = { __typename?: 'Query', races: Array<{ __typename?:
 export type HomePageQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type HomePageQuery = { __typename?: 'Query', races: Array<{ __typename?: 'Race', id: string, name: string, location: string, distanceInKm: number, timezone: string, pickCount: number, status: Types.RaceStatus, fields: Array<{ __typename?: 'RaceField', id: string, gender: Types.Gender, startAt: string, lockAt: string, isLocked: boolean, startList: { __typename?: 'StartList', fieldId: string, withdrawnRunners: Array<{ __typename?: 'Runner', id: string, fullName: string }> }, result: { __typename?: 'FieldResult', fieldId: string, version: number } | null }> }>, myPredictions: Array<{ __typename?: 'Prediction', id: string, fieldId: string, pickList: Array<string | null>, winnerTimeEstimateInSeconds: number | null, isComplete: boolean, withdrawnRunnerIds: Array<string> }>, myLeagues: Array<{ __typename?: 'League', id: string, name: string, visibility: Types.LeagueVisibility, memberCount: number, leaderboard: Array<{ __typename?: 'LeaderboardEntry', rank: number, userId: string, total: number, scoredFieldCount: number }> }>, communityLeaderboard: Array<{ __typename?: 'LeaderboardEntry', rank: number, userId: string, total: number, scoredFieldCount: number }> };
+export type HomePageQuery = { __typename?: 'Query', races: Array<{ __typename?: 'Race', id: string, name: string, location: string, distanceInKm: number, timezone: string, pickCount: number, status: Types.RaceStatus, fields: Array<{ __typename?: 'RaceField', id: string, gender: Types.Gender, startAt: string, lockAt: string, isLocked: boolean, startList: { __typename?: 'StartList', fieldId: string, withdrawnRunners: Array<{ __typename?: 'Runner', id: string, fullName: string }> }, result: { __typename?: 'FieldResult', fieldId: string, version: number } | null }> }>, myPredictions: Array<{ __typename?: 'Prediction', id: string, fieldId: string, pickList: Array<string | null>, winnerTimeEstimateInSeconds: number | null, isComplete: boolean, withdrawnRunnerIds: Array<string> }>, myLeagues: Array<{ __typename?: 'League', id: string, name: string, visibility: Types.LeagueVisibility, memberCount: number, leaderboard: Array<{ __typename?: 'LeaderboardEntry', rank: number, userId: string, total: number, scoredFieldCount: number }> }> };
 
 export type HomePageGetRaceScoresQueryVariables = Types.Exact<{
   raceId: Types.Scalars['ID']['input'];
@@ -62,13 +62,6 @@ export type HomePageGetFieldScoreQueryVariables = Types.Exact<{
 
 
 export type HomePageGetFieldScoreQuery = { __typename?: 'Query', myScorecard: { __typename?: 'Scorecard', fieldId: string, total: number } | null };
-
-export type CommunityPageQueryVariables = Types.Exact<{
-  raceId?: Types.InputMaybe<Types.Scalars['ID']['input']>;
-}>;
-
-
-export type CommunityPageQuery = { __typename?: 'Query', communityLeaderboard: Array<{ __typename?: 'LeaderboardEntry', rank: number, userId: string, total: number, scoredFieldCount: number, player: { __typename?: 'Player', id: string, pseudo: string } }>, races: Array<{ __typename?: 'Race', id: string, name: string, status: Types.RaceStatus }> };
 
 export type CreateLeaguePageQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
@@ -171,7 +164,7 @@ export type LeagueSettingsPageMutateRacesMutation = { __typename?: 'Mutation', c
 export type LeaguesPageQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type LeaguesPageQuery = { __typename?: 'Query', myLeagues: Array<{ __typename?: 'League', id: string, name: string, visibility: Types.LeagueVisibility, memberCount: number, leaderboard: Array<{ __typename?: 'LeaderboardEntry', rank: number, userId: string, total: number, scoredFieldCount: number }> }>, publicLeagues: Array<{ __typename?: 'League', id: string, name: string, memberCount: number, isMember: boolean }>, communityLeaderboard: Array<{ __typename?: 'LeaderboardEntry', rank: number, userId: string, total: number, scoredFieldCount: number }> };
+export type LeaguesPageQuery = { __typename?: 'Query', myLeagues: Array<{ __typename?: 'League', id: string, name: string, visibility: Types.LeagueVisibility, memberCount: number, leaderboard: Array<{ __typename?: 'LeaderboardEntry', rank: number, userId: string, total: number, scoredFieldCount: number }> }>, publicLeagues: Array<{ __typename?: 'League', id: string, name: string, memberCount: number, isMember: boolean }> };
 
 export type LeaguesPageMutateJoinByCodeMutationVariables = Types.Exact<{
   inviteCode: Types.Scalars['String']['input'];
@@ -203,6 +196,13 @@ export type PredictionPageMutateSaveMutationVariables = Types.Exact<{
 
 export type PredictionPageMutateSaveMutation = { __typename?: 'Mutation', savePrediction: { __typename?: 'Prediction', id: string, fieldId: string, pickList: Array<string | null>, winnerTimeEstimateInSeconds: number | null, isComplete: boolean, finalizedAt: string | null, updatedAt: string, withdrawnRunnerIds: Array<string> } };
 
+export type RaceLeaderboardPageQueryVariables = Types.Exact<{
+  raceId: Types.Scalars['ID']['input'];
+}>;
+
+
+export type RaceLeaderboardPageQuery = { __typename?: 'Query', race: { __typename?: 'Race', id: string, name: string, fields: Array<{ __typename?: 'RaceField', id: string, result: { __typename?: 'FieldResult', fieldId: string, version: number } | null }> }, communityLeaderboard: Array<{ __typename?: 'LeaderboardEntry', rank: number, userId: string, total: number, scoredFieldCount: number, player: { __typename?: 'Player', id: string, pseudo: string } }> };
+
 export type ScorecardPageQueryVariables = Types.Exact<{
   raceId: Types.Scalars['ID']['input'];
 }>;
@@ -220,4 +220,4 @@ export type ScorecardPageGetScorecardQuery = { __typename?: 'Query', myScorecard
 export type ScoresPageQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type ScoresPageQuery = { __typename?: 'Query', communityLeaderboard: Array<{ __typename?: 'LeaderboardEntry', rank: number, userId: string, total: number, scoredFieldCount: number }> };
+export type ScoresPageQuery = { __typename?: 'Query', myTotalPoints: number };

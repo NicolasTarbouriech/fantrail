@@ -85,7 +85,7 @@ export function RaceCardContainer({
     skip: kind !== 'scored',
   });
 
-  const rows: RaceCardProps['rows'] = fields.map((field) => {
+  const fieldRows: RaceCardProps['rows'] = fields.map((field) => {
     const slug = getFieldSlug(field.gender);
     const hasResult = Boolean(field.result);
     return {
@@ -101,6 +101,15 @@ export function RaceCardContainer({
       ),
     };
   });
+  const rows: RaceCardProps['rows'] = [
+    ...fieldRows,
+    {
+      id: `${race.id}-leaderboard`,
+      label: 'Classement de la course',
+      to: paths.raceLeaderboard(race.id),
+      trailing: null,
+    },
+  ];
 
   if (kind === 'cancelled') {
     return (

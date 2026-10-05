@@ -2,6 +2,7 @@ import type { ReactNode } from 'react';
 
 import {
   HomeIcon,
+  MountainIcon,
   TrophyIcon,
   UserIcon,
   UsersIcon,
@@ -13,6 +14,7 @@ import { TopBar } from './TopBar';
 
 export type TabPagePaths = {
   home: string;
+  races: string;
   leagues: string;
   scores: string;
   profile: string;
@@ -21,6 +23,7 @@ export type TabPagePaths = {
 export function getTabItems(paths: TabPagePaths): BottomNavItem[] {
   return [
     { label: 'Accueil', to: paths.home, icon: HomeIcon, end: true },
+    { label: 'Courses', to: paths.races, icon: MountainIcon, end: true },
     { label: 'Ligues', to: paths.leagues, icon: UsersIcon },
     { label: 'Mes scores', to: paths.scores, icon: TrophyIcon },
     { label: 'Profil', to: paths.profile, icon: UserIcon },

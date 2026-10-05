@@ -373,7 +373,7 @@ export type Query = {
   adminLeagues: Array<League>;
   adminRaces: Array<Race>;
   adminUsers: Array<AdminUser>;
-  /** Every player, on one race or on all public races */
+  /** Every player with a prediction on the race */
   communityLeaderboard: Array<LeaderboardEntry>;
   league: League;
   /** Preview of the league behind an invite link, before joining */
@@ -384,6 +384,8 @@ export type Query = {
   myPredictions: Array<Prediction>;
   /** Null until the field is scored or without complete prediction */
   myScorecard?: Maybe<Scorecard>;
+  /** My points on every public race */
+  myTotalPoints: Scalars['Float']['output'];
   publicLeagues: Array<League>;
   race: Race;
   /** Races open to predictions, locked, scored or cancelled */
@@ -397,7 +399,7 @@ export type QueryAdminRacesArgs = {
 
 
 export type QueryCommunityLeaderboardArgs = {
-  raceId?: InputMaybe<Scalars['ID']['input']>;
+  raceId: Scalars['ID']['input'];
 };
 
 

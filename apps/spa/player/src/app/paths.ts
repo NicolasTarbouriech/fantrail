@@ -3,11 +3,12 @@ export const paths = {
   login: '/connexion',
   register: '/inscription',
   join: (inviteCode: string) => `/join/${inviteCode}`,
+  races: '/courses',
   prediction: (raceId: string, fieldSlug: string) =>
     `/courses/${raceId}/${fieldSlug}`,
+  raceLeaderboard: (raceId: string) => `/courses/${raceId}/classement`,
   leagues: '/ligues',
   createLeague: '/ligues/nouvelle',
-  community: '/ligues/communaute',
   league: (leagueId: string, raceId?: string) =>
     raceId ? `/ligues/${leagueId}?course=${raceId}` : `/ligues/${leagueId}`,
   leagueSettings: (leagueId: string) => `/ligues/${leagueId}/reglages`,
@@ -20,6 +21,7 @@ export const paths = {
 
 export const tabPaths = {
   home: paths.home,
+  races: paths.races,
   leagues: paths.leagues,
   scores: paths.scores,
   profile: paths.profile,

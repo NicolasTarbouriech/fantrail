@@ -125,6 +125,9 @@ export const UsersIcon = createIcon(
   </>,
   { strokeWidth: 2.2 },
 );
+export const MountainIcon = createIcon(<path d="m8 3 4 8 5-5 5 15H2L8 3z" />, {
+  strokeWidth: 2.2,
+});
 export const TrophyIcon = createIcon(
   <>
     <path d="M8 21h8" />

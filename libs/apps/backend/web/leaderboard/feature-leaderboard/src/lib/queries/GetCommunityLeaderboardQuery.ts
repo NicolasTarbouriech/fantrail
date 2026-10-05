@@ -5,13 +5,13 @@ import { LeaderboardEntry } from '@trail/modules/scoring/domain';
 import { Query } from '@trail/shared/cqrs/util-nestjs';
 
 export const GetCommunityLeaderboardQueryInput = z.object({
-  raceId: RaceId.optional(),
+  raceId: RaceId,
 });
 export type GetCommunityLeaderboardQueryInput = z.infer<
   typeof GetCommunityLeaderboardQueryInput
 >;
 
-// Every player of the site, on one race or on every public race.
+// The community of a race: every active player with a prediction on one of its fields.
 export class GetCommunityLeaderboardQuery extends Query<LeaderboardEntry[]> {
   public readonly input: GetCommunityLeaderboardQueryInput;
 

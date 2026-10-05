@@ -1,6 +1,6 @@
 # Fantrail — Spécifications du POC
 
-Version 0.4 — 5 octobre 2026 (écrans de la section 9 alignés sur les maquettes, décisions 10 à 16)
+Version 0.5 — 5 octobre 2026 (écrans de la section 9 alignés sur les maquettes, décisions 10 à 17)
 Cible : Festival des Templiers (Millau, 15–18 octobre 2026) et Grand Raid de La Réunion / Diagonale des Fous (15–18 octobre 2026).
 
 ---
@@ -141,6 +141,7 @@ Les bonus se cumulent (un top 3 exact donne aussi le top 3 désordre et le vainq
 - Score du joueur pour un champ = Σ points de position × multiplicateur + points de temps + bonus. Les points de temps sont arrondis à l'entier le plus proche.
 - Score pour une course = somme des deux champs.
 - Classement d'une ligue = somme des scores sur les courses sélectionnées par la ligue.
+- Classement communauté d'une course = tous les joueurs ayant un pronostic sur l'un de ses champs. Il n'y a pas de classement global du site.
 - Égalité : écart de temps cumulé le plus faible, puis date de finalisation la plus ancienne.
 - Un joueur sans pronostic sur un champ marque 0 et reste classé.
 
@@ -157,7 +158,7 @@ Les bonus se cumulent (un top 3 exact donne aussi le top 3 désordre et le vainq
 - Mot de passe : 8 caractères minimum, avec au moins une lettre, un chiffre et un caractère spécial.
 - Deux rôles : `Player` et `Admin`. Le rôle admin est attribué en base, pas d'auto-inscription.
 - Suppression de compte : hors POC.
-- Un compte désactivé par l'admin ne peut plus se connecter. Il sort du classement Communauté mais reste dans ses ligues, avec ses points.
+- Un compte désactivé par l'admin ne peut plus se connecter. Il sort des classements communauté des courses mais reste dans ses ligues, avec ses points.
 
 ## 6. Ligues
 
@@ -177,7 +178,7 @@ Les bonus se cumulent (un top 3 exact donne aussi le top 3 désordre et le vainq
 - Un membre peut quitter. Le propriétaire ne peut pas quitter sans transférer la propriété (hors POC : il supprime la ligue).
 - Une ligue couvre **les courses choisies par son propriétaire**, au moins une. À la création, les courses ouvertes aux pronos sont cochées par défaut ; le propriétaire peut en ajouter ou en retirer à tout moment, et le classement est recalculé. Une course annulée ne compte plus, même si elle reste dans la liste.
 - Un joueur peut appartenir à plusieurs ligues. Ses picks sont les mêmes partout : on pronostique une fois par champ, pas une fois par ligue.
-- Une ligue « Communauté » implicite classe tous les joueurs du site.
+- Chaque course a son classement communauté, avec tous les joueurs qui l'ont pronostiquée (§ 4.7).
 
 ### 6.3 Code d'invitation
 
@@ -220,24 +221,26 @@ Les maquettes de référence sont dans `docs/design/maquettes/` (copie du caneva
 
 ### Joueur
 
-Navigation par une barre d'onglets en bas : Accueil, Ligues, Mes scores, Profil. Mobile d'abord, 390 px.
+Navigation par une barre d'onglets en bas : Accueil, Courses, Ligues, Mes scores, Profil. Mobile d'abord, 390 px.
 
 1. **Inscription / connexion**. Le lien `/join/<code>` montre la ligue avant l'inscription, puis la rejoint une fois le compte créé. Cette page n'est pas indexée.
-2. **Accueil** : alerte groupée des coureurs retirés de mes picks, cartes des courses, mes ligues avec mon rang. Une carte de course a cinq états :
+2. **Accueil** : mes courses, c'est-à-dire celles où j'ai au moins un pronostic, avec l'alerte groupée des coureurs retirés de mes picks et mes ligues avec mon rang. Sans pronostic, un lien mène à la liste des courses. Chaque carte mène aussi au classement communauté de la course. Une carte de course a cinq états :
    - ouverte, prono à faire ou incomplet (`3/5`), avec le compte à rebours avant verrouillage ;
    - ouverte, pronos complets ;
    - verrouillée, course en cours : champs « verrouillé » ou « incomplet · 0 pt », accès aux pronos de mes ligues ;
    - notée : score de la course, score par champ vers la scorecard, rang dans mes ligues ;
    - annulée : carte grisée, les pronos ne rapportent aucun point.
-3. **Pronostic d'un champ** : onglets hommes / femmes avec l'état de chaque champ, top 5 sous forme de dossards. Toucher une place ouvre le **choix d'un coureur** (panneau du bas, recherche, tri par index ou par nom, multiplicateur affiché pour chaque coureur, coureurs déjà choisis grisés). Les places se réordonnent par glisser-déposer. Saisie du chrono du vainqueur, puis « Valider mon prono ». Une fois enregistré et complet, le bouton passe à « Prono enregistré » et redevient actif au premier changement. Un coureur retiré s'affiche barré, « retiré · 0 pt », avec « Changer ».
-4. **Pronostic verrouillé** : même écran en lecture seule, sans poignées de déplacement, avec un accès aux pronos de mes ligues. La scorecard remplace cet écran une fois le résultat publié.
-5. **Ligues** : créer (nom, privée ou publique, courses comptées), rejoindre par code, liste des ligues publiques avec « Rejoindre ». La Communauté apparaît comme une ligue.
-6. **Ligue** : classement cumulé et par course, bouton d'invitation avec le code. Après le verrouillage d'un champ, l'onglet de la course montre le top 5 et le chrono de chaque membre, sans points tant que le résultat n'est pas publié. Un membre peut quitter la ligue, après confirmation.
-7. **Ligue publique vue par un non-membre** : classement visible, bouton « Rejoindre la ligue ». Ni code d'invitation ni pronos des membres.
-8. **Réglages d'une ligue** (propriétaire) : changer les courses comptées, renommer, changer la visibilité, générer un nouveau code (l'ancien ne marche plus), retirer un membre, supprimer la ligue. Les actions destructives demandent une confirmation.
-9. **Mes scores** : score par course et par champ, vers la scorecard.
-10. **Scorecard** : pour chaque pick, position réelle, points de position, multiplicateur ; puis points de temps et bonus.
-11. **Profil** : pseudo, email, page « Comment on marque des points », déconnexion. Pas de statistiques.
+3. **Courses** : toutes les courses, avec les mêmes cartes. Un pronostic suffit pour qu'une course rejoigne l'accueil.
+4. **Classement d'une course** : tous les joueurs qui l'ont pronostiquée. Avant le premier résultat, tout le monde est à égalité.
+5. **Pronostic d'un champ** : onglets hommes / femmes avec l'état de chaque champ, top 5 sous forme de dossards. Toucher une place ouvre le **choix d'un coureur** (panneau du bas, recherche, tri par index ou par nom, multiplicateur affiché pour chaque coureur, coureurs déjà choisis grisés). Les places se réordonnent par glisser-déposer. Saisie du chrono du vainqueur, puis « Valider mon prono ». Une fois enregistré et complet, le bouton passe à « Prono enregistré » et redevient actif au premier changement. Un coureur retiré s'affiche barré, « retiré · 0 pt », avec « Changer ».
+6. **Pronostic verrouillé** : même écran en lecture seule, sans poignées de déplacement, avec un accès aux pronos de mes ligues. La scorecard remplace cet écran une fois le résultat publié.
+7. **Ligues** : créer (nom, privée ou publique, courses comptées), rejoindre par code, liste des ligues publiques avec « Rejoindre ».
+8. **Ligue** : classement cumulé et par course, bouton d'invitation avec le code. Après le verrouillage d'un champ, l'onglet de la course montre le top 5 et le chrono de chaque membre, sans points tant que le résultat n'est pas publié. Un membre peut quitter la ligue, après confirmation.
+9. **Ligue publique vue par un non-membre** : classement visible, bouton « Rejoindre la ligue ». Ni code d'invitation ni pronos des membres.
+10. **Réglages d'une ligue** (propriétaire) : changer les courses comptées, renommer, changer la visibilité, générer un nouveau code (l'ancien ne marche plus), retirer un membre, supprimer la ligue. Les actions destructives demandent une confirmation.
+11. **Mes scores** : total de mes points et nombre de mes courses, score par course et par champ, vers la scorecard.
+12. **Scorecard** : pour chaque pick, position réelle, points de position, multiplicateur ; puis points de temps et bonus.
+13. **Profil** : pseudo, email, page « Comment on marque des points », déconnexion. Pas de statistiques.
 
 ### Admin
 
@@ -285,6 +288,7 @@ Questions tranchées le 30 septembre 2026 (1 à 9) et le 5 octobre 2026 (10 à 1
 | 14  | Pronos des membres              | Révélés au verrouillage de chaque champ, aux membres de la ligue seulement.                                                                                                                     |
 | 15  | Historique des résultats        | Chaque publication crée une version datée. L'admin voit les versions et ce qui a changé ; les joueurs ne voient que la dernière.                                                                |
 | 16  | Courses d'une ligue             | Le propriétaire choisit les courses comptées par sa ligue, au moins une, et peut les changer. Courses ouvertes cochées par défaut. Les ligues existantes comptent toutes les courses publiques. |
+| 17  | Mes courses et communauté       | L'accueil ne montre que les courses où le joueur a un pronostic ; l'onglet Courses les montre toutes. Le classement communauté existe par course, pas pour tout le site.                        |
 
 Sur le point 8 : vider le pick aurait rendu le pronostic incomplet, et un pronostic incomplet ne marque aucun point (§ 4.1). Un joueur qui ne se reconnecte pas avant le départ aurait perdu tout son pronostic pour un seul forfait. Conserver le pick limite la perte à ce pick.
 

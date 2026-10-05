@@ -46,12 +46,6 @@ query HomePage {
       scoredFieldCount
     }
   }
-  communityLeaderboard {
-    rank
-    userId
-    total
-    scoredFieldCount
-  }
 }
 
 query HomePageGetRaceScores($raceId: ID!) {

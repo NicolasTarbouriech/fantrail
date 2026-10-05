@@ -242,8 +242,11 @@ type Query {
   myPrediction(fieldId: ID!): Prediction
   myPredictions: [Prediction!]!
 
-  """Every player, on one race or on all public races"""
-  communityLeaderboard(raceId: ID): [LeaderboardEntry!]!
+  """Every player with a prediction on the race"""
+  communityLeaderboard(raceId: ID!): [LeaderboardEntry!]!
+
+  """My points on every public race"""
+  myTotalPoints: Float!
 
   """Null until the field is scored or without complete prediction"""
   myScorecard(fieldId: ID!): Scorecard
