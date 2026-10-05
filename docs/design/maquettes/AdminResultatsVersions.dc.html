@@ -1,0 +1,164 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>Admin — résultats publiés et versions</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@800;900&amp;family=Outfit:wght@400;500;600;700&amp;display=swap">
+<style>
+body{margin:0}
+a{color:#09090B}a:hover{color:#2B3BFF}
+</style>
+</helmet>
+<div style="width: 1280px; height: 900px; box-sizing: border-box; display: grid; grid-template-columns: 240px minmax(0, 1fr); background: #FFFFFF; color: #09090B; font-family: 'Outfit', sans-serif; font-size: 14px">
+<aside style="display: flex; flex-direction: column; gap: 20px; padding: 16px 12px; border-right: 1px solid #E4E4E7; background: #FAFAFA">
+<div style="display: flex; align-items: center; gap: 8px; height: 40px; padding: 0 8px">
+<span style="font-family: 'Big Shoulders Display', sans-serif; font-size: 24px; font-weight: 900; letter-spacing: 0.04em; color: #2B3BFF">FANTRAIL</span>
+<span style="padding: 2px 8px; border: 1px solid #E4E4E7; border-radius: 999px; background: #FFFFFF; color: #52525B; font-size: 12px; font-weight: 600">Admin</span>
+</div>
+<nav aria-label="Administration" style="display: flex; flex-direction: column; gap: 2px">
+<a href="AdminCourses.dc.html" aria-current="page" style="display: flex; align-items: center; gap: 10px; height: 36px; padding: 0 10px; border-radius: 8px; background: #F4F4F5; color: #09090B; font-weight: 600; text-decoration: none">
+<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20l6-14 4 8 3-5 3 11z"></path></svg>
+Courses</a>
+<a href="AdminLigues.dc.html" style="display: flex; align-items: center; gap: 10px; height: 36px; padding: 0 10px; border-radius: 8px; color: #52525B; font-weight: 500; text-decoration: none">
+<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="8" r="4"></circle><path d="M2 21c0-4 3-6 7-6s7 2 7 6"></path><path d="M16 4a4 4 0 0 1 0 8"></path><path d="M22 21c0-3-2-5-5-5.5"></path></svg>
+Ligues</a>
+<a href="AdminJoueurs.dc.html" style="display: flex; align-items: center; gap: 10px; height: 36px; padding: 0 10px; border-radius: 8px; color: #52525B; font-weight: 500; text-decoration: none">
+<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4"></circle><path d="M4 21c0-4 4-6 8-6s8 2 8 6"></path></svg>
+Joueurs</a>
+</nav>
+<div style="margin-top: auto; display: flex; align-items: center; gap: 10px; padding: 8px">
+<span style="width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; border-radius: 999px; background: #FFD60A; font-weight: 700">K</span>
+<span style="display: flex; flex-direction: column">
+<span style="font-weight: 600">Kilian</span>
+<span style="font-size: 12px; color: #71717A">Administrateur</span>
+</span>
+</div>
+</aside>
+<main style="display: flex; flex-direction: column; min-width: 0">
+<header style="display: flex; align-items: center; justify-content: space-between; height: 56px; padding: 0 24px; border-bottom: 1px solid #E4E4E7">
+<nav aria-label="Fil d’Ariane" style="display: flex; align-items: center; gap: 8px; color: #71717A">
+<a href="AdminCourses.dc.html" style="color: #71717A; text-decoration: none">Courses</a>
+<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"></path></svg>
+<span style="color: #09090B; font-weight: 500">Diagonale des Fous 2026</span>
+</nav>
+<a href="Main.dc.html" style="height: 36px; box-sizing: border-box; display: flex; align-items: center; padding: 0 14px; border: 1px solid #E4E4E7; border-radius: 8px; background: #FFFFFF; color: #09090B; font-weight: 500; text-decoration: none">Voir côté joueur</a>
+</header>
+<div style="display: flex; flex-direction: column; gap: 20px; padding: 24px">
+<div style="display: flex; flex-direction: column; gap: 4px">
+<div style="display: flex; align-items: center; gap: 12px">
+<h1 style="margin: 0; font-size: 24px; font-weight: 700; letter-spacing: -0.01em">Diagonale des Fous 2026</h1>
+<span style="display: flex; align-items: center; gap: 6px; padding: 2px 10px; border-radius: 999px; background: #F4F4F5; color: #27272A; font-size: 12px; font-weight: 600">
+<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="11" width="16" height="10" rx="2"></rect><path d="M8 11V7a4 4 0 0 1 8 0v4"></path></svg>
+Verrouillée</span>
+</div>
+<span style="color: #71717A">175 km · 10 150 m D+ · départ jeu. 15 oct. 22:00 (heure de La Réunion) · 5 picks · tolérance 3 %</span>
+</div>
+<div style="display: flex; align-items: center; justify-content: space-between">
+<div role="tablist" aria-label="Sections de la course" style="display: flex; gap: 4px; padding: 4px; border-radius: 10px; background: #F4F4F5">
+<a href="AdminCourseInfos.dc.html" role="tab" aria-selected="false" style="height: 32px; box-sizing: border-box; display: flex; align-items: center; padding: 0 12px; border-radius: 7px; color: #71717A; font-weight: 500; text-decoration: none">Infos</a>
+<a href="AdminStartList.dc.html" role="tab" aria-selected="false" style="height: 32px; box-sizing: border-box; display: flex; align-items: center; padding: 0 12px; border-radius: 7px; color: #71717A; font-weight: 500; text-decoration: none">Champs et start lists</a>
+<a href="AdminResultatsVersions.dc.html" role="tab" aria-selected="true" style="height: 32px; box-sizing: border-box; display: flex; align-items: center; padding: 0 12px; border-radius: 7px; background: #FFFFFF; color: #09090B; box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08); font-weight: 600; text-decoration: none">Résultats</a>
+</div>
+<div role="group" aria-label="Champ" style="display: flex; border: 1px solid #E4E4E7; border-radius: 8px; overflow: hidden">
+<button type="button" aria-pressed="true" style="height: 34px; padding: 0 14px; border: 0; border-right: 1px solid #E4E4E7; background: #F4F4F5; color: #09090B; font-family: inherit; font-size: 14px; font-weight: 600; cursor: pointer">Élites hommes · v2</button>
+<button type="button" aria-pressed="false" style="height: 34px; padding: 0 14px; border: 0; background: #FFFFFF; color: #52525B; font-family: inherit; font-size: 14px; font-weight: 500; cursor: pointer">Élites femmes · v1</button>
+</div>
+</div>
+<div style="display: grid; grid-template-columns: minmax(0, 1fr) 360px; gap: 20px; align-items: start">
+<section style="border: 1px solid #E4E4E7; border-radius: 12px; background: #FFFFFF">
+<div style="display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; padding: 18px 20px 12px">
+<div style="display: flex; flex-direction: column; gap: 2px">
+<h2 style="margin: 0; font-size: 16px; font-weight: 600">Classement officiel · version 2</h2>
+<span style="color: #71717A">Publié sam. 17 oct. à 14:05. Les scores de tous les joueurs ont été recalculés.</span>
+</div>
+<a href="AdminResultats.dc.html" style="flex-shrink: 0; height: 36px; box-sizing: border-box; display: inline-flex; align-items: center; gap: 8px; padding: 0 14px; border: 1px solid #E4E4E7; border-radius: 8px; background: #FFFFFF; color: #09090B; font-weight: 500; text-decoration: none"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20h4L19 9l-4-4L4 16z"></path></svg>
+Corriger</a>
+</div>
+<div style="display: grid; grid-template-columns: 64px minmax(0, 1fr) 120px 180px; align-items: center; height: 38px; border-top: 1px solid #E4E4E7; border-bottom: 1px solid #E4E4E7; color: #71717A; font-size: 13px; font-weight: 500">
+<span style="padding: 0 20px">Pos.</span>
+<span style="padding: 0 8px">Coureur</span>
+<span style="padding: 0 8px">Favori</span>
+<span style="padding: 0 20px">Par rapport à la v1</span>
+</div>
+<ol style="margin: 0; padding: 0; list-style: none">
+<sc-for list="{{rows}}" as="row" hint-placeholder-count="10">
+<li style="display: grid; grid-template-columns: 64px minmax(0, 1fr) 120px 180px; align-items: center; height: 44px; border-bottom: 1px solid #F4F4F5; background: {{row.background}}">
+<span style="padding: 0 20px; font-weight: 700">{{row.position}}</span>
+<span style="padding: 0 8px; font-weight: 500">{{row.runner}}</span>
+<span style="padding: 0 8px; color: #71717A">{{row.favorite}}</span>
+<span style="padding: 0 20px; font-size: 13px; font-weight: 600; color: #1E2BD6">{{row.change}}</span>
+</li>
+</sc-for>
+</ol>
+</section>
+<div style="display: flex; flex-direction: column; gap: 16px">
+<section style="display: flex; flex-direction: column; gap: 6px; padding: 18px 20px; border: 1px solid #E4E4E7; border-radius: 12px">
+<span style="font-size: 16px; font-weight: 600">Temps du vainqueur</span>
+<span style="font-size: 22px; font-weight: 700; font-variant-numeric: tabular-nums">23:32:00</span>
+<span style="color: #71717A; font-size: 13px">Inchangé depuis la v1.</span>
+</section>
+<section style="display: flex; flex-direction: column; gap: 12px; padding: 18px 20px; border: 1px solid #E4E4E7; border-radius: 12px">
+<h2 style="margin: 0; font-size: 16px; font-weight: 600">Historique</h2>
+<ol style="margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column">
+<li style="display: flex; gap: 12px; padding-bottom: 14px">
+<span style="display: flex; flex-direction: column; align-items: center; gap: 4px">
+<span style="width: 12px; height: 12px; margin-top: 4px; border-radius: 999px; background: #2B3BFF"></span>
+<span style="flex-grow: 1; width: 2px; background: #E4E4E7"></span>
+</span>
+<span style="display: flex; flex-direction: column; gap: 2px">
+<span style="display: flex; align-items: center; gap: 8px"><span style="font-weight: 600">Version 2</span><span style="padding: 1px 8px; border-radius: 999px; background: #EEF0FF; color: #1E2BD6; font-size: 12px; font-weight: 600">En ligne</span></span>
+<span style="color: #71717A; font-size: 13px">sam. 17 oct. 14:05 · par Kilian</span>
+<span style="font-size: 13px">Positions 7 à 10 modifiées, Paul Vidal sorti du top 10.</span>
+</span>
+</li>
+<li style="display: flex; gap: 12px">
+<span style="display: flex; flex-direction: column; align-items: center">
+<span style="width: 12px; height: 12px; margin-top: 4px; box-sizing: border-box; border: 2px solid #A1A1AA; border-radius: 999px"></span>
+</span>
+<span style="display: flex; flex-direction: column; gap: 2px">
+<span style="font-weight: 600">Version 1</span>
+<span style="color: #71717A; font-size: 13px">sam. 17 oct. 08:30 · par Kilian</span>
+<span style="font-size: 13px">Première publication.</span>
+<a href="AdminResultats.dc.html" style="align-self: flex-start; margin-top: 2px; color: #2B3BFF; font-size: 13px; font-weight: 600">Voir cette version</a>
+</span>
+</li>
+</ol>
+</section>
+<section style="display: flex; gap: 10px; padding: 14px 16px; border: 1px solid #E4E4E7; border-radius: 12px; background: #FAFAFA; font-size: 13px; line-height: 1.45">
+<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#2B3BFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex-shrink: 0; margin-top: 2px"><circle cx="12" cy="12" r="9"></circle><path d="M12 11v5"></path><path d="M12 8h.01"></path></svg>
+<span>Les deux champs ont un résultat publié. Tu peux marquer la course notée dans <a href="AdminCourseInfos.dc.html" style="color: #2B3BFF; font-weight: 600">Infos</a>.</span>
+</section>
+</div>
+</div>
+</div>
+</main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1280,"height":900}}'>
+class Component extends DCLogic {
+renderVals() {
+const rows = [
+['Léo Martin', 'n°1', ''], ['Kenji Sato', 'n°7', ''], ['Tomás Rivera', 'n°2', ''], ['Hugo Lefèvre', 'n°5', ''], ['Jon Aldaz', 'n°4', ''],
+['Ruben Silva', 'n°6', ''], ['Olivier Hoarau', 'n°9', 'était 8ᵉ'], ['Marco Bianchi', 'n°8', 'était 9ᵉ'], ['Sam Carter', 'n°14', 'était 10ᵉ'],
+['Arnaud Payet', 'n°3', 'entre dans le top 10'],
+];
+return {
+rows: rows.map(([runner, favorite, change], index) => ({
+position: index + 1,
+runner,
+favorite,
+change,
+background: change === '' ? '#FFFFFF' : '#F5F6FF',
+})),
+};
+}
+}
+</script>
+</body>
+</html>

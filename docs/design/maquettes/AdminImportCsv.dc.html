@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>Admin — import CSV des coureurs</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@800;900&amp;family=Outfit:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@500&amp;display=swap">
+<style>
+body{margin:0}
+a{color:#09090B}a:hover{color:#2B3BFF}
+</style>
+</helmet>
+<div style="position: relative; width: 1280px; height: 900px; box-sizing: border-box; display: grid; grid-template-columns: 240px minmax(0, 1fr); background: #FFFFFF; color: #09090B; font-family: 'Outfit', sans-serif; font-size: 14px; overflow: hidden">
+<aside style="display: flex; flex-direction: column; gap: 20px; padding: 16px 12px; border-right: 1px solid #E4E4E7; background: #FAFAFA">
+<div style="display: flex; align-items: center; gap: 8px; height: 40px; padding: 0 8px">
+<span style="font-family: 'Big Shoulders Display', sans-serif; font-size: 24px; font-weight: 900; letter-spacing: 0.04em; color: #2B3BFF">FANTRAIL</span>
+<span style="padding: 2px 8px; border: 1px solid #E4E4E7; border-radius: 999px; background: #FFFFFF; color: #52525B; font-size: 12px; font-weight: 600">Admin</span>
+</div>
+</aside>
+<main style="display: flex; flex-direction: column; gap: 16px; padding: 80px 24px 24px">
+<h1 style="margin: 0; font-size: 24px; font-weight: 700">Grand Trail des Templiers 2026</h1>
+<section style="height: 520px; border: 1px solid #E4E4E7; border-radius: 12px"></section>
+</main>
+<a href="AdminStartList.dc.html" aria-label="Fermer l’import" style="position: absolute; inset: 0; background: rgba(9, 9, 11, 0.45)"></a>
+<div role="dialog" aria-modal="true" aria-labelledby="csv-title" style="position: absolute; top: 56px; left: 260px; width: 760px; box-sizing: border-box; display: flex; flex-direction: column; border: 1px solid #E4E4E7; border-radius: 14px; background: #FFFFFF; box-shadow: 0 16px 48px rgba(9, 9, 11, 0.18)">
+<div style="display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; padding: 20px 24px 14px">
+<div style="display: flex; flex-direction: column; gap: 2px">
+<h2 id="csv-title" style="margin: 0; font-size: 18px; font-weight: 600">Importer des coureurs</h2>
+<span style="color: #71717A">Élites hommes · Grand Trail des Templiers 2026</span>
+</div>
+<a href="AdminStartList.dc.html" aria-label="Fermer" style="width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; border-radius: 8px; color: #52525B">
+<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"></path></svg>
+</a>
+</div>
+<div style="display: flex; flex-direction: column; gap: 14px; padding: 0 24px 18px">
+<div style="display: flex; align-items: center; gap: 14px; padding: 14px 16px; border: 1px dashed #A1A1AA; border-radius: 10px; background: #FAFAFA">
+<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#2B3BFF" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex-shrink: 0"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"></path><path d="M14 3v5h5"></path><path d="M9 14h6M9 17h4"></path></svg>
+<span style="flex-grow: 1; display: flex; flex-direction: column; gap: 2px">
+<span style="font-weight: 600">templiers-hommes.csv · 33 lignes lues</span>
+<span style="color: #71717A; font-size: 13px">Dépose un autre fichier ou colle son contenu pour remplacer.</span>
+</span>
+<button type="button" style="height: 34px; padding: 0 12px; border: 1px solid #E4E4E7; border-radius: 8px; background: #FFFFFF; color: #09090B; font-family: inherit; font-size: 14px; font-weight: 500; cursor: pointer">Choisir un fichier</button>
+</div>
+<div style="display: flex; flex-direction: column; gap: 4px; color: #52525B; font-size: 13px">
+<span>Colonnes attendues, dans cet ordre, séparées par <b>;</b> ou <b>,</b> :</span>
+<code style="padding: 6px 10px; border-radius: 6px; background: #F4F4F5; color: #09090B; font-family: 'JetBrains Mono', monospace; font-size: 12px">prenom;nom;nationalite;index;source;utmb;itra</code>
+<span>Nationalité en code à 3 lettres (FRA). Source : utmb, itra, betrail ou manuel. Index, source et liens peuvent rester vides.</span>
+</div>
+<div style="border: 1px solid #E4E4E7; border-radius: 10px; overflow: hidden">
+<div style="display: grid; grid-template-columns: 64px minmax(0, 1fr) 70px 70px 80px 260px; align-items: center; height: 34px; border-bottom: 1px solid #E4E4E7; background: #FAFAFA; color: #71717A; font-size: 13px; font-weight: 500">
+<span style="padding: 0 12px">Ligne</span>
+<span style="padding: 0 8px">Coureur</span>
+<span style="padding: 0 8px">Nat.</span>
+<span style="padding: 0 8px; text-align: right">Index</span>
+<span style="padding: 0 8px">Source</span>
+<span style="padding: 0 12px">État</span>
+</div>
+<ul style="margin: 0; padding: 0; list-style: none; max-height: 290px; overflow: auto">
+<sc-for list="{{lines}}" as="line" hint-placeholder-count="8">
+<li style="display: grid; grid-template-columns: 64px minmax(0, 1fr) 70px 70px 80px 260px; align-items: center; min-height: 36px; border-bottom: 1px solid #F4F4F5; background: {{line.background}}">
+<span style="padding: 0 12px; color: #71717A; font-variant-numeric: tabular-nums">{{line.number}}</span>
+<span style="padding: 0 8px; font-weight: 600">{{line.name}}</span>
+<span style="padding: 0 8px">{{line.nationality}}</span>
+<span style="padding: 0 8px; text-align: right; font-variant-numeric: tabular-nums">{{line.index}}</span>
+<span style="padding: 0 8px">{{line.source}}</span>
+<span style="padding: 0 12px; font-size: 13px; font-weight: 600; color: {{line.stateColor}}">{{line.state}}</span>
+</li>
+</sc-for>
+</ul>
+</div>
+</div>
+<div style="display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 14px 24px; border-top: 1px solid #E4E4E7; background: #FAFAFA; border-radius: 0 0 14px 14px">
+<span style="display: flex; flex-direction: column; gap: 2px">
+<span style="font-weight: 600">30 prêts · 2 erreurs · 1 doublon ignoré</span>
+<span style="color: #71717A; font-size: 13px">Les lignes en erreur ne sont pas importées : corrige le fichier et recharge-le.</span>
+</span>
+<span style="display: flex; gap: 8px">
+<a href="AdminStartList.dc.html" style="height: 36px; box-sizing: border-box; display: inline-flex; align-items: center; padding: 0 14px; border: 1px solid #E4E4E7; border-radius: 8px; background: #FFFFFF; color: #09090B; font-weight: 500; text-decoration: none">Annuler</a>
+<button type="button" style="height: 36px; padding: 0 14px; border: 0; border-radius: 8px; background: #2B3BFF; color: #FFFFFF; font-family: inherit; font-size: 14px; font-weight: 600; cursor: pointer">Importer 30 coureurs</button>
+</span>
+</div>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1280,"height":900}}'>
+class Component extends DCLogic {
+renderVals() {
+const ok = { state: 'Prêt', stateColor: '#52525B', background: '#FFFFFF' };
+const lines = [
+[2, 'Arthur Blanc', 'FRA', '921', 'UTMB', ok],
+[3, 'Luca Moretti', 'ITA', '914', 'UTMB', ok],
+[4, 'Thibault Roux', 'FRA', '905', 'UTMB', ok],
+[5, 'Owen Price', 'GBR', '890', 'ITRA', ok],
+[14, 'Hugo Perrin', 'FR', '842', 'UTMB', { state: 'Nationalité : 3 lettres attendues (FRA)', stateColor: '#B91C1C', background: '#FEF2F2' }],
+[15, 'Matteo Galli', 'ITA', '884', 'UTMB', ok],
+[22, 'Jakob Weber', 'DEU', '8x5', 'ITRA', { state: 'Index : nombre attendu', stateColor: '#B91C1C', background: '#FEF2F2' }],
+[27, 'Nils Berg', 'NOR', '902', 'UTMB', { state: 'Déjà dans la start list, ignoré', stateColor: '#71717A', background: '#FAFAFA' }],
+[28, 'Yanis Benali', 'MAR', '—', '—', ok],
+];
+return {
+lines: lines.map(([number, name, nationality, index, source, status]) => ({ number, name, nationality, index, source, ...status })),
+};
+}
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>Pronostic verrouillé</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;800;900&amp;family=Outfit:wght@400;500;600;700&amp;display=swap">
+<style>
+body{margin:0}
+a{color:#2B3BFF}a:hover{color:#1A26B8}
+</style>
+</helmet>
+<div style="width: 390px; height: 900px; box-sizing: border-box; display: flex; flex-direction: column; background: #F4F5FF; color: #0E1330; font-family: 'Outfit', sans-serif">
+<div style="padding: 20px 20px 22px; display: flex; flex-direction: column; gap: 14px; background: #2B3BFF; color: #FFFFFF">
+<div style="display: flex; align-items: center; justify-content: space-between">
+<a href="Main.dc.html" aria-label="Retour à l’accueil" style="width: 44px; height: 44px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid #0E1330; border-radius: 999px; background: #FFFFFF; color: #0E1330">
+<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 18l-6-6 6-6"></path></svg>
+</a>
+<div style="transform: rotate(-4deg); display: flex; align-items: center; gap: 6px; padding: 6px 12px; border: 2px solid #0E1330; border-radius: 10px; background: #0E1330; color: #FFFFFF; box-shadow: 3px 3px 0 #FFD60A; font-family: 'Big Shoulders Display', sans-serif; font-size: 18px; font-weight: 800; letter-spacing: 0.02em">
+<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="11" width="16" height="10" rx="2"></rect><path d="M8 11V7a4 4 0 0 1 8 0v4"></path></svg>
+VERROUILLÉ</div>
+</div>
+<h1 style="margin: 0; font-family: 'Big Shoulders Display', sans-serif; font-size: 44px; line-height: 0.95; font-weight: 900; letter-spacing: 0.01em">DIAGONALE DES FOUS</h1>
+<div style="font-size: 13px; font-weight: 500; color: #DDE1FF">Départ donné jeu. 15 oct. à 20:00 (22:00 à La Réunion)</div>
+</div>
+<div style="flex-grow: 1; box-sizing: border-box; padding: 16px 20px 24px; display: flex; flex-direction: column; gap: 14px">
+<div role="tablist" aria-label="Champ" style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px">
+<button type="button" role="tab" aria-selected="true" style="height: 44px; border: 2px solid #0E1330; border-radius: 999px; background: #0E1330; color: #FFFFFF; font-family: 'Big Shoulders Display', sans-serif; font-size: 18px; font-weight: 800; letter-spacing: 0.04em; cursor: pointer">HOMMES</button>
+<button type="button" role="tab" aria-selected="false" style="height: 44px; border: 2px solid #0E1330; border-radius: 999px; background: #FFFFFF; color: #0E1330; font-family: 'Big Shoulders Display', sans-serif; font-size: 18px; font-weight: 800; letter-spacing: 0.04em; cursor: pointer">FEMMES</button>
+</div>
+<div style="display: flex; align-items: baseline; justify-content: space-between">
+<h2 style="margin: 0; font-family: 'Big Shoulders Display', sans-serif; font-size: 26px; font-weight: 900; letter-spacing: 0.02em">TON TOP 5</h2>
+<span style="font-size: 12px; font-weight: 600; color: #4A5070">figé au départ</span>
+</div>
+<ol style="margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 9px">
+<sc-for list="{{picks}}" as="pick" hint-placeholder-count="5">
+<li style="display: flex; align-items: center; gap: 12px; height: 56px; padding: 0 12px 0 6px; border: 2px solid #0E1330; border-radius: 14px; background: #FFFFFF">
+<span style="width: 44px; height: 42px; flex-shrink: 0; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border-radius: 8px; border-top: 6px solid #0E1330; background: #F4F5FF; font-family: 'Big Shoulders Display', sans-serif; font-size: 28px; font-weight: 900">{{pick.position}}</span>
+<div style="flex-grow: 1; display: flex; flex-direction: column">
+<span style="font-size: 15px; font-weight: 700; text-transform: uppercase">{{pick.name}}</span>
+<span style="font-size: 12px; color: #4A5070">{{pick.rank}}</span>
+</div>
+<sc-if value="{{pick.outsider}}" hint-placeholder-val="{{false}}">
+<span style="transform: rotate(3deg); padding: 3px 8px; border: 2px solid #0E1330; border-radius: 8px; background: #FFD60A; font-family: 'Big Shoulders Display', sans-serif; font-size: 17px; font-weight: 900">{{pick.multiplier}}</span>
+</sc-if>
+<sc-if value="{{pick.regular}}" hint-placeholder-val="{{true}}">
+<span style="padding: 3px 8px; border: 2px solid #0E1330; border-radius: 8px; background: #FFFFFF; font-family: 'Big Shoulders Display', sans-serif; font-size: 17px; font-weight: 800">{{pick.multiplier}}</span>
+</sc-if>
+</li>
+</sc-for>
+</ol>
+<div style="display: flex; align-items: center; justify-content: space-between; gap: 12px">
+<span style="font-family: 'Big Shoulders Display', sans-serif; font-size: 20px; font-weight: 900; letter-spacing: 0.02em">CHRONO DU VAINQUEUR</span>
+<span style="width: 120px; height: 52px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid #0E1330; border-radius: 12px; background: #0E1330; color: #FFD60A; font-family: 'Big Shoulders Display', sans-serif; font-size: 34px; font-weight: 900; letter-spacing: 0.04em">23:45</span>
+</div>
+<div style="display: flex; gap: 10px; padding: 12px 14px; border: 2px solid #0E1330; border-radius: 14px; background: #FFFFFF">
+<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#2B3BFF" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex-shrink: 0"><circle cx="12" cy="12" r="9"></circle><path d="M12 11v5"></path><path d="M12 8h.01"></path></svg>
+<span style="font-size: 13px; line-height: 1.4">Ton prono n’est plus modifiable et les membres de tes ligues le voient. Ta scorecard s’affichera ici dès la publication des résultats.</span>
+</div>
+<a href="LiguePronos.dc.html" style="margin-top: auto; height: 56px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; gap: 8px; border: 2px solid #0E1330; border-radius: 16px; background: #FFD60A; color: #0E1330; box-shadow: 0 4px 0 #0E1330; font-family: 'Big Shoulders Display', sans-serif; font-size: 22px; font-weight: 900; letter-spacing: 0.04em; text-decoration: none">VOIR LES PRONOS DE MES LIGUES</a>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":900}}'>
+class Component extends DCLogic {
+renderVals() {
+const picks = [
+['Léo Martin', 1], ['Hugo Lefèvre', 5], ['Tomás Rivera', 2], ['Kenji Sato', 7], ['Olivier Hoarau', 9],
+];
+return {
+picks: picks.map(([name, rank], index) => {
+const multiplier = Math.min(1 + 0.1 * (rank - 1), 2);
+return {
+position: index + 1,
+name,
+rank: rank >= 6 ? 'Favori n°' + rank + ' · outsider' : 'Favori n°' + rank,
+multiplier: '×' + multiplier.toFixed(1),
+outsider: rank >= 6,
+regular: rank < 6,
+};
+}),
+};
+}
+}
+</script>
+</body>
+</html>

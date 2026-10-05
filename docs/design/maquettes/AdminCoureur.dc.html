@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>Admin — fiche coureur</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@800;900&amp;family=Outfit:wght@400;500;600;700&amp;display=swap">
+<style>
+body{margin:0}
+a{color:#09090B}a:hover{color:#2B3BFF}
+</style>
+</helmet>
+<div style="position: relative; width: 1280px; height: 900px; box-sizing: border-box; display: grid; grid-template-columns: 240px minmax(0, 1fr); background: #FFFFFF; color: #09090B; font-family: 'Outfit', sans-serif; font-size: 14px; overflow: hidden">
+<aside style="display: flex; flex-direction: column; gap: 20px; padding: 16px 12px; border-right: 1px solid #E4E4E7; background: #FAFAFA">
+<div style="display: flex; align-items: center; gap: 8px; height: 40px; padding: 0 8px">
+<span style="font-family: 'Big Shoulders Display', sans-serif; font-size: 24px; font-weight: 900; letter-spacing: 0.04em; color: #2B3BFF">FANTRAIL</span>
+<span style="padding: 2px 8px; border: 1px solid #E4E4E7; border-radius: 999px; background: #FFFFFF; color: #52525B; font-size: 12px; font-weight: 600">Admin</span>
+</div>
+<nav aria-label="Administration" style="display: flex; flex-direction: column; gap: 2px">
+<span style="display: flex; align-items: center; gap: 10px; height: 36px; padding: 0 10px; border-radius: 8px; background: #F4F4F5; font-weight: 600">Courses</span>
+<span style="display: flex; align-items: center; gap: 10px; height: 36px; padding: 0 10px; color: #52525B">Ligues</span>
+<span style="display: flex; align-items: center; gap: 10px; height: 36px; padding: 0 10px; color: #52525B">Joueurs</span>
+</nav>
+</aside>
+<main style="display: flex; flex-direction: column; min-width: 0">
+<header style="display: flex; align-items: center; height: 56px; padding: 0 24px; border-bottom: 1px solid #E4E4E7; color: #71717A">Courses › Grand Trail des Templiers 2026</header>
+<div style="display: flex; flex-direction: column; gap: 16px; padding: 24px">
+<h1 style="margin: 0; font-size: 24px; font-weight: 700; letter-spacing: -0.01em">Grand Trail des Templiers 2026</h1>
+<section style="border: 1px solid #E4E4E7; border-radius: 12px; overflow: hidden">
+<sc-for list="{{rows}}" as="row" hint-placeholder-count="12">
+<div style="display: grid; grid-template-columns: 64px minmax(0, 1fr) 80px 100px; align-items: center; height: 40px; border-bottom: 1px solid #F4F4F5">
+<span style="padding: 0 16px; font-weight: 700">{{row.rank}}</span>
+<span style="padding: 0 8px; font-weight: 600">{{row.name}}</span>
+<span style="padding: 0 8px">{{row.nationality}}</span>
+<span style="padding: 0 16px; text-align: right">{{row.index}}</span>
+</div>
+</sc-for>
+</section>
+</div>
+</main>
+<a href="AdminStartList.dc.html" aria-label="Fermer la fiche" style="position: absolute; inset: 0; background: rgba(9, 9, 11, 0.45)"></a>
+<aside role="dialog" aria-modal="true" aria-labelledby="runner-sheet-title" style="position: absolute; top: 0; right: 0; bottom: 0; width: 460px; box-sizing: border-box; display: flex; flex-direction: column; border-left: 1px solid #E4E4E7; background: #FFFFFF; box-shadow: -12px 0 32px rgba(9, 9, 11, 0.12)">
+<div style="display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; padding: 20px 24px 16px; border-bottom: 1px solid #E4E4E7">
+<div style="display: flex; flex-direction: column; gap: 2px">
+<h2 id="runner-sheet-title" style="margin: 0; font-size: 18px; font-weight: 600">Modifier le coureur</h2>
+<span style="color: #71717A">Grand Trail des Templiers 2026 · Élites hommes</span>
+</div>
+<a href="AdminStartList.dc.html" aria-label="Fermer" style="width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; border-radius: 8px; color: #52525B">
+<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"></path></svg>
+</a>
+</div>
+<form style="flex-grow: 1; display: flex; flex-direction: column; gap: 14px; padding: 20px 24px; overflow: auto">
+<div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px">
+<label style="display: flex; flex-direction: column; gap: 6px; font-weight: 500">Prénom
+<input type="text" value="Owen" style="height: 36px; box-sizing: border-box; padding: 0 12px; border: 1px solid #E4E4E7; border-radius: 8px; font-family: inherit; font-size: 14px">
+</label>
+<label style="display: flex; flex-direction: column; gap: 6px; font-weight: 500">Nom
+<input type="text" value="Price" style="height: 36px; box-sizing: border-box; padding: 0 12px; border: 1px solid #E4E4E7; border-radius: 8px; font-family: inherit; font-size: 14px">
+</label>
+</div>
+<label style="display: flex; flex-direction: column; gap: 6px; font-weight: 500">Nationalité
+<select style="height: 36px; box-sizing: border-box; padding: 0 10px; border: 1px solid #E4E4E7; border-radius: 8px; background: #FFFFFF; font-family: inherit; font-size: 14px">
+<option>GBR — Royaume-Uni</option>
+<option>FRA — France</option>
+</select>
+</label>
+<div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px">
+<label style="display: flex; flex-direction: column; gap: 6px; font-weight: 500">Index
+<input type="text" inputmode="numeric" value="890" style="height: 36px; box-sizing: border-box; padding: 0 12px; border: 1px solid #E4E4E7; border-radius: 8px; font-family: inherit; font-size: 14px; font-variant-numeric: tabular-nums">
+</label>
+<label style="display: flex; flex-direction: column; gap: 6px; font-weight: 500">Source de l’index
+<select style="height: 36px; box-sizing: border-box; padding: 0 10px; border: 1px solid #E4E4E7; border-radius: 8px; background: #FFFFFF; font-family: inherit; font-size: 14px">
+<option>ITRA</option>
+<option>UTMB</option>
+<option>Betrail</option>
+<option>Manuel</option>
+</select>
+</label>
+</div>
+<span style="margin-top: -6px; color: #71717A; font-size: 13px">Favori n°5 aujourd’hui, soit un multiplicateur de ×1.4. Laisse vide si le coureur n’a pas d’index : ×1.0.</span>
+<label style="display: flex; flex-direction: column; gap: 6px; font-weight: 500">Lien UTMB
+<input type="url" placeholder="https://utmb.world/runner/…" style="height: 36px; box-sizing: border-box; padding: 0 12px; border: 1px solid #E4E4E7; border-radius: 8px; font-family: inherit; font-size: 14px">
+</label>
+<label style="display: flex; flex-direction: column; gap: 6px; font-weight: 500">Lien ITRA
+<input type="url" value="https://itra.run/RunnerSpace/Price.Owen/…" style="height: 36px; box-sizing: border-box; padding: 0 12px; border: 1px solid #E4E4E7; border-radius: 8px; font-family: inherit; font-size: 14px">
+</label>
+<section style="margin-top: 8px; display: flex; flex-direction: column; gap: 10px; padding: 16px; border: 1px solid #FECACA; border-radius: 12px">
+<h3 style="margin: 0; font-size: 15px; font-weight: 600">Retirer de la start list</h3>
+<span style="color: #52525B; line-height: 1.45">Forfait avant le départ. Il reste dans les pronos qui le contiennent et y vaut 0 point. Les joueurs concernés voient une alerte et peuvent le remplacer jusqu’au verrouillage.</span>
+<button type="button" style="align-self: flex-start; height: 36px; padding: 0 14px; border: 1px solid #FCA5A5; border-radius: 8px; background: #FFFFFF; color: #B91C1C; font-family: inherit; font-size: 14px; font-weight: 600; cursor: pointer">Retirer Owen Price</button>
+</section>
+</form>
+<div style="display: flex; justify-content: flex-end; gap: 8px; padding: 16px 24px; border-top: 1px solid #E4E4E7">
+<a href="AdminStartList.dc.html" style="height: 36px; box-sizing: border-box; display: inline-flex; align-items: center; padding: 0 14px; border: 1px solid #E4E4E7; border-radius: 8px; background: #FFFFFF; color: #09090B; font-weight: 500; text-decoration: none">Annuler</a>
+<button type="button" style="height: 36px; padding: 0 14px; border: 0; border-radius: 8px; background: #2B3BFF; color: #FFFFFF; font-family: inherit; font-size: 14px; font-weight: 600; cursor: pointer">Enregistrer</button>
+</div>
+</aside>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1280,"height":900}}'>
+class Component extends DCLogic {
+renderVals() {
+const rows = [
+['1', 'Arthur Blanc', 'FRA', '921'], ['2', 'Luca Moretti', 'ITA', '914'], ['3', 'Thibault Roux', 'FRA', '905'],
+['4', 'Iker Etxeberria', 'ESP', '898'], ['5', 'Owen Price', 'GBR', '890'], ['6', 'Matteo Galli', 'ITA', '884'],
+['7', 'Félix Garnier', 'FRA', '870'], ['8', 'Diego Ortiz', 'MEX', '866'], ['—', 'Yanis Benali', 'MAR', '—'],
+['—', 'Nils Berg', 'NOR', '902'],
+];
+return { rows: rows.map(([rank, name, nationality, index]) => ({ rank, name, nationality, index })) };
+}
+}
+</script>
+</body>
+</html>

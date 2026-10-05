@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>Ligue — réglages du propriétaire</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;800;900&amp;family=Outfit:wght@400;500;600;700&amp;display=swap">
+<style>
+body{margin:0}
+a{color:#2B3BFF}a:hover{color:#1A26B8}
+</style>
+</helmet>
+<div style="width: 390px; height: 1480px; box-sizing: border-box; display: flex; flex-direction: column; background: #F4F5FF; color: #0E1330; font-family: 'Outfit', sans-serif">
+<div style="padding: 20px 20px 22px; display: flex; flex-direction: column; gap: 14px; background: #2B3BFF; color: #FFFFFF">
+<div style="display: flex; align-items: center; gap: 12px">
+<a href="Ligue.dc.html" aria-label="Retour à la ligue" style="width: 44px; height: 44px; flex-shrink: 0; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid #0E1330; border-radius: 999px; background: #FFFFFF; color: #0E1330">
+<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 18l-6-6 6-6"></path></svg>
+</a>
+<span style="font-size: 13px; color: #DDE1FF">Les Chamois · tu es propriétaire</span>
+</div>
+<h1 style="margin: 0; font-family: 'Big Shoulders Display', sans-serif; font-size: 46px; line-height: 0.95; font-weight: 900">RÉGLAGES</h1>
+</div>
+<div style="flex-grow: 1; box-sizing: border-box; padding: 16px 20px 28px; display: flex; flex-direction: column; gap: 16px">
+<form style="display: flex; flex-direction: column; gap: 8px; padding: 14px; border: 2px solid #0E1330; border-radius: 14px; background: #FFFFFF">
+<label for="league-rename" style="font-family: 'Big Shoulders Display', sans-serif; font-size: 20px; font-weight: 900; letter-spacing: 0.02em">NOM DE LA LIGUE</label>
+<div style="display: flex; gap: 8px">
+<input id="league-rename" type="text" value="Les Chamois" style="flex-grow: 1; min-width: 0; height: 48px; box-sizing: border-box; padding: 0 14px; border: 2px solid #0E1330; border-radius: 12px; background: #FFFFFF; color: #0E1330; font-family: inherit; font-size: 16px; font-weight: 600">
+<button type="button" style="height: 48px; padding: 0 16px; border: 2px solid #0E1330; border-radius: 12px; background: #2B3BFF; color: #FFFFFF; font-family: inherit; font-size: 14px; font-weight: 700; cursor: pointer">Renommer</button>
+</div>
+<span style="font-size: 12px; color: #4A5070">3 à 40 caractères, unique.</span>
+</form>
+<fieldset style="margin: 0; padding: 14px; display: flex; flex-direction: column; gap: 10px; border: 2px solid #0E1330; border-radius: 14px; background: #FFFFFF">
+<legend style="float: left; width: 100%; margin-bottom: 10px; padding: 0; font-family: 'Big Shoulders Display', sans-serif; font-size: 20px; font-weight: 900; letter-spacing: 0.02em">VISIBILITÉ</legend>
+<label style="display: flex; align-items: flex-start; gap: 12px; padding: 12px; border: 2px solid #0E1330; border-radius: 12px; background: #EEF0FF; cursor: pointer">
+<input type="radio" name="visibility-edit" value="private" checked style="width: 20px; height: 20px; margin: 2px 0 0; accent-color: #2B3BFF">
+<span style="display: flex; flex-direction: column; gap: 3px">
+<span style="font-family: 'Big Shoulders Display', sans-serif; font-size: 20px; line-height: 1; font-weight: 900">PRIVÉE</span>
+<span style="font-size: 13px; line-height: 1.4; color: #4A5070">On la rejoint avec le code ou le lien d’invitation.</span>
+</span>
+</label>
+<label style="display: flex; align-items: flex-start; gap: 12px; padding: 12px; border: 2px solid #D5D8EB; border-radius: 12px; background: #FFFFFF; cursor: pointer">
+<input type="radio" name="visibility-edit" value="public" style="width: 20px; height: 20px; margin: 2px 0 0; accent-color: #2B3BFF">
+<span style="display: flex; flex-direction: column; gap: 3px">
+<span style="font-family: 'Big Shoulders Display', sans-serif; font-size: 20px; line-height: 1; font-weight: 900">PUBLIQUE</span>
+<span style="font-size: 13px; line-height: 1.4; color: #4A5070">Visible dans la liste des ligues, tout joueur la rejoint en un clic.</span>
+</span>
+</label>
+</fieldset>
+<section aria-label="Code d’invitation" style="display: flex; flex-direction: column; gap: 10px; padding: 14px; border: 2px solid #0E1330; border-radius: 14px; background: #FFFFFF">
+<h2 style="margin: 0; font-family: 'Big Shoulders Display', sans-serif; font-size: 20px; font-weight: 900; letter-spacing: 0.02em">CODE D’INVITATION</h2>
+<div style="display: flex; align-items: center; gap: 10px">
+<span style="flex-grow: 1; height: 52px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px dashed #0E1330; border-radius: 12px; font-family: 'Big Shoulders Display', sans-serif; font-size: 28px; font-weight: 900; letter-spacing: 0.12em">CHAMX742</span>
+<button type="button" aria-label="Copier le lien d’invitation" style="width: 52px; height: 52px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; border: 2px solid #0E1330; border-radius: 12px; background: #FFD60A; color: #0E1330; box-shadow: 0 3px 0 #0E1330; cursor: pointer">
+<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"></rect><path d="M5 15V5a2 2 0 0 1 2-2h10"></path></svg>
+</button>
+</div>
+<button type="button" style="height: 44px; display: flex; align-items: center; justify-content: center; gap: 8px; border: 2px solid #0E1330; border-radius: 12px; background: #FFFFFF; color: #0E1330; font-family: inherit; font-size: 14px; font-weight: 700; cursor: pointer">
+<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 11a8 8 0 1 0-2.3 5.7"></path><path d="M20 5v6h-6"></path></svg>
+Générer un nouveau code</button>
+<span style="font-size: 12px; color: #4A5070">L’ancien code et l’ancien lien ne marcheront plus. Les membres actuels restent.</span>
+</section>
+<section aria-label="Membres" style="display: flex; flex-direction: column; gap: 8px; padding: 14px; border: 2px solid #0E1330; border-radius: 14px; background: #FFFFFF">
+<h2 style="margin: 0 0 2px; font-family: 'Big Shoulders Display', sans-serif; font-size: 20px; font-weight: 900; letter-spacing: 0.02em">MEMBRES · 6</h2>
+<ul style="margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column">
+<li style="display: flex; align-items: center; gap: 10px; min-height: 52px; border-bottom: 2px solid #E3E5F3">
+<span style="flex-grow: 1; font-size: 15px; font-weight: 700">Kilian · toi</span>
+<span style="padding: 2px 8px; border: 2px solid #0E1330; border-radius: 8px; background: #FFD60A; font-size: 11px; font-weight: 700">PROPRIÉTAIRE</span>
+</li>
+<sc-for list="{{members}}" as="member" hint-placeholder-count="5">
+<li style="display: flex; align-items: center; gap: 10px; min-height: 52px; border-bottom: 2px solid #E3E5F3">
+<span style="flex-grow: 1; display: flex; flex-direction: column">
+<span style="font-size: 15px; font-weight: 700">{{member.pseudo}}</span>
+<span style="font-size: 12px; color: #4A5070">{{member.joinedAt}}</span>
+</span>
+<button type="button" aria-label="{{member.removeLabel}}" style="height: 36px; padding: 0 12px; border: 2px solid #B8330A; border-radius: 999px; background: #FFFFFF; color: #B8330A; font-family: inherit; font-size: 13px; font-weight: 700; cursor: pointer">Retirer</button>
+</li>
+</sc-for>
+</ul>
+</section>
+<section aria-label="Supprimer la ligue" style="display: flex; flex-direction: column; gap: 10px; padding: 14px; border: 2px dashed #B8330A; border-radius: 14px; background: #FFECE3">
+<h2 style="margin: 0; font-family: 'Big Shoulders Display', sans-serif; font-size: 20px; font-weight: 900; letter-spacing: 0.02em; color: #B8330A">SUPPRIMER LA LIGUE</h2>
+<span style="font-size: 13px; line-height: 1.4">Le classement de la ligue disparaît pour tous ses membres. Leurs pronos et leurs points restent dans leurs autres ligues.</span>
+<button type="button" style="height: 48px; border: 2px solid #0E1330; border-radius: 12px; background: #B8330A; color: #FFFFFF; font-family: 'Big Shoulders Display', sans-serif; font-size: 20px; font-weight: 900; letter-spacing: 0.03em; cursor: pointer">SUPPRIMER LES CHAMOIS</button>
+</section>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":1480}}'>
+class Component extends DCLogic {
+renderVals() {
+const members = [
+['Juju', 'a rejoint le 1 oct.'], ['Pierrot74', 'a rejoint le 2 oct.'], ['Marmotte', 'a rejoint le 2 oct.'],
+['Sandrine', 'a rejoint le 3 oct.'], ['Tonton Bob', 'a rejoint le 5 oct.'],
+];
+return {
+members: members.map(([pseudo, joinedAt]) => ({ pseudo, joinedAt, removeLabel: 'Retirer ' + pseudo + ' de la ligue' })),
+};
+}
+}
+</script>
+</body>
+</html>

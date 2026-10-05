@@ -82,6 +82,62 @@
       "x": 4700,
       "y": 0
     },
+    "CarteCourseEtats.dc.html": {
+      "h": 1560,
+      "is_interactive": true,
+      "title": "Carte course — états",
+      "w": 390,
+      "x": 5170,
+      "y": 0
+    },
+    "DossardComplet.dc.html": {
+      "h": 900,
+      "is_interactive": true,
+      "title": "Pronostic complet",
+      "w": 390,
+      "x": 5640,
+      "y": 0
+    },
+    "DossardVerrouille.dc.html": {
+      "h": 900,
+      "is_interactive": true,
+      "title": "Pronostic verrouillé",
+      "w": 390,
+      "x": 6110,
+      "y": 0
+    },
+    "LiguePronos.dc.html": {
+      "h": 1240,
+      "is_interactive": true,
+      "title": "Ligue — pronos des membres",
+      "w": 390,
+      "x": 6580,
+      "y": 0
+    },
+    "QuitterLigue.dc.html": {
+      "h": 844,
+      "is_interactive": true,
+      "title": "Quitter une ligue",
+      "w": 390,
+      "x": 7050,
+      "y": 0
+    },
+    "LiguePublique.dc.html": {
+      "h": 900,
+      "is_interactive": true,
+      "title": "Ligue publique — non-membre",
+      "w": 390,
+      "x": 7520,
+      "y": 0
+    },
+    "LigueReglages.dc.html": {
+      "h": 1480,
+      "is_interactive": true,
+      "title": "Ligue — réglages du propriétaire",
+      "w": 390,
+      "x": 7990,
+      "y": 0
+    },
     "AdminCourses.dc.html": {
       "h": 900,
       "is_interactive": true,
@@ -130,6 +186,46 @@
       "x": 1360,
       "y": 3580
     },
+    "AdminCourseInfos.dc.html": {
+      "h": 900,
+      "is_interactive": true,
+      "title": "Admin — course, infos et statut",
+      "w": 1280,
+      "x": 0,
+      "y": 4860
+    },
+    "AdminStartList.dc.html": {
+      "h": 900,
+      "is_interactive": true,
+      "title": "Admin — champ et start list",
+      "w": 1280,
+      "x": 1360,
+      "y": 4860
+    },
+    "AdminCoureur.dc.html": {
+      "h": 900,
+      "is_interactive": true,
+      "title": "Admin — fiche coureur",
+      "w": 1280,
+      "x": 2720,
+      "y": 4860
+    },
+    "AdminImportCsv.dc.html": {
+      "h": 900,
+      "is_interactive": true,
+      "title": "Admin — import CSV des coureurs",
+      "w": 1280,
+      "x": 4080,
+      "y": 4860
+    },
+    "AdminResultatsVersions.dc.html": {
+      "h": 900,
+      "is_interactive": true,
+      "title": "Admin — résultats publiés et versions",
+      "w": 1280,
+      "x": 5440,
+      "y": 4860
+    },
     "CreerLigue.dc.html": {
       "h": 900,
       "is_interactive": true,
@@ -163,6 +259,22 @@
       "w": 240,
       "x": 0,
       "y": -260
+    },
+    "playerStates": {
+      "kind": "title1",
+      "maxW": 3210,
+      "text": "Joueur — états du prono et ligues",
+      "w": 240,
+      "x": 5170,
+      "y": -260
+    },
+    "adminRace": {
+      "kind": "title1",
+      "maxW": 6720,
+      "text": "Back-office — une course : infos, start list, résultats",
+      "w": 240,
+      "x": 0,
+      "y": 4600
     }
   },
   "order": [
@@ -177,12 +289,24 @@
     "Profil.dc.html",
     "Invitation.dc.html",
     "Connexion.dc.html",
+    "CarteCourseEtats.dc.html",
+    "DossardComplet.dc.html",
+    "DossardVerrouille.dc.html",
+    "LiguePronos.dc.html",
+    "QuitterLigue.dc.html",
+    "LiguePublique.dc.html",
+    "LigueReglages.dc.html",
     "AdminCourses.dc.html",
     "AdminResultats.dc.html",
     "AdminLigues.dc.html",
     "AdminLigue.dc.html",
     "AdminJoueurs.dc.html",
-    "AdminJoueur.dc.html"
+    "AdminJoueur.dc.html",
+    "AdminCourseInfos.dc.html",
+    "AdminStartList.dc.html",
+    "AdminCoureur.dc.html",
+    "AdminImportCsv.dc.html",
+    "AdminResultatsVersions.dc.html"
   ],
   "pages": [],
   "title": "Fantrail — directions visuelles"

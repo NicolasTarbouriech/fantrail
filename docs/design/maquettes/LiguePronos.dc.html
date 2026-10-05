@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>Ligue — pronos des membres</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;800;900&amp;family=Outfit:wght@400;500;600;700&amp;display=swap">
+<style>
+body{margin:0}
+a{color:#2B3BFF}a:hover{color:#1A26B8}
+</style>
+</helmet>
+<div style="width: 390px; height: 1240px; box-sizing: border-box; display: flex; flex-direction: column; background: #F4F5FF; color: #0E1330; font-family: 'Outfit', sans-serif">
+<div style="padding: 20px 20px 22px; display: flex; flex-direction: column; gap: 14px; background: #2B3BFF; color: #FFFFFF">
+<div style="display: flex; align-items: center; justify-content: space-between">
+<a href="MesLigues.dc.html" aria-label="Retour à mes ligues" style="width: 44px; height: 44px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid #0E1330; border-radius: 999px; background: #FFFFFF; color: #0E1330">
+<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 18l-6-6 6-6"></path></svg>
+</a>
+<span style="display: flex; align-items: center; gap: 6px; padding: 4px 10px; border: 2px solid #FFFFFF; border-radius: 999px; font-size: 12px; font-weight: 700">
+<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="11" width="16" height="10" rx="2"></rect><path d="M8 11V7a4 4 0 0 1 8 0v4"></path></svg>
+LIGUE PRIVÉE</span>
+</div>
+<div style="display: flex; flex-direction: column; gap: 4px">
+<h1 style="margin: 0; font-family: 'Big Shoulders Display', sans-serif; font-size: 42px; line-height: 0.95; font-weight: 900">LES MARMOTTES DU VERCORS</h1>
+<span style="font-size: 13px; color: #DDE1FF">12 joueurs · créée par Pierrot74</span>
+</div>
+</div>
+<div style="flex-grow: 1; box-sizing: border-box; padding: 16px 20px 24px; display: flex; flex-direction: column; gap: 14px">
+<div role="tablist" aria-label="Classement" style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px">
+<button type="button" role="tab" aria-selected="false" style="height: 44px; border: 2px solid #0E1330; border-radius: 999px; background: #FFFFFF; color: #0E1330; font-family: 'Big Shoulders Display', sans-serif; font-size: 17px; font-weight: 800; letter-spacing: 0.03em; cursor: pointer">CUMUL</button>
+<button type="button" role="tab" aria-selected="true" style="height: 44px; border: 2px solid #0E1330; border-radius: 999px; background: #0E1330; color: #FFFFFF; font-family: 'Big Shoulders Display', sans-serif; font-size: 17px; font-weight: 800; letter-spacing: 0.03em; cursor: pointer">DIAGONALE</button>
+<button type="button" role="tab" aria-selected="false" style="height: 44px; border: 2px solid #0E1330; border-radius: 999px; background: #FFFFFF; color: #0E1330; font-family: 'Big Shoulders Display', sans-serif; font-size: 17px; font-weight: 800; letter-spacing: 0.03em; cursor: pointer">TEMPLIERS</button>
+</div>
+<div style="display: flex; align-items: center; justify-content: space-between; gap: 10px">
+<span style="display: flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 600">
+<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#2B3BFF" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="11" width="16" height="10" rx="2"></rect><path d="M8 11V7a4 4 0 0 1 8 0v4"></path></svg>
+En course · pronos révélés</span>
+<div role="group" aria-label="Champ" style="display: flex; border: 2px solid #0E1330; border-radius: 999px; overflow: hidden">
+<button type="button" aria-pressed="true" style="height: 36px; padding: 0 12px; border: 0; background: #0E1330; color: #FFFFFF; font-family: 'Big Shoulders Display', sans-serif; font-size: 15px; font-weight: 800; letter-spacing: 0.04em; cursor: pointer">HOMMES</button>
+<button type="button" aria-pressed="false" style="height: 36px; padding: 0 12px; border: 0; background: #FFFFFF; color: #0E1330; font-family: 'Big Shoulders Display', sans-serif; font-size: 15px; font-weight: 800; letter-spacing: 0.04em; cursor: pointer">FEMMES</button>
+</div>
+</div>
+<ul style="margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 10px">
+<sc-for list="{{members}}" as="member" hint-placeholder-count="5">
+<li style="display: flex; flex-direction: column; gap: 10px; padding: 12px; border: 2px solid #0E1330; border-radius: 14px; background: {{member.background}}; box-shadow: 0 3px 0 #0E1330">
+<div style="display: flex; align-items: center; justify-content: space-between; gap: 10px">
+<span style="font-size: 16px; font-weight: 700">{{member.pseudo}}</span>
+<span style="display: flex; align-items: center; gap: 6px; font-size: 12px; color: #4A5070">chrono
+<span style="padding: 2px 8px; border-radius: 8px; background: #0E1330; color: #FFD60A; font-family: 'Big Shoulders Display', sans-serif; font-size: 18px; font-weight: 900; letter-spacing: 0.04em">{{member.time}}</span>
+</span>
+</div>
+<ol style="margin: 0; padding: 0; list-style: none; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 6px">
+<sc-for list="{{member.picks}}" as="pick" hint-placeholder-count="5">
+<li style="min-width: 0; box-sizing: border-box; display: flex; flex-direction: column; align-items: center; gap: 1px; padding: 4px 3px 6px; border: 2px solid #0E1330; border-top: 5px solid #2B3BFF; border-radius: 8px; background: {{pick.background}}">
+<span style="font-family: 'Big Shoulders Display', sans-serif; font-size: 18px; line-height: 1; font-weight: 900">{{pick.position}}</span>
+<span style="max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 10px; font-weight: 700; text-transform: uppercase">{{pick.lastName}}</span>
+</li>
+</sc-for>
+</ol>
+</li>
+</sc-for>
+<li style="display: flex; align-items: center; gap: 10px; padding: 12px; border: 2px dashed #9097B8; border-radius: 14px">
+<span style="flex-grow: 1; display: flex; flex-direction: column">
+<span style="font-size: 16px; font-weight: 700; color: #4A5070">Tonton Bob</span>
+<span style="font-size: 12px; color: #4A5070">Pas de prono sur ce champ · 0 pt</span>
+</span>
+</li>
+</ul>
+<button type="button" style="height: 48px; border: 2px solid #0E1330; border-radius: 12px; background: #FFFFFF; color: #0E1330; font-family: inherit; font-size: 14px; font-weight: 700; cursor: pointer">Voir les 7 autres membres</button>
+<div style="display: flex; align-items: center; gap: 8px; font-size: 12px; color: #4A5070">
+<span style="width: 18px; height: 14px; box-sizing: border-box; border: 2px solid #0E1330; border-top: 4px solid #2B3BFF; border-radius: 4px; background: #FFD60A"></span>
+outsider (favori n°6 et au-delà) · les points tombent à la publication des résultats
+</div>
+<a href="QuitterLigue.dc.html" style="margin-top: auto; align-self: center; min-height: 44px; display: flex; align-items: center; gap: 8px; padding: 0 12px; color: #B8330A; font-size: 14px; font-weight: 700; text-decoration: none">
+<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 4h4v16h-4"></path><path d="M10 8l-4 4 4 4"></path><path d="M6 12h10"></path></svg>
+Quitter la ligue</a>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":1240}}'>
+class Component extends DCLogic {
+renderVals() {
+const outsiders = ['Sato', 'Hoarau', 'Silva', 'Bianchi', 'Vidal', 'Carter'];
+const toPicks = (lastNames) => lastNames.map((lastName, index) => ({
+position: index + 1,
+lastName,
+background: outsiders.includes(lastName) ? '#FFD60A' : '#FFFFFF',
+}));
+const members = [
+['Kilian · toi', '23:45', ['Martin', 'Lefèvre', 'Rivera', 'Sato', 'Hoarau'], true],
+['Pierrot74', '22:58', ['Rivera', 'Martin', 'Aldaz', 'Lefèvre', 'Silva'], false],
+['Juju', '24:10', ['Martin', 'Rivera', 'Sato', 'Aldaz', 'Bianchi'], false],
+['Marmotte', '23:20', ['Aldaz', 'Martin', 'Vidal', 'Rivera', 'Carter'], false],
+];
+return {
+members: members.map(([pseudo, time, lastNames, isMe]) => ({
+pseudo,
+time,
+picks: toPicks(lastNames),
+background: isMe ? '#FFF3B0' : '#FFFFFF',
+})),
+};
+}
+}
+</script>
+</body>
+</html>
