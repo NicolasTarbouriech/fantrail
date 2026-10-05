@@ -1,0 +1,27 @@
+{
+  "name": "shared-apps-backend-web-data-access-graphql-types",
+  "$schema": "../../../../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/shared/apps/backend/web/data-access-graphql-types/src",
+  "projectType": "library",
+  "tags": [],
+  "targets": {
+    "build": {
+      "executor": "@nx/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/libs/shared/apps/backend/web/data-access-graphql-types",
+        "main": "libs/shared/apps/backend/web/data-access-graphql-types/src/index.ts",
+        "tsConfig": "libs/shared/apps/backend/web/data-access-graphql-types/tsconfig.lib.json",
+        "assets": [
+          "libs/shared/apps/backend/web/data-access-graphql-types/*.md"
+        ]
+      }
+    },
+    "codegen": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npx graphql-codegen --config libs/shared/apps/backend/web/data-access-graphql-types/codegen.ts"
+      }
+    }
+  }
+}

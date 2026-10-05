@@ -1,0 +1,25 @@
+@theme {
+  --font-display: 'Big Shoulders Display', sans-serif;
+  --font-sans: 'Outfit', sans-serif;
+
+  --color-primary: #2b3bff;
+  --color-primary-dark: #1a26b8;
+  --color-primary-soft: #eef0ff;
+  --color-on-primary: #dde1ff;
+  --color-highlight: #ffd60a;
+  --color-highlight-soft: #fff3b0;
+  --color-ink: #0e1330;
+  --color-on-ink: #c3c7dd;
+  --color-ground: #f4f5ff;
+  --color-muted: #4a5070;
+  --color-faded: #9097b8;
+  --color-line: #e3e5f3;
+  --color-line-strong: #d5d8eb;
+  --color-disabled: #eceef8;
+  --color-alert: #b8330a;
+  --color-alert-soft: #ffece3;
+
+  --shadow-block: 0 3px 0 var(--color-ink);
+  --shadow-block-lg: 0 4px 0 var(--color-ink);
+  --shadow-sticker: 3px 3px 0 var(--color-ink);
+}

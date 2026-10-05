@@ -115,7 +115,15 @@
       ],
       "@trail/shared/tooling/util-text": [
         "libs/shared/tooling/util-text/src/index.ts"
-      ]
+      ],
+      "@trail/shared/apps/backend/web/data-access-graphql-types": [
+        "libs/shared/apps/backend/web/data-access-graphql-types/src/index.ts"
+      ],
+      "@trail/shared/design/ui-react": [
+        "libs/shared/design/ui-react/src/index.ts"
+      ],
+      "@trail/modules-frontend": ["libs/modules-frontend/src/index.ts"],
+      "@trail/shell/fantrail": ["libs/shell/fantrail/src/index.ts"]
     },
     "esModuleInterop": true
   },
