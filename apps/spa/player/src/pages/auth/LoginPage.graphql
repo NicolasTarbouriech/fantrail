@@ -1,0 +1,12 @@
+query LoginPage {
+  races {
+    id
+    name
+    status
+    fields {
+      id
+      lockAt
+      isLocked
+    }
+  }
+}

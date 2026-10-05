@@ -1,0 +1,21 @@
+mutation useAuthActionsMutateLogin($email: String!, $password: String!) {
+  login(email: $email, password: $password) {
+    id
+    email
+    pseudo
+    role
+  }
+}
+
+mutation useAuthActionsMutateRegister($data: RegisterInput!) {
+  register(data: $data) {
+    id
+    email
+    pseudo
+    role
+  }
+}
+
+mutation useAuthActionsMutateLogout {
+  logout
+}

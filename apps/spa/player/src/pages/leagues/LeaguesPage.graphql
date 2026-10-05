@@ -1,0 +1,38 @@
+query LeaguesPage {
+  myLeagues {
+    id
+    name
+    visibility
+    memberCount
+    leaderboard {
+      rank
+      userId
+      total
+      scoredFieldCount
+    }
+  }
+  publicLeagues {
+    id
+    name
+    memberCount
+    isMember
+  }
+  communityLeaderboard {
+    rank
+    userId
+    total
+    scoredFieldCount
+  }
+}
+
+mutation LeaguesPageMutateJoinByCode($inviteCode: String!) {
+  joinLeagueByInviteCode(inviteCode: $inviteCode) {
+    id
+  }
+}
+
+mutation LeaguesPageMutateJoin($leagueId: ID!) {
+  joinLeague(leagueId: $leagueId) {
+    id
+  }
+}

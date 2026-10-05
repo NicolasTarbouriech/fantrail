@@ -1,0 +1,8 @@
+query ScoresPage {
+  communityLeaderboard {
+    rank
+    userId
+    total
+    scoredFieldCount
+  }
+}

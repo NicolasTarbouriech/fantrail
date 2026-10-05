@@ -1,0 +1,53 @@
+query LeagueSettingsPage($leagueId: ID!) {
+  league(leagueId: $leagueId) {
+    id
+    name
+    visibility
+    isOwner
+    ownerId
+    inviteCode
+    members {
+      id
+      pseudo
+    }
+  }
+}
+
+mutation LeagueSettingsPageMutateRename($leagueId: ID!, $name: String!) {
+  renameLeague(leagueId: $leagueId, name: $name) {
+    id
+    name
+  }
+}
+
+mutation LeagueSettingsPageMutateVisibility(
+  $leagueId: ID!
+  $visibility: LeagueVisibility!
+) {
+  changeLeagueVisibility(leagueId: $leagueId, visibility: $visibility) {
+    id
+    visibility
+  }
+}
+
+mutation LeagueSettingsPageMutateRegenerateCode($leagueId: ID!) {
+  regenerateLeagueInviteCode(leagueId: $leagueId) {
+    id
+    inviteCode
+  }
+}
+
+mutation LeagueSettingsPageMutateRemoveMember($leagueId: ID!, $userId: ID!) {
+  removeLeagueMember(leagueId: $leagueId, userId: $userId) {
+    id
+    memberCount
+    members {
+      id
+      pseudo
+    }
+  }
+}
+
+mutation LeagueSettingsPageMutateDelete($leagueId: ID!) {
+  deleteLeague(leagueId: $leagueId)
+}

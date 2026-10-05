@@ -1,0 +1,66 @@
+query PredictionPage($raceId: ID!) {
+  race(raceId: $raceId) {
+    id
+    name
+    distanceInKm
+    elevationGainInMeters
+    timezone
+    pickCount
+    timeTolerancePercent
+    status
+    fields {
+      id
+      gender
+      startAt
+      lockAt
+      isLocked
+      startList {
+        fieldId
+        runners {
+          id
+          fullName
+          lastName
+          nationality
+          index
+          favoriteRank
+          isWithdrawn
+        }
+      }
+      result {
+        fieldId
+        version
+      }
+    }
+  }
+  myPredictions {
+    id
+    fieldId
+    pickList
+    winnerTimeEstimateInSeconds
+    isComplete
+    finalizedAt
+    updatedAt
+    withdrawnRunnerIds
+  }
+}
+
+mutation PredictionPageMutateSave(
+  $fieldId: ID!
+  $pickList: [ID]!
+  $winnerTimeEstimateInSeconds: Int
+) {
+  savePrediction(
+    fieldId: $fieldId
+    pickList: $pickList
+    winnerTimeEstimateInSeconds: $winnerTimeEstimateInSeconds
+  ) {
+    id
+    fieldId
+    pickList
+    winnerTimeEstimateInSeconds
+    isComplete
+    finalizedAt
+    updatedAt
+    withdrawnRunnerIds
+  }
+}

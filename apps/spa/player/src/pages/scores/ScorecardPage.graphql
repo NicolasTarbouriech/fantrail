@@ -1,0 +1,46 @@
+query ScorecardPage($raceId: ID!) {
+  race(raceId: $raceId) {
+    id
+    name
+    timeTolerancePercent
+    fields {
+      id
+      gender
+      startList {
+        fieldId
+        runners {
+          id
+          fullName
+          isWithdrawn
+        }
+      }
+    }
+  }
+}
+
+query ScorecardPageGetScorecard($fieldId: ID!) {
+  myScorecard(fieldId: $fieldId) {
+    fieldId
+    resultVersion
+    total
+    picks {
+      pickPosition
+      runnerId
+      finishPosition
+      favoriteRank
+      positionPoints
+      multiplier
+      points
+    }
+    time {
+      estimateInSeconds
+      actualInSeconds
+      gapInSeconds
+      points
+    }
+    bonuses {
+      type
+      points
+    }
+  }
+}

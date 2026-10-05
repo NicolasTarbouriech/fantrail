@@ -1,0 +1,8 @@
+query RequireAuth {
+  me {
+    id
+    email
+    pseudo
+    role
+  }
+}

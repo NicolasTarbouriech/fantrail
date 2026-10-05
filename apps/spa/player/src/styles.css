@@ -1,0 +1,20 @@
+@import 'tailwindcss';
+@import '../../../../libs/shared/design/ui-react/src/lib/theme.css';
+
+@source '../../../../libs/shared/design/ui-react/src';
+@source '../../../../libs/modules-frontend/src';
+@source '../../../../libs/shell/fantrail/src';
+
+@layer base {
+  body {
+    margin: 0;
+    background: var(--color-ground);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  a {
+    color: inherit;
+  }
+}

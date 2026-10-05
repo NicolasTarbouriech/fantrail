@@ -1,0 +1,72 @@
+query HomePage {
+  races {
+    id
+    name
+    location
+    distanceInKm
+    timezone
+    pickCount
+    status
+    fields {
+      id
+      gender
+      startAt
+      lockAt
+      isLocked
+      startList {
+        fieldId
+        runners {
+          id
+          fullName
+          isWithdrawn
+        }
+      }
+      result {
+        fieldId
+        version
+      }
+    }
+  }
+  myPredictions {
+    id
+    fieldId
+    pickList
+    winnerTimeEstimateInSeconds
+    isComplete
+    withdrawnRunnerIds
+  }
+  myLeagues {
+    id
+    name
+    visibility
+    memberCount
+    leaderboard {
+      rank
+      userId
+      total
+      scoredFieldCount
+    }
+  }
+  communityLeaderboard {
+    rank
+    userId
+    total
+    scoredFieldCount
+  }
+}
+
+query HomePageGetRaceScores($raceId: ID!) {
+  communityLeaderboard(raceId: $raceId) {
+    rank
+    userId
+    total
+    scoredFieldCount
+  }
+}
+
+query HomePageGetFieldScore($fieldId: ID!) {
+  myScorecard(fieldId: $fieldId) {
+    fieldId
+    total
+  }
+}

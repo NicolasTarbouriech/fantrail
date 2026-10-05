@@ -1,0 +1,8 @@
+mutation CreateLeaguePageMutateCreate(
+  $name: String!
+  $visibility: LeagueVisibility!
+) {
+  createLeague(name: $name, visibility: $visibility) {
+    id
+  }
+}

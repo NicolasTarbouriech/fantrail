@@ -1,0 +1,23 @@
+query JoinPage($inviteCode: String!) {
+  leagueByInviteCode(inviteCode: $inviteCode) {
+    id
+    name
+    memberCount
+    ownerId
+    isMember
+    members {
+      id
+      pseudo
+    }
+  }
+  races {
+    id
+    name
+  }
+}
+
+mutation JoinPageMutateJoin($inviteCode: String!) {
+  joinLeagueByInviteCode(inviteCode: $inviteCode) {
+    id
+  }
+}

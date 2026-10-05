@@ -1,0 +1,16 @@
+{
+  "name": "spa-player",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/spa/player/src",
+  "projectType": "application",
+  "tags": ["frontend"],
+  "// targets": "to see all targets run: nx show project spa-player --web",
+  "targets": {
+    "codegen": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npx graphql-codegen --config apps/spa/player/codegen.ts"
+      }
+    }
+  }
+}

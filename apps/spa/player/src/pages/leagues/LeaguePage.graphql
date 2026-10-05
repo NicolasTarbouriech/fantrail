@@ -1,0 +1,74 @@
+query LeaguePage($leagueId: ID!, $raceId: ID) {
+  league(leagueId: $leagueId) {
+    id
+    name
+    visibility
+    memberCount
+    ownerId
+    isOwner
+    isMember
+    inviteCode
+    members {
+      id
+      pseudo
+    }
+    leaderboard(raceId: $raceId) {
+      rank
+      userId
+      total
+      scoredFieldCount
+      player {
+        id
+        pseudo
+      }
+    }
+  }
+  races {
+    id
+    name
+    status
+    pickCount
+    fields {
+      id
+      gender
+      isLocked
+      startList {
+        fieldId
+        runners {
+          id
+          lastName
+          favoriteRank
+          isWithdrawn
+        }
+      }
+    }
+  }
+}
+
+query LeaguePageGetFieldPredictions($leagueId: ID!, $fieldId: ID!) {
+  league(leagueId: $leagueId) {
+    id
+    fieldPredictions(fieldId: $fieldId) {
+      id
+      fieldId
+      pickList
+      winnerTimeEstimateInSeconds
+      player {
+        id
+        pseudo
+      }
+    }
+  }
+}
+
+mutation LeaguePageMutateJoin($leagueId: ID!) {
+  joinLeague(leagueId: $leagueId) {
+    id
+    isMember
+    memberCount
+  }
+}
+
+mutation LeaguePageMutateLeave($leagueId: ID!) {
+  leaveLeague(leagueId: $leagueId)
+}
