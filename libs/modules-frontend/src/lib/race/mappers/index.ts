@@ -6,3 +6,4 @@ export * from './raceCardState';
 export * from './raceStatus';
 export * from './raceTime';
 export * from './startListCsv';
+export * from './raceGroups';

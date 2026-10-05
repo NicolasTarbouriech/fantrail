@@ -6,7 +6,7 @@ import { tabPaths } from '../../app/paths';
 import { useCurrentPlayer } from '../../auth/CurrentPlayer';
 import { useNow } from '../../hooks/useNow';
 import { useHomePageQuery } from '../../services/graphql';
-import { RaceCardContainer } from '../home/RaceCardContainer';
+import { RaceGroupList } from '../home/RaceGroupList';
 import { getPredictionByFieldId } from '../home/homeRace';
 
 export function RacesPage() {
@@ -29,17 +29,12 @@ export function RacesPage() {
           Impossible de charger les courses. Réessaie dans un instant.
         </Callout>
       ) : null}
-      <div className="grid gap-[18px] md:grid-cols-2 lg:grid-cols-3">
-        {(data?.races ?? []).map((race, index) => (
-          <RaceCardContainer
-            key={race.id}
-            race={race}
-            predictionByFieldId={predictionByFieldId}
-            tone={index % 2 === 0 ? 'primary' : 'ink'}
-            now={now}
-          />
-        ))}
-      </div>
+      <RaceGroupList
+        races={data?.races ?? []}
+        predictionByFieldId={predictionByFieldId}
+        now={now}
+        gridClassName="md:grid-cols-2 lg:grid-cols-3"
+      />
     </TabPage>
   );
 }

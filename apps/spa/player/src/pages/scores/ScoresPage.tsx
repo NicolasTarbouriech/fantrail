@@ -6,7 +6,7 @@ import { tabPaths } from '../../app/paths';
 import { useCurrentPlayer } from '../../auth/CurrentPlayer';
 import { useNow } from '../../hooks/useNow';
 import { useHomePageQuery, useScoresPageQuery } from '../../services/graphql';
-import { RaceCardContainer } from '../home/RaceCardContainer';
+import { RaceGroupList } from '../home/RaceGroupList';
 import { getPredictionByFieldId, selectMyRaces } from '../home/homeRace';
 
 export function ScoresPage() {
@@ -45,17 +45,12 @@ export function ScoresPage() {
         </Card>
       </div>
       {loading && !homeData ? <Spinner /> : null}
-      <div className="grid gap-[18px] md:grid-cols-2 md:gap-6">
-        {races.map((race, index) => (
-          <RaceCardContainer
-            key={race.id}
-            race={race}
-            predictionByFieldId={predictionByFieldId}
-            tone={index % 2 === 0 ? 'primary' : 'ink'}
-            now={now}
-          />
-        ))}
-      </div>
+      <RaceGroupList
+        races={races}
+        predictionByFieldId={predictionByFieldId}
+        now={now}
+        gridClassName="md:grid-cols-2 md:gap-6"
+      />
       <Callout className="md:max-w-xl">
         Chaque champ noté a sa scorecard : points pick par pick, multiplicateur
         outsider, chrono et bonus.

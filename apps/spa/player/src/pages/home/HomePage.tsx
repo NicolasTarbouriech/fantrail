@@ -25,7 +25,7 @@ import { paths, tabPaths } from '../../app/paths';
 import { useCurrentPlayer } from '../../auth/CurrentPlayer';
 import { useNow } from '../../hooks/useNow';
 import { type HomePageQuery, useHomePageQuery } from '../../services/graphql';
-import { RaceCardContainer } from './RaceCardContainer';
+import { RaceGroupList } from './RaceGroupList';
 import {
   type HomePrediction,
   type HomeRace,
@@ -109,17 +109,12 @@ export function HomePage() {
               </Link>
             </Card>
           ) : null}
-          <div className="grid gap-[18px] md:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2">
-            {races.map((race, index) => (
-              <RaceCardContainer
-                key={race.id}
-                race={race}
-                predictionByFieldId={predictionByFieldId}
-                tone={index % 2 === 0 ? 'primary' : 'ink'}
-                now={now}
-              />
-            ))}
-          </div>
+          <RaceGroupList
+            races={races}
+            predictionByFieldId={predictionByFieldId}
+            now={now}
+            gridClassName="md:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2"
+          />
         </div>
         {data ? <HomeLeagues data={data} /> : null}
       </div>
